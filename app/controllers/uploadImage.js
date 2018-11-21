@@ -3,15 +3,22 @@ const imageUploadModel = require( '../models/uploadImage.js' );
 // Create and Save new Data
 exports.create = ( req, res ) => {
 
-	/*
-	if( !req.body.AFD_CODE ) {
+	if( !req.files ) {
 		return res.status( 400 ).send({
 			status: false,
-			message: 'Invalid input',
-			data: {}
-		});
+			message: 'Invalid file input',
+			data:  {}
+		} );
 	}
-	*/
+
+	if ( !req.body.IMAGE_CODE || !req.body.TR_CODE  ) {
+		return res.status( 400 ).send( {
+			status: false,
+			message: "Invalid input image description",
+			data: {}
+		} );
+	}
+
 	if ( req.files ) {
 		var file = req.files.filename;
 		var filename = file.name;
@@ -36,8 +43,7 @@ exports.create = ( req, res ) => {
 					INSERT_TIME: new Date() || "",
 					UPDATE_USER: req.body.INSERT_USER || "",
 					UPDATE_TIME: new Date() || "",
-					DELETE_USER: "",
-					DELETE_TIME: "",
+					DELETE_USER: ""
 				} );
 
 				set.save()

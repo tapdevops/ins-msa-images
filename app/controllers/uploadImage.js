@@ -38,21 +38,6 @@ exports.create = ( req, res ) => {
 					UPDATE_TIME: new Date() || "",
 					DELETE_USER: "",
 					DELETE_TIME: "",
-
-
-					//REGION_CODE: req.body.REGION_CODE || "",
-					//COMP_CODE: req.body.COMP_CODE || "",
-					//EST_CODE: req.body.EST_CODE || "",
-					//WERKS: req.body.WERKS || "",
-					//AFD_CODE: req.body.AFD_CODE || "",
-					//AFD_NAME: req.body.AFD_NAME || "",
-					//WERKS_AFD_CODE: req.body.WERKS_AFD_CODE || "",
-					//START_VALID: ( req.body.START_VALID != '' ) ? date.parse( req.body.START_VALID, 'YYYY-MM-DD' ) : "",
-					//END_VALID: ( req.body.END_VALID != '' ) ? date.parse( req.body.END_VALID, 'YYYY-MM-DD' ) : "",
-					//INSERT_USER: req.body.INSERT_USER || "",
-					//INSERT_TIME: ( req.body.INSERT_TIME != '' ) ? date.parse( req.body.INSERT_TIME, 'YYYY-MM-DD HH:mm:ss' ) : "",
-					//UPDATE_USER: req.body.UPDATE_USER || "",
-					//UPDATE_TIME: ( req.body.UPDATE_TIME != '' ) ? date.parse( req.body.UPDATE_TIME, 'YYYY-MM-DD HH:mm:ss' ) : ""
 				} );
 
 				set.save()

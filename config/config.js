@@ -5,7 +5,7 @@ module.exports = {
 	| App Config
 	|--------------------------------------------------------------------------
 	*/
-	app_port: process.env.PORT || 3004,
+	app_port: process.env.PORT || 3012,
 	app_name: 'Microservice Images',
 
 	/*

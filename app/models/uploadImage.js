@@ -1,6 +1,7 @@
 const mongoose = require( 'mongoose' );
 
 const UploadImageSchema = mongoose.Schema( {
+	
 	IMAGE_CODE: String,
 	TR_CODE: String,
 	IMAGE_NAME: String,
@@ -8,32 +9,45 @@ const UploadImageSchema = mongoose.Schema( {
 	STATUS_IMAGE: String,
 	STATUS_SYNC: String,
 	SYNC_TIME: {
-		type: Date,
+		type: Number,
+		get: v => Math.floor( v ),
+		set: v => Math.floor( v ),
+		alias: 'i',
 		default: function() {
-			return null;
+			return 0;
 		}
 	},
 	INSERT_USER: String,
 	INSERT_TIME: {
-		type: Date,
+		type: Number,
+		get: v => Math.floor( v ),
+		set: v => Math.floor( v ),
+		alias: 'i',
 		default: function() {
-			return null;
+			return 0;
 		}
 	},
 	UPDATE_USER: String,
 	UPDATE_TIME: {
-		type: Date,
+		type: Number,
+		get: v => Math.floor( v ),
+		set: v => Math.floor( v ),
+		alias: 'i',
 		default: function() {
-			return null;
+			return 0;
 		}
 	},
 	DELETE_USER: String,
 	DELETE_TIME: {
-		type: Date,
+		type: Number,
+		get: v => Math.floor( v ),
+		set: v => Math.floor( v ),
+		alias: 'i',
 		default: function() {
-			return null;
+			return 0;
 		}
 	}
+
 });
 
 module.exports = mongoose.model( 'UploadImage', UploadImageSchema, 'TR_IMAGE' );

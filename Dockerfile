@@ -16,7 +16,7 @@ RUN npm install
 COPY . /usr/src/app
 
 EXPOSE 3012
-CMD [ "npm", "start" ]
+CMD [ "node", "app.js" ]
 
 #RUN npm install
 #RUN node  app.js

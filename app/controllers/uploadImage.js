@@ -1,205 +1,394 @@
-const config = require( '../../config/config.js' ); 	
-const uuid = require( 'uuid' );
-const nJwt = require( 'njwt' );
-const dateAndTimes = require( 'date-and-time' );
-const jwtDecode = require( 'jwt-decode' );
-const randomTextLib = require( '../libraries/randomText' );
-const imageUploadModel = require( '../models/uploadImage.js' );
-const fs = require( 'file-system' );
-const SSHClient = require( 'scp2' );
+/*
+ |--------------------------------------------------------------------------
+ | App Setup
+ |--------------------------------------------------------------------------
+ |
+ | Untuk menghandle models, libraries, helper, node modules, dan lain-lain
+ |
+ */
+ 	// Models
+	const imageUploadModel = require( '../models/uploadImage.js' );
 
-// Create and Save new Data
-exports.createDesc = ( req, res ) => {
+	// Node Modules
+	const querystring = require( 'querystring' );
+	const url = require( 'url' );
+	const jwt = require( 'jsonwebtoken' );
+	const uuid = require( 'uuid' );
+	const nJwt = require( 'njwt' );
+	const jwtDecode = require( 'jwt-decode' );
+	const Client = require( 'node-rest-client' ).Client; 
+	const moment_pure = require( 'moment' );
+	const moment = require( 'moment-timezone' );
+	const fs = require( 'file-system' );
+	const SSHClient = require( 'scp2' );
+	const fServer = require( 'fs' );
+	const path = require( 'path' );
 
-	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
-		if ( err ) {
-			console.log(err)
+	// Libraries
+	const config = require( '../../config/config.js' );
+	const date = require( '../libraries/date' );
+	
+	const dateAndTimes = require( 'date-and-time' );
+	const randomTextLib = require( '../libraries/randomText' );
+
+	// Variable
+	var localdir = '/Users/mac/Documents/NodeJS/Microservices-TAP-MobileInspection-Dev/SourceImages';
+
+/**
+ * syncMobile
+ * Untuk 
+ * --------------------------------------------------------------------------
+ */
+	exports.syncMobile = ( req, res ) => {
+		var auth = req.auth;
+		var location_code_group = auth.LOCATION_CODE.split( ',' );
+		var ref_role = auth.REFFERENCE_ROLE;
+		var location_code_final = [];
+		var key = [];
+
+		res.json( {
+			message: auth,
+			loc_group: location_code_group,
+			loc_final: location_code_final,
+		} )
+	}
+
+/**
+ * find
+ * Untuk menyimpan data yang diupload
+ * --------------------------------------------------------------------------
+ */
+	exports.find = ( req, res ) => {
+
+		if( !req.params.id ) {
 			return res.send( {
 				status: false,
-				message: 'Invalid Token',
+				message: config.error_message.invalid_input + 'TR_CODE.',
 				data: {}
 			} );
 		}
 
+	 	imageUploadModel.find( { 
+			TR_CODE : req.params.id,
+			DELETE_USER: ""
+		} )
+		.select({
+			_id: 0,
+			IMAGE_CODE: 1,
+			IMAGE_NAME: 1,
+			IMAGE_PATH: 1,
+			TR_CODE: 1,
+			STATUS_IMAGE: 1,
+			STATUS_SYNC: 1,
+			SYNC_TIME: 1,
+			INSERT_USER: 1,
+			INSERT_TIME: 1,
+			UPDATE_USER: 1,
+			UPDATE_TIME: 1,
+			DELETE_USER: 1,
+			DELETE_TIME: 1
+		})
+		.then( data => {
+			if( !data ) {
+				return res.send( {
+					status: false,
+					message: config.error_message.find_404,
+					data: {}
+				} );
+			}
+
+			var results = [];
+			data.forEach( function( result ) {
+				var bitmap = fServer.readFileSync( result.IMAGE_PATH + '/' + result.TR_CODE + '/' + result.IMAGE_NAME );
+				results.push( {
+					IMAGE_CODE: result.IMAGE_CODE,
+					IMAGE_NAME: result.IMAGE_NAME,
+					IMAGE_SOURCE: new Buffer( bitmap ).toString( 'base64' )
+				} );
+			} );
+			res.send( {
+				status: true,
+				message: config.error_message.find_200,
+				data: results
+			} );
+		} ).catch( err => {
+			res.send( {
+				status: false,
+				message: config.error_message.find_500,
+				data: {}
+			} );
+		} );
+	};
+
+/**
+ * createFile
+ * Untuk menyimpan data yang diupload
+ * --------------------------------------------------------------------------
+ */
+	exports.createFile = ( req, res ) => {
+
+		if( !req.files ) {
+			return res.send( {
+				status: false,
+				message: config.error_message.invalid_input + 'REQUEST FILES.',
+				data: {}
+			} );
+		}
+
+		var auth = req.auth;
+		var file = req.files.filename;
+		var filename = file.name;
+
+		/** 
+		 * Check MIME Type
+		 * Allowed MIME Type : ➤ IMAGE/JPEG
+		 * 					   ➤ IMAGE/JPG
+		 * ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬●
+		 */
+		if ( file.mimetype == 'image/jpeg' || file.mimetype == 'image/jpg' ) {
+			/** 
+			 * Check, apakah file ada didalam database.
+			 * ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬●
+			 */
+			imageUploadModel.findOne( { 
+				IMAGE_NAME : filename,
+				DELETE_USER: ""
+			} )
+			.then( data => {
+
+				if( !data ) {
+					return res.send( {
+						status: false,
+						message: config.error_message.find_404,
+						data: {}
+					} );
+				}
+
+				var upload_folder = 'images-inspeksi';
+				if ( String( data.TR_CODE.substr( 0, 1 ) ) == 'F' ) {
+					upload_folder = 'images_finding';
+				}
+
+				var directory_local = localdir + '/' + upload_folder;
+				var directory_target_local = directory_local + '/' + data.TR_CODE;
+				//var directory_target_server = '/root/' + upload_folder + '/' + data.TR_CODE;
+
+				fServer.existsSync( directory_local ) || fServer.mkdirSync( directory_local );
+				fServer.existsSync( directory_target_local ) || fServer.mkdirSync( directory_target_local );
+
+				file.mv( directory_target_local + '/' + filename, function( err ) {
+					if ( err ) {
+						return res.send( {
+							status: false,
+							message: config.error_message.upload_404,
+							data: {}
+						} );
+					}
+					res.send( {
+						status: true,
+						message: config.error_message.upload_200,
+						data: {}
+					} );
+
+					/** 
+					 * Kirim file ke Server Images
+					 * ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬●
+					 */
+					/*
+						SSHClient.defaults({
+							port: 22,
+							host: '149.129.245.230',
+							username: 'root',
+							password: 'T4pagri123'
+						});
+						console.log(directory_target_server);
+						console.log(directory_target_local + '/' + filename);
+
+						SSHClient.mkdir( directory_target_server, function( err ) {
+							if ( err ) {
+								return res.send({
+									status: false,
+									message: "Error! Pembuatan direktori pada Server Images.",
+									data: {},
+								});
+							}
+
+							SSHClient.scp( directory_target_local + '/' + filename, {
+								host: '149.129.245.230',
+								username: 'root',
+								password: 'T4pagri123',
+								path: directory_target_server
+							}, function( err ) {
+								if ( err ) {
+									return res.send({
+										status: false,
+										message: "Error! Pengiriman file gambar ke Server Images",
+										data: {},
+									});
+								}
+								res.send( {
+									status: true,
+									message: config.error_message.upload_200,
+									data: {}
+								} );
+								
+							});
+						} );
+					*/
+				} );
+			} ).catch( err => {
+				res.send( {
+					status: false,
+					message: config.error_message.find_500,
+					data: {}
+				} );
+			} );
+		}
+		else {
+			res.send( {
+				status: false,
+				message: config.error_message.upload_406,
+				data: {}
+			} );
+		}
+
+	};
+
+/**
+ * createDesc
+ * Untuk membuat dan menyimpan data baru
+ * --------------------------------------------------------------------------
+ */
+	exports.createDesc = ( req, res ) => {
 		if ( !req.body.TR_CODE  ) {
 			return res.send( {
 				status: false,
-				message: "Invalid input image description",
+				message: config.error_message.invalid_input + ' TR_CODE.',
 				data: {}
 			} );
 		}
 
-		var trcode = req.body.TR_CODE;
-		var split = trcode.split("-");
-		var auth = jwtDecode( req.token );
-		var randomText = randomTextLib.generate( 5 );
-		var CODE = auth.EMPLOYEE_NIK + 
-			'-' + 
-			dateAndTimes.format( new Date(), 'YYYYMMDD' ) + 
-			'-' + 
-			split[3] + 
-			'-' +
-			split[4] + 
-			'-' + 
-			split[5] + 
-			'-I-' + 
-			randomText;
-		//var folder_target = dateAndTimes.format( new Date(), 'YYYYMMDD' );
-		var imgcode = req.body.IMAGE_CODE;
-		var folder_target = imgcode.split( '-' );
-		var dir = folder_target[1];
-		
+		var auth = req.auth;
+		var upload_folder = 'images-inspeksi';
+
+		if ( String( req.body.TR_CODE.substr( 0, 1 ) ) == 'F' ) {
+			upload_folder = 'images_finding';
+		}
+
 		const set = new imageUploadModel( {
 			IMAGE_CODE: req.body.IMAGE_CODE,
 			TR_CODE: req.body.TR_CODE || "",
 			IMAGE_NAME: req.body.IMAGE_NAME || "",
-			IMAGE_PATH: folder_target[1],
+			IMAGE_PATH: localdir + '/' + upload_folder,
 			STATUS_IMAGE: req.body.STATUS_IMAGE || "",
 			STATUS_SYNC: req.body.STATUS_SYNC || "",
-			SYNC_TIME: new Date(),
+			SYNC_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
 			INSERT_USER: auth.USER_AUTH_CODE,
-			INSERT_TIME: new Date() || "",
+			INSERT_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
 			UPDATE_USER: auth.USER_AUTH_CODE,
-			UPDATE_TIME: new Date() || "",
-			DELETE_USER: ""
+			UPDATE_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
+			DELETE_USER: "",
+			DELETE_TIME: 0,
 		} );
 
 		set.save()
 		.then( data => {
+			if ( !data ) {
+				return res.send( {
+					status: false,
+					message: config.error_message.create_404,
+					data: {}
+				} );
+			}
 			res.send( {
 				status: true,
-				message: 'Success',
+				message: config.error_message.create_200,
 				data: {}
 			} );
 		} ).catch( err => {
 			res.send( {
 				status: false,
-				message: 'Some error occurred while creating data',
+				message: config.error_message.create_500,
 				data: {}
 			} );
 		} );
+	};
 
-	} );
-};
 
-// Create and Save new Data
-exports.createFile = ( req, res ) => {
 
-	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
+
+
+
+
+// Testing read base64 file
+exports.readfile2 = ( req, res ) => {
+		
+	SSHClient.defaults({
+		port: 22,
+		host: '149.129.245.230',
+		username: 'root',
+		password: 'T4pagri123'
+	});
+
+	SSHClient.scp( {
+		host: '149.129.245.230',
+		username: 'root',
+		password: 'T4pagri123',
+		path: '/root/images-inspeksi/image.jpg'
+	},'./', function( err ) {
+		
 		if ( err ) {
-			console.log(err)
-			return res.send( {
-				status: false,
-				message: 'Invalid Token',
-				data: {}
-			} );
-		}
-
-		if( !req.files ) {
 			return res.send({
 				status: false,
-				message: 'Invalid file input',
-				data:  {}
-			} );
-		}
-
-		if ( req.files ) {
-
-			var file = req.files.filename;
-			var filename = file.name;
-			
-			imageUploadModel.findOne( { 
-				IMAGE_NAME : filename,
-				DELETE_USER: "",
-				DELETE_TIME: ""
-			} ).then( data => {
-				if( !data ) {
-					return res.send({
-						status: false,
-						message: "Gambar tidak ditemukan",
-						data: data,
-					});
-				}
-
-				file.mv( './assets/temp-images/' + filename, function( err ) {
-
-					if ( err ) {
-						return res.send({
-							status: false,
-							message: "Some error occurred while creating data",
-							data: {},
-						});
-					}
-
-					SSHClient.defaults({
-						port: 22,
-						host: '149.129.242.205',
-						username: 'root',
-						password: 'anfieldSG08'
-					});
-
-
-					SSHClient.mkdir( 'development/upload-images/' + data.IMAGE_PATH, function( err ) {
-						if ( err ) {
-							return res.send({
-								status: false,
-								message: "MKDIR Error",
-								data: {},
-							});
-						}
-
-						SSHClient.scp( './assets/temp-images/' + filename, {
-							host: '149.129.242.205',
-							username: 'root',
-							password: 'anfieldSG08',
-							path: '/root/development/upload-images/' + data.IMAGE_PATH + '/'
-						}, function( err ) {
-							if ( err ) {
-								return res.send({
-									status: false,
-									message: "SSH Error",
-									data: {},
-								});
-							}
-
-							fs.unlink( 'assets/temp-images/' + filename, ( err ) => {
-								if ( err ) throw err;
-								console.log( 'assets/temp-images/' + filename );
-							} );
-
-							res.send( {
-								status: true,
-								message: 'Success',
-								data: {}
-							} );
-							
-						});
-					} );
-				} );
-				
-			} ).catch( err => {
-				if( err.kind === 'ObjectId' ) {
-					return res.send({
-						status: false,
-						message: "Error",
-						data: {}
-					});
-				}
-				return res.send({
-					status: false,
-					message: "Error retrieving Data",
-					data: {}
-				} );
-			} );
-			
-		}
-		else {
-			res.send({
-				status: false,
-				message: 'Gagal upload file',
-				data: {}
+				message: "SSH Error",
+				data: {},
 			});
 		}
 
+		//fs.unlink( 'assets/temp-images/' + filename, ( err ) => {
+		//	if ( err ) throw err;
+		//	console.log( 'assets/temp-images/' + filename );
+		//} );
+
+		res.send( {
+			status: true,
+			message: 'Success',
+			data: {}
+		} );
+		
+	});
+
+	//SSHClient.scp( '/root/images-inspeksi/image.jpg', '/Users/mac/Documents/NodeJS/', function( err ) {
+	//	console.log(err);
+	//	console.log('A');
+	//	if ( err ) {
+	//		res.send({
+	//			status: false,
+	//			message: "SSH Error",
+	//			data: {},
+	//		});
+	//	}
+	//	res.send( {
+	//		status: true,
+	//		message: 'Success',
+	//		err: err,
+	//		data: {}
+	//	} );
+	//} );
+};
+
+// Testing read base64 file
+exports.readfile = ( req, res ) => {
+		
+var appRoot = process.cwd();
+	//console.log( __basedir );
+	console.log( __basedir );
+	console.log(process.cwd())
+	//var bitmap = fServer.readFileSync( __basedir + '/assets/temp-images/image.jpg' );
+	var bitmap = fServer.readFileSync( '/Users/mac/Documents/NodeJS/Microservices-TAP-MobileInspection-Dev/SourceImages/images-inspeksi/I0000002A0F/diagrum.jpg' );
+	console.log( new Buffer( bitmap ).toString('base64')  );
+	res.json( {
+		message: 'Testing Read File base64 Encode',
+		base64_encode: new Buffer( bitmap ).toString('base64')
 	} );
 };

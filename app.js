@@ -3,6 +3,9 @@ const express = require( 'express' );
 
 const http = require( 'http' );
 
+global.__basedir = __dirname;
+global.__rootdir = '';
+
 //
 const expressUpload = require( 'express-fileupload' );
 
@@ -54,6 +57,21 @@ app.get( '/', ( req, res ) => {
 } );
 
 require( './routes/route.js' )( app );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

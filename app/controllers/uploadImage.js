@@ -40,17 +40,72 @@
  * --------------------------------------------------------------------------
  */
 	exports.syncMobile = ( req, res ) => {
-		var auth = req.auth;
-		var location_code_group = auth.LOCATION_CODE.split( ',' );
-		var ref_role = auth.REFFERENCE_ROLE;
-		var location_code_final = [];
-		var key = [];
+		
 
-		res.json( {
-			message: auth,
-			loc_group: location_code_group,
-			loc_final: location_code_final,
+		if( !req.body.TR_CODE ) {
+			return res.send( {
+				status: false,
+				message: config.error_message.find_404,
+				data: {}
+			} );
+		}
+
+		imageUploadModel.find( { 
+			TR_CODE : req.body.TR_CODE,
+			DELETE_USER: "A"
 		} )
+		.select({
+			_id: 0,
+			IMAGE_CODE: 1,
+			IMAGE_NAME: 1,
+			IMAGE_PATH: 1,
+			TR_CODE: 1,
+			STATUS_IMAGE: 1,
+			STATUS_SYNC: 1,
+			SYNC_TIME: 1,
+			INSERT_USER: 1,
+			INSERT_TIME: 1,
+			UPDATE_USER: 1,
+			UPDATE_TIME: 1,
+			DELETE_USER: 1,
+			DELETE_TIME: 1
+		})
+		.limit( 20 )
+		.then( data => {
+			if( !data ) {
+				return res.send( {
+					status: false,
+					message: config.error_message.find_404,
+					data: {}
+				} );
+			}
+
+			var results = [];
+			data.forEach( function( result ) {
+
+				var bitmap = fServer.readFileSync( result.IMAGE_PATH + '/' + result.TR_CODE + '/' + result.IMAGE_NAME );
+					bitmap = bitmap.replace(/^data:image\/jpg;base64,/,"");
+				results.push( {
+					IM: 'ASU',
+					TR_CODE: result.TR_CODE,
+					IMAGE_CODE: result.IMAGE_CODE,
+					IMAGE_NAME: result.IMAGE_NAME,
+
+					IMAGE_SOURCE: new Buffer( bitmap ).toString( 'base64' )
+				} );
+			} );
+			res.send( {
+				status: true,
+				message: config.error_message.find_200,
+				data: results
+			} );
+		} ).catch( err => {
+			res.send( {
+				status: false,
+				message: config.error_message.find_500,
+				data: {}
+			} );
+		} );
 	}
 
 /**
@@ -103,7 +158,7 @@
 				results.push( {
 					IMAGE_CODE: result.IMAGE_CODE,
 					IMAGE_NAME: result.IMAGE_NAME,
-					IMAGE_SOURCE: new Buffer( bitmap ).toString( 'base64' )
+					IMAGE_SOURCE: 'data:image/jpg;base64,' + new Buffer( bitmap ).toString( 'base64' )
 				} );
 			} );
 			res.send( {
@@ -145,7 +200,7 @@
 		 * 					   ➤ IMAGE/JPG
 		 * ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬●
 		 */
-		if ( file.mimetype == 'image/jpeg' || file.mimetype == 'image/jpg' ) {
+		if ( /*file.mimetype == 'image/jpeg' || */file.mimetype == 'image/jpg' ) {
 			/** 
 			 * Check, apakah file ada didalam database.
 			 * ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬●

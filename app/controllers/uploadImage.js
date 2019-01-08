@@ -156,12 +156,15 @@
 
 			var results = [];
 			data.forEach( function( result ) {
-				var bitmap = fServer.readFileSync( result.IMAGE_PATH + '/' + result.TR_CODE + '/' + result.IMAGE_NAME );
-				results.push( {
-					IMAGE_CODE: result.IMAGE_CODE,
-					IMAGE_NAME: result.IMAGE_NAME,
-					IMAGE_SOURCE: 'data:image/jpg;base64,' + new Buffer( bitmap ).toString( 'base64' )
-				} );
+				var pth = result.IMAGE_PATH + '/' + result.IMAGE_NAME;
+				if ( fServer.existsSync( pth ) ) {
+					var bitmap = fServer.readFileSync( pth );
+					results.push( {
+						IMAGE_CODE: result.IMAGE_CODE,
+						IMAGE_NAME: result.IMAGE_NAME,
+						IMAGE_SOURCE: 'data:' + result.MIME_TYPE + ';base64,' + new Buffer( bitmap ).toString( 'base64' )
+					} );
+				}
 			} );
 			res.send( {
 				status: true,
@@ -253,10 +256,41 @@
 							data: {}
 						} );
 					}
-					// aa
-					res.json({
-						message: 'OK'
-					})
+
+					imageUploadModel.findOneAndUpdate( { 
+						IMAGE_CODE : data.IMAGE_CODE,
+						TR_CODE : data.TR_CODE
+					}, {
+						MIME_TYPE: file.mimetype,
+						IMAGE_PATH : directory_target_local,
+						UPDATE_USER: auth.USER_AUTH_CODE,
+						UPDATE_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' )
+					}, { new: true } )
+					.then( data => {
+						if( !data ) {
+							console.log( 'G' )
+							return res.send( {
+								status: false,
+								message: config.error_message.put_404,
+								data: {}
+							} );
+						}
+
+						console.log( 'H' )
+						res.send( {
+							status: true,
+							message: config.error_message.put_200,
+							data: {}
+						} );
+						
+					}).catch( err => {
+						console.log( 'I' )
+						res.send( {
+							status: false,
+							message: config.error_message.put_500,
+							data: {}
+						} );
+					});
 
 					/** 
 					 * Kirim file ke Server Images

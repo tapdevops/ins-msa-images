@@ -184,6 +184,7 @@
  */
 	exports.createFile = ( req, res ) => {
 
+		console.log( 'A' )
 		if( !req.files ) {
 			return res.send( {
 				status: false,
@@ -191,7 +192,7 @@
 				data: {}
 			} );
 		}
-
+		console.log( 'B' )
 		var auth = req.auth;
 		var file = req.files.filename;
 		var filename = file.name;
@@ -203,6 +204,7 @@
 		 * ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬●
 		 */
 		if ( file.mimetype == 'image/jpeg' || file.mimetype == 'image/jpg' ) {
+			console.log( 'C' )
 			/** 
 			 * Check, apakah file ada didalam database.
 			 * ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬●
@@ -214,6 +216,7 @@
 			.then( data => {
 
 				if( !data ) {
+					console.log( 'D' )
 					return res.send( {
 						status: false,
 						message: config.error_message.find_404 + 'AW',
@@ -224,6 +227,7 @@
 				console.log(data);
 				var upload_folder = 'images-inspeksi';
 				if ( String( data.TR_CODE.substr( 0, 1 ) ) == 'F' ) {
+					console.log( 'E' )
 					upload_folder = 'images_finding';
 				}
 
@@ -241,6 +245,7 @@
 				fServer.existsSync( directory_target_local ) || fServer.mkdirSync( directory_target_local );
 				
 				file.mv( directory_target_local + '/' + filename, function( err ) {
+					console.log( 'F' )
 					if ( err ) {
 						return res.send( {
 							status: false,
@@ -259,6 +264,7 @@
 					}, { new: true } )
 					.then( data => {
 						if( !data ) {
+							console.log( 'G' )
 							return res.send( {
 								status: false,
 								message: config.error_message.put_404,
@@ -266,6 +272,7 @@
 							} );
 						}
 
+						console.log( 'H' )
 						res.send( {
 							status: true,
 							message: config.error_message.put_200,
@@ -273,6 +280,7 @@
 						} );
 						
 					}).catch( err => {
+						console.log( 'I' )
 						res.send( {
 							status: false,
 							message: config.error_message.put_500,
@@ -327,6 +335,7 @@
 					*/
 				} );
 			} ).catch( err => {
+				console.log( 'J' )
 				res.send( {
 					status: false,
 					message: config.error_message.find_500,
@@ -335,6 +344,7 @@
 			} );
 		}
 		else {
+			console.log( 'K' )
 			res.send( {
 				status: false,
 				message: config.error_message.upload_406,

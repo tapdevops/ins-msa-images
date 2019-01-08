@@ -214,7 +214,72 @@
 				DELETE_USER: ""
 			} )
 			.then( data => {
+				console.log(data);
+				if( !data ) {
+					console.log( 'D' )
+					return res.send( {
+						status: false,
+						message: config.error_message.find_404 + 'AW',
+						data: {}
+					} );
+				}
 
+				res.json({
+					message: data
+				})
+			} ).catch( err => {
+				console.log( 'J' )
+				res.send( {
+					status: false,
+					message: config.error_message.find_500,
+					data: {}
+				} );
+			} );
+		}
+		else {
+			console.log( 'K' )
+			res.send( {
+				status: false,
+				message: config.error_message.upload_406,
+				data: {}
+			} );
+		}
+
+	};
+
+	exports.createFile2 = ( req, res ) => {
+
+		console.log( 'A' )
+		if( !req.files ) {
+			return res.send( {
+				status: false,
+				message: config.error_message.invalid_input + 'REQUEST FILES.',
+				data: {}
+			} );
+		}
+		console.log( 'B' )
+		var auth = req.auth;
+		var file = req.files.filename;
+		var filename = file.name;
+
+		/** 
+		 * Check MIME Type
+		 * Allowed MIME Type : ➤ IMAGE/JPEG
+		 * 					   ➤ IMAGE/JPG
+		 * ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬●
+		 */
+		if ( file.mimetype == 'image/jpeg' || file.mimetype == 'image/jpg' ) {
+			console.log( 'C' )
+			/** 
+			 * Check, apakah file ada didalam database.
+			 * ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬●
+			 */
+			imageUploadModel.findOne( { 
+				IMAGE_NAME : filename,
+				DELETE_USER: ""
+			} )
+			.then( data => {
+				console.log(data);
 				if( !data ) {
 					console.log( 'D' )
 					return res.send( {

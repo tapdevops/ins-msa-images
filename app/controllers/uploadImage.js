@@ -52,7 +52,7 @@
 
 		imageUploadModel.find( { 
 			TR_CODE : req.body.TR_CODE,
-			DELETE_USER: "A"
+			DELETE_USER: ""
 		} )
 		.select({
 			_id: 0,
@@ -84,7 +84,7 @@
 			data.forEach( function( result ) {
 
 				var bitmap = fServer.readFileSync( result.IMAGE_PATH + '/' + result.TR_CODE + '/' + result.IMAGE_NAME );
-					bitmap = bitmap.replace(/^data:image\/jpg;base64,/,"");
+
 				results.push( {
 					IM: 'ASU',
 					TR_CODE: result.TR_CODE,

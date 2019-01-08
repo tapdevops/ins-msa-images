@@ -244,7 +244,66 @@
 				fServer.existsSync( directory_local ) || fServer.mkdirSync( directory_local );
 				fServer.existsSync( directory_target_local ) || fServer.mkdirSync( directory_target_local );
 				
-				
+				file.mv( directory_target_local + '/' + filename, function( err ) {
+					console.log( 'F' )
+					if ( err ) {
+						return res.send( {
+							status: false,
+							message: config.error_message.upload_404,
+							data: {}
+						} );
+					}
+
+					res.json({
+						message: 'OK'
+					})
+
+					/** 
+					 * Kirim file ke Server Images
+					 * ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬●
+					 */
+					/*
+						SSHClient.defaults({
+							port: 22,
+							host: '149.129.245.230',
+							username: 'root',
+							password: 'T4pagri123'
+						});
+						console.log(directory_target_server);
+						console.log(directory_target_local + '/' + filename);
+
+						SSHClient.mkdir( directory_target_server, function( err ) {
+							if ( err ) {
+								return res.send({
+									status: false,
+									message: "Error! Pembuatan direktori pada Server Images.",
+									data: {},
+								});
+							}
+
+							SSHClient.scp( directory_target_local + '/' + filename, {
+								host: '149.129.245.230',
+								username: 'root',
+								password: 'T4pagri123',
+								path: directory_target_server
+							}, function( err ) {
+								if ( err ) {
+									return res.send({
+										status: false,
+										message: "Error! Pengiriman file gambar ke Server Images",
+										data: {},
+									});
+								}
+								res.send( {
+									status: true,
+									message: config.error_message.upload_200,
+									data: {}
+								} );
+								
+							});
+						} );
+					*/
+				} );
 			} ).catch( err => {
 				console.log( 'J' )
 				res.send( {

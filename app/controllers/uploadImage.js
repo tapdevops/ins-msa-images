@@ -82,17 +82,20 @@
 
 			var results = [];
 			data.forEach( function( result ) {
+				var pth = result.IMAGE_PATH + '/' + result.TR_CODE + '/' + result.IMAGE_NAME;
+				if ( fs.existsSync( pth ) ) {
+					var bitmap = fServer.readFileSync( pth );
 
-				var bitmap = fServer.readFileSync( result.IMAGE_PATH + '/' + result.TR_CODE + '/' + result.IMAGE_NAME );
+					results.push( {
+						TR_CODE: result.TR_CODE,
+						IMAGE_CODE: result.IMAGE_CODE,
+						IMAGE_NAME: result.IMAGE_NAME,
 
-				results.push( {
-					TR_CODE: result.TR_CODE,
-					IMAGE_CODE: result.IMAGE_CODE,
-					IMAGE_NAME: result.IMAGE_NAME,
-
-					IMAGE_SOURCE: 'data:image/jpg;base64,' + new Buffer( bitmap ).toString( 'base64' )
-				} );
+						IMAGE_SOURCE: 'data:image/jpg;base64,' + new Buffer( bitmap ).toString( 'base64' )
+					} );
+				}
 			} );
+
 			res.send( {
 				status: true,
 				message: config.error_message.find_200,
@@ -199,7 +202,7 @@
 		 * 					   ➤ IMAGE/JPG
 		 * ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬●
 		 */
-		if ( /*file.mimetype == 'image/jpeg' || */file.mimetype == 'image/jpg' ) {
+		if ( file.mimetype == 'image/jpeg' || file.mimetype == 'image/jpg' ) {
 			/** 
 			 * Check, apakah file ada didalam database.
 			 * ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬●
@@ -213,23 +216,30 @@
 				if( !data ) {
 					return res.send( {
 						status: false,
-						message: config.error_message.find_404,
+						message: config.error_message.find_404 + 'AW',
 						data: {}
 					} );
 				}
 
+				console.log(data);
 				var upload_folder = 'images-inspeksi';
 				if ( String( data.TR_CODE.substr( 0, 1 ) ) == 'F' ) {
 					upload_folder = 'images_finding';
 				}
 
-				var directory_local = localdir + '/' + upload_folder;
+				
+				var directory_local = __basedir + '/assets/images/' + upload_folder;
 				var directory_target_local = directory_local + '/' + data.TR_CODE;
-				//var directory_target_server = '/root/' + upload_folder + '/' + data.TR_CODE;
+
+				console.log( __basedir );
+				console.log( __rootdir );
+				console.log( directory_local );
+				console.log( directory_target_local );
+				console.log( file );
 
 				fServer.existsSync( directory_local ) || fServer.mkdirSync( directory_local );
 				fServer.existsSync( directory_target_local ) || fServer.mkdirSync( directory_target_local );
-
+				
 				file.mv( directory_target_local + '/' + filename, function( err ) {
 					if ( err ) {
 						return res.send( {
@@ -238,11 +248,37 @@
 							data: {}
 						} );
 					}
-					res.send( {
-						status: true,
-						message: config.error_message.upload_200,
-						data: {}
-					} );
+
+					imageUploadModel.findOneAndUpdate( { 
+						IMAGE_CODE : data.IMAGE_CODE,
+						TR_CODE : data.TR_CODE
+					}, {
+						MIME_TYPE: file.mimetype,
+						UPDATE_USER: auth.USER_AUTH_CODE,
+						UPDATE_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' )
+					}, { new: true } )
+					.then( data => {
+						if( !data ) {
+							return res.send( {
+								status: false,
+								message: config.error_message.put_404,
+								data: {}
+							} );
+						}
+
+						res.send( {
+							status: true,
+							message: config.error_message.put_200,
+							data: {}
+						} );
+						
+					}).catch( err => {
+						res.send( {
+							status: false,
+							message: config.error_message.put_500,
+							data: {}
+						} );
+					});
 
 					/** 
 					 * Kirim file ke Server Images
@@ -335,6 +371,7 @@
 			IMAGE_NAME: req.body.IMAGE_NAME || "",
 			IMAGE_PATH: localdir + '/' + upload_folder,
 			STATUS_IMAGE: req.body.STATUS_IMAGE || "",
+			MIME_TYPE: "",
 			STATUS_SYNC: req.body.STATUS_SYNC || "",
 			SYNC_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
 			INSERT_USER: auth.USER_AUTH_CODE,

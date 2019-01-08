@@ -7,6 +7,7 @@ const UploadImageSchema = mongoose.Schema( {
 	IMAGE_NAME: String,
 	IMAGE_PATH: String,
 	STATUS_IMAGE: String,
+	MIME_TYPE: String,
 	STATUS_SYNC: String,
 	SYNC_TIME: {
 		type: Number,

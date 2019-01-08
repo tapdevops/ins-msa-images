@@ -13,7 +13,7 @@ module.exports = ( app ) => {
 	app.post( '/sync-mobile/images/', token_verify, uploadImage.syncMobile );
 	app.post( '/images/:id', token_verify, uploadImage.find );
 	app.post( '/image/description', token_verify, uploadImage.createDesc );
-	app.post( '/image/upload-file', verifyToken, uploadImage.createFile );
+	app.post( '/image/upload-file', token_verify, uploadImage.createFile );
 
 	app.get( '/testing', token_verify, uploadImage.readfile );
 	app.get( '/testing2', uploadImage.readfile2 );

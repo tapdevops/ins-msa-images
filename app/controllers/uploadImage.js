@@ -224,9 +224,27 @@
 					} );
 				}
 
-				res.json({
-					message: data
-				})
+				console.log(data);
+				var upload_folder = 'images-inspeksi';
+				if ( String( data.TR_CODE.substr( 0, 1 ) ) == 'F' ) {
+					console.log( 'E' )
+					upload_folder = 'images_finding';
+				}
+
+				
+				var directory_local = __basedir + '/assets/images/' + upload_folder;
+				var directory_target_local = directory_local + '/' + data.TR_CODE;
+
+				console.log( __basedir );
+				console.log( __rootdir );
+				console.log( directory_local );
+				console.log( directory_target_local );
+				console.log( file );
+
+				fServer.existsSync( directory_local ) || fServer.mkdirSync( directory_local );
+				fServer.existsSync( directory_target_local ) || fServer.mkdirSync( directory_target_local );
+				
+				
 			} ).catch( err => {
 				console.log( 'J' )
 				res.send( {

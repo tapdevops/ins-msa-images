@@ -86,12 +86,11 @@
 				var bitmap = fServer.readFileSync( result.IMAGE_PATH + '/' + result.TR_CODE + '/' + result.IMAGE_NAME );
 
 				results.push( {
-					IM: 'ASU',
 					TR_CODE: result.TR_CODE,
 					IMAGE_CODE: result.IMAGE_CODE,
 					IMAGE_NAME: result.IMAGE_NAME,
 
-					IMAGE_SOURCE: new Buffer( bitmap ).toString( 'base64' )
+					IMAGE_SOURCE: 'data:image/jpg;base64,' + new Buffer( bitmap ).toString( 'base64' )
 				} );
 			} );
 			res.send( {

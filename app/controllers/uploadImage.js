@@ -114,13 +114,13 @@
 					TR_CODE: result.TR_CODE,
 					IMAGE_CODE: result.IMAGE_CODE,
 					IMAGE_NAME: result.IMAGE_NAME,
-					IMAGE_URL: '/files/' + path_tr + '/' + result.TR_CODE + '/' + result.IMAGE_NAME
+					IMAGE_URL: req.protocol + '://' + req.get( 'host' ) + '/files/' + path_tr + '/' + result.TR_CODE + '/' + result.IMAGE_NAME
 				} );
 			} );
 
 			res.send( {
 				status: true,
-				message: config.error_message.find_200 + 'AWWW',
+				message: config.error_message.find_200,
 				data: results
 			} );
 		} ).catch( err => {

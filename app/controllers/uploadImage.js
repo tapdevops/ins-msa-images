@@ -83,7 +83,7 @@
 			var results = [];
 			data.forEach( function( result ) {
 				var pth = result.IMAGE_PATH + '/' + result.IMAGE_NAME;
-				if ( fs.existsSync( pth ) ) {
+				/*if ( fs.existsSync( pth ) ) {
 					var bitmap = fServer.readFileSync( pth );
 
 					results.push( {
@@ -101,7 +101,13 @@
 						IMAGE_CODE: result.IMAGE_CODE,
 						IMAGE_NAME: result.IMAGE_NAME,
 					} );
-				}
+				}*/
+				results.push( {
+					TR_CODE: result.TR_CODE,
+					pth: pth,
+					IMAGE_CODE: result.IMAGE_CODE,
+					IMAGE_NAME: result.IMAGE_NAME,
+				} );
 			} );
 
 			res.send( {

@@ -102,11 +102,19 @@
 						IMAGE_NAME: result.IMAGE_NAME,
 					} );
 				}*/
+
+				var type_tr = 'F';
+				var path_tr = 'images-finding';
+				if ( result.TR_CODE.substr( 0, 1 ) == 'I' ) {
+					type_tr = 'I';
+					path_tr = 'images-inspeksi';
+				}
+
 				results.push( {
 					TR_CODE: result.TR_CODE,
-					pth: pth,
 					IMAGE_CODE: result.IMAGE_CODE,
 					IMAGE_NAME: result.IMAGE_NAME,
+					IMAGE_URL: '/files/' + path_tr + '/' + result.TR_CODE + '/' + result.IMAGE_NAME
 				} );
 			} );
 

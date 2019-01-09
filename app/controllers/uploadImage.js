@@ -82,7 +82,7 @@
 
 			var results = [];
 			data.forEach( function( result ) {
-				var pth = result.IMAGE_PATH + '/' + result.TR_CODE + '/' + result.IMAGE_NAME;
+				var pth = result.IMAGE_PATH + '/' + result.IMAGE_NAME;
 				if ( fs.existsSync( pth ) ) {
 					var bitmap = fServer.readFileSync( pth );
 
@@ -94,11 +94,19 @@
 						IMAGE_SOURCE: 'data:image/jpg;base64,' + new Buffer( bitmap ).toString( 'base64' )
 					} );
 				}
+				else {
+					results.push( {
+						TR_CODE: result.TR_CODE,
+						pth: pth,
+						IMAGE_CODE: result.IMAGE_CODE,
+						IMAGE_NAME: result.IMAGE_NAME,
+					} );
+				}
 			} );
 
 			res.send( {
 				status: true,
-				message: config.error_message.find_200,
+				message: config.error_message.find_200 + 'AWWW',
 				data: results
 			} );
 		} ).catch( err => {
@@ -156,7 +164,9 @@
 
 			var results = [];
 			data.forEach( function( result ) {
+				console.log( result );
 				var pth = result.IMAGE_PATH + '/' + result.IMAGE_NAME;
+				console.log(pth);
 				if ( fServer.existsSync( pth ) ) {
 					var bitmap = fServer.readFileSync( pth );
 					results.push( {
@@ -169,7 +179,8 @@
 			res.send( {
 				status: true,
 				message: config.error_message.find_200,
-				data: results
+				data: results,
+				x: data
 			} );
 		} ).catch( err => {
 			res.send( {

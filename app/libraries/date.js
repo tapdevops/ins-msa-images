@@ -7,7 +7,7 @@ module.exports.convert = function ( value, format ) {
 	value = value.replace( / /g, "" );
 
 	if ( value == 'now' ) {
-		value = moment( new Date() ).format( "YYYYMMDDhhmmss" );
+		value = moment( new Date() ).tz( "Asia/Jakarta" ).format( "YYYYMMDDHHmmss" );
 	}
 
 	switch ( format ) {

@@ -40,7 +40,6 @@
  * --------------------------------------------------------------------------
  */
 	exports.syncMobile = ( req, res ) => {
-		
 
 		if( !req.body.TR_CODE ) {
 			return res.send( {
@@ -212,7 +211,6 @@
  */
 	exports.createFile = ( req, res ) => {
 
-		console.log( 'A' )
 		if( !req.files ) {
 			return res.send( {
 				status: false,
@@ -220,7 +218,7 @@
 				data: {}
 			} );
 		}
-		console.log( 'B' )
+
 		var auth = req.auth;
 		var file = req.files.filename;
 		var filename = file.name;
@@ -244,7 +242,7 @@
 			.then( data => {
 				console.log(data);
 				if( !data ) {
-					console.log( 'D' )
+
 					return res.send( {
 						status: false,
 						message: config.error_message.find_404 + 'AW',
@@ -273,7 +271,7 @@
 				fServer.existsSync( directory_target_local ) || fServer.mkdirSync( directory_target_local );
 				
 				file.mv( directory_target_local + '/' + filename, function( err ) {
-					console.log( 'F' )
+
 					if ( err ) {
 						return res.send( {
 							status: false,

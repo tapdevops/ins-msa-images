@@ -20,8 +20,8 @@
 		ssl: false,
 	}
 
-	if ( fServer.existsSync( '/database-config.json' ) ) {
-		var rawdata = fServer.readFileSync( '/database-config.json' );
+	if ( fServer.existsSync( '/dbapp-ins.json' ) ) {
+		var rawdata = fServer.readFileSync( '/dbapp-ins.json' );
 		set_db_config.push( JSON.parse( rawdata ) );
 	}
 

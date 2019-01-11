@@ -209,7 +209,156 @@
  * Untuk menyimpan data yang diupload
  * --------------------------------------------------------------------------
  */
-	exports.createFile = ( req, res ) => {
+ 	exports.createFile = ( req, res ) => {
+
+		if( !req.files ) {
+			return res.send( {
+				status: false,
+				message: config.error_message.invalid_input + 'REQUEST FILES.',
+				data: {}
+			} );
+		}
+
+		if ( !req.body.TR_CODE  ) {
+			return res.send( {
+				status: false,
+				message: config.error_message.invalid_input + ' TR_CODE.',
+				data: {}
+			} );
+		}
+
+		var auth = req.auth;
+		var file = req.files.FILENAME;
+		var filename = file.name;
+
+		/** 
+		 * Check MIME Type
+		 * Allowed MIME Type : ➤ IMAGE/JPEG
+		 * 					   ➤ IMAGE/JPG
+		 * ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬●
+		 */
+		if ( file.mimetype == 'image/jpeg' || file.mimetype == 'image/jpg' ) {
+			
+			var new_filename = req.body.TR_CODE + '_' + filename;
+			var new_filename_rep = new_filename.replace( '.jpeg', new_filename.replace( '.jpg', '' ) );
+
+			const set = new imageUploadModel( {
+				IMAGE_CODE: req.body.IMAGE_CODE,
+				TR_CODE: req.body.TR_CODE || "",
+				IMAGE_NAME: new_filename_rep,
+				IMAGE_PATH: "",
+				STATUS_IMAGE: req.body.STATUS_IMAGE || "",
+				MIME_TYPE: "",
+				STATUS_SYNC: req.body.STATUS_SYNC || "",
+				SYNC_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
+				INSERT_USER: req.body.INSERT_USER || "",
+				INSERT_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
+				UPDATE_USER: req.body.INSERT_USER || "",
+				UPDATE_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
+				DELETE_USER: "",
+				DELETE_TIME: 0
+			} );
+
+			set.save()
+			.then( data => {
+				if ( !data ) {
+					return res.send( {
+						status: false,
+						message: config.error_message.create_404,
+						data: {}
+					} );
+				}
+
+				
+				var upload_folder = 'images-inspeksi';
+
+				if ( String( req.body.TR_CODE.substr( 0, 1 ) ) == 'F' ) {
+					upload_folder = 'images_finding';
+				}
+
+				var directory_local = __basedir + '/assets/images/' + upload_folder;
+				var directory_target_local = directory_local + '/' + req.body.TR_CODE;
+
+				console.log( __basedir );
+				console.log( __rootdir );
+				console.log( directory_local );
+				console.log( directory_target_local );
+				console.log( file );
+
+				fServer.existsSync( directory_local ) || fServer.mkdirSync( directory_local );
+				fServer.existsSync( directory_target_local ) || fServer.mkdirSync( directory_target_local );
+				
+				file.mv( directory_target_local + '/' + filename, function( err ) {
+
+					if ( err ) {
+						return res.send( {
+							status: false,
+							message: config.error_message.upload_404,
+							data: {}
+						} );
+					}
+
+					
+					fs.rename( directory_target_local + '/' + filename, directory_target_local + '/' + new_filename, function(err) {
+						if ( err ) console.log( 'ERROR: ' + err );
+					});
+
+					console.log( new_filename.replace( '.jpg', '' ) );
+					console.log( new_filename.replace( '.jpeg', '' ) );
+					//http://localhost:3011/finding/F0000005weR
+					imageUploadModel.findOneAndUpdate( { 
+						IMAGE_CODE : req.body.IMAGE_CODE,
+						IMAGE_NAME : req.body.IMAGE_NAME,
+						TR_CODE : req.body.TR_CODE
+					}, {
+						MIME_TYPE: file.mimetype,
+						IMAGE_PATH : directory_target_local,
+						UPDATE_USER: req.body.INSERT_USER || "",
+						UPDATE_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
+					}, { new: true } )
+					.then( data => {
+						if( !data ) {
+							return res.send( {
+								status: false,
+								message: config.error_message.put_404,
+								data: {}
+							} );
+						}
+
+						res.send( {
+							status: true,
+							message: config.error_message.put_200,
+							data: {}
+						} );
+						
+					}).catch( err => {
+						res.send( {
+							status: false,
+							message: config.error_message.put_500,
+							data: {}
+						} );
+					});
+				} );
+				
+			} ).catch( err => {
+				console.log('catch_err');
+				res.send( {
+					status: false,
+					message: config.error_message.create_500,
+					data: {}
+				} );
+			} );
+		}
+		else {
+			res.send( {
+				status: false,
+				message: config.error_message.upload_406,
+				data: {}
+			} );
+		}
+
+	};
+	exports.createFile3 = ( req, res ) => {
 
 		if( !req.files ) {
 			return res.send( {

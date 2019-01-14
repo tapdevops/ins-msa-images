@@ -187,8 +187,7 @@
 			res.send( {
 				status: true,
 				message: config.error_message.find_200,
-				data: results,
-				x: data
+				data: results
 			} );
 		} ).catch( err => {
 			res.send( {

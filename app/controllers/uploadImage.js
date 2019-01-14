@@ -253,22 +253,11 @@
 			var new_filename = req.body.TR_CODE + '_' + filename;
 			var new_filename_rep = '';
 			if ( file.mimetype == 'image/jpeg' ) {
-				console.log('B')
 				new_filename_rep = new_filename.replace( '.jpeg', '' );
-				console.log( new_filename.replace( '.jpeg', '' ) )
 			}
 			else if ( file.mimetype == 'image/jpg' ) {
-				console.log('B')
 				new_filename_rep = new_filename.replace( '.jpg', '' );
-				console.log( new_filename.replace( '.jpg', '' ) )
 			}
-
-			console.log( '---- REPLACE: ' + new_filename_rep );
-
-			console.log( '------------>>' )
-			var xyz ='doremi.dore';
-			console.log( xyz.replace( '.do', '' ) );
-			console.log( '<<------------' )
 
 			const set = new imageUploadModel( {
 				IMAGE_CODE: req.body.IMAGE_CODE,
@@ -306,6 +295,7 @@
 					}
 
 					var dir_date = date.convert( String( data_client.data.INSERT_TIME ), 'YYYYMMDD' ).substr(0, 6);
+					console.log( dir_date );
 					var directory_local = __basedir + '/assets/images/' + upload_folder + '/' + dir_date;
 					var directory_target_local = directory_local;
 

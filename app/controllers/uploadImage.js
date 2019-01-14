@@ -251,7 +251,13 @@
 			var client = new Client();
 			
 			var new_filename = req.body.TR_CODE + '_' + filename;
-			var new_filename_rep = new_filename.replace( '.jpeg', new_filename.replace( '.jpg', '' ) );
+			var new_filename_rep = '';
+			if ( file.mimetype == 'image/jpeg' ) {
+				new_filename_rep = new_filename.replace( '.jpeg', '' );
+			}
+			else if ( file.mimetype == 'image/jpg' ) {
+				new_filename_rep = new_filename.replace( '.jpg', '' );
+			}
 
 			const set = new imageUploadModel( {
 				IMAGE_CODE: req.body.IMAGE_CODE,

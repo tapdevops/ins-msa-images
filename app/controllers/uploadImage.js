@@ -272,7 +272,9 @@
 
 			client.get( 'http://149.129.245.230:3011/finding/F0000005weR', args, function (data_client, response) {
 				
-				console.log(data_client.data.INSERT_TIME)
+				console.log('DATA CLIENT ------------------------------')
+				console.log(data_client)
+				console.log('DATA CLIENT ------------------------------')
 				set.save()
 				.then( data => {
 					if ( !data ) {

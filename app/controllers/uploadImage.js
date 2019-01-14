@@ -259,6 +259,8 @@
 				new_filename_rep = new_filename.replace( '.jpg', '' );
 			}
 
+			console.log( '---- REPLACE: ' + new_filename_rep );
+
 			const set = new imageUploadModel( {
 				IMAGE_CODE: req.body.IMAGE_CODE,
 				TR_CODE: req.body.TR_CODE || "",

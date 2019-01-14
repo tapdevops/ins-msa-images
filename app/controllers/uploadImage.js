@@ -272,7 +272,7 @@
 
 			client.get( 'http://149.129.245.230:3011/finding/F0000005weR', args, function (data_client, response) {
 				
-				console.log(data_client)
+				console.log(data_client.data.INSERT_TIME)
 				set.save()
 				.then( data => {
 					if ( !data ) {
@@ -283,10 +283,10 @@
 						} );
 					}
 					
-					var upload_folder = 'images-inspeksi';
+					var upload_folder = 'inspeksi';
 
 					if ( String( req.body.TR_CODE.substr( 0, 1 ) ) == 'F' ) {
-						upload_folder = 'images_finding';
+						upload_folder = 'finding';
 					}
 
 					var directory_local = __basedir + '/assets/images/' + upload_folder;
@@ -298,7 +298,6 @@
 
 					file.mv( directory_target_local + '/' + filename, function( err ) {
 						
-
 						if ( err ) {
 							return res.send( {
 								status: false,

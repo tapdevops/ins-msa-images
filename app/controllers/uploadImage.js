@@ -291,9 +291,9 @@
 
 				fServer.existsSync( directory_local ) || fServer.mkdirSync( directory_local );
 				fServer.existsSync( directory_target_local ) || fServer.mkdirSync( directory_target_local );
-				
+				console.log('A');
 				file.mv( directory_target_local + '/' + filename, function( err ) {
-
+					console.log('--A');
 					if ( err ) {
 						return res.send( {
 							status: false,
@@ -301,7 +301,7 @@
 							data: {}
 						} );
 					}
-					
+					console.log('----A');
 					fs.rename( directory_target_local + '/' + filename, directory_target_local + '/' + new_filename, function(err) {
 						if ( err ) console.log( 'ERROR: ' + err );
 					});
@@ -309,6 +309,7 @@
 					console.log( new_filename.replace( '.jpg', '' ) );
 					console.log( new_filename.replace( '.jpeg', '' ) );
 					//http://localhost:3011/finding/F0000005weR
+					console.log('------A');
 					imageUploadModel.findOneAndUpdate( { 
 						IMAGE_CODE : req.body.IMAGE_CODE,
 						IMAGE_NAME : req.body.IMAGE_NAME,

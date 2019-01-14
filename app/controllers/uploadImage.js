@@ -209,8 +209,13 @@
  * Untuk menyimpan data yang diupload
  * --------------------------------------------------------------------------
  */
+
  	exports.createFile = ( req, res ) => {
 
+ 		console.log( req.files );
+ 		console.log( req.body );
+
+ 		/*
 		if( !req.files ) {
 			return res.send( {
 				status: false,
@@ -230,13 +235,14 @@
 		var auth = req.auth;
 		var file = req.files.FILENAME;
 		var filename = file.name;
-
+		*/
 		/** 
 		 * Check MIME Type
 		 * Allowed MIME Type : ➤ IMAGE/JPEG
 		 * 					   ➤ IMAGE/JPG
 		 * ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬●
 		 */
+		/*
 		if ( file.mimetype == 'image/jpeg' || file.mimetype == 'image/jpg' ) {
 			
 			var new_filename = req.body.TR_CODE + '_' + filename;
@@ -297,7 +303,6 @@
 							data: {}
 						} );
 					}
-
 					
 					fs.rename( directory_target_local + '/' + filename, directory_target_local + '/' + new_filename, function(err) {
 						if ( err ) console.log( 'ERROR: ' + err );
@@ -356,6 +361,7 @@
 				data: {}
 			} );
 		}
+		*/
 
 	};
 	exports.createFile3 = ( req, res ) => {

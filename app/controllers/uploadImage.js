@@ -272,11 +272,6 @@
 
 			client.get( 'http://149.129.245.230:3011/finding/F0000005weR', args, function (data_client, response) {
 				
-				console.log('DATA CLIENT ------------------------------')
-				console.log(data_client.data.INSERT_TIME)
-
-				console.log(    date.convert( String( data_client.data.INSERT_TIME ), 'YYYYMMDD' )    )
-				console.log('DATA CLIENT ------------------------------')
 				set.save()
 				.then( data => {
 					if ( !data ) {
@@ -293,7 +288,8 @@
 						upload_folder = 'finding';
 					}
 
-					var directory_local = __basedir + '/assets/images/' + upload_folder;
+					var dir_date = date.convert( String( data_client.data.INSERT_TIME ), 'YYYYMMDD' ).substr(0, 6);
+					var directory_local = __basedir + '/assets/images/' + upload_folder + '/' + dir_date;
 					var directory_target_local = directory_local + '/' + req.body.TR_CODE;
 
 					fServer.existsSync( directory_local ) || fServer.mkdirSync( directory_local );

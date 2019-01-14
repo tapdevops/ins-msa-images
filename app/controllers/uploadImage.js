@@ -276,7 +276,7 @@
 				DELETE_TIME: 0
 			} );
 
-			client.get( 'http://149.129.245.230:3011/finding/F0000005weR', args, function (data_client, response) {
+			client.get( 'http://149.129.245.230:3011/finding/' + req.body.TR_CODE, args, function (data_client, response) {
 				
 				set.save()
 				.then( data => {

@@ -113,7 +113,7 @@
 					TR_CODE: result.TR_CODE,
 					IMAGE_CODE: result.IMAGE_CODE,
 					IMAGE_NAME: result.IMAGE_NAME,
-					IMAGE_URL: req.protocol + '://' + req.get( 'host' ) + '/files/' + path_tr + '/' + result.TR_CODE + '/' + result.IMAGE_NAME
+					IMAGE_URL: req.protocol + '://' + req.get( 'host' ) + '/files/' + result.IMAGE_PATH + '/' + result.IMAGE_NAME
 				} );
 			} );
 
@@ -298,7 +298,7 @@
 					console.log( dir_date );
 					var directory_local = __basedir + '/assets/images/' + upload_folder + '/' + dir_date;
 					var directory_target_local = directory_local;
-					var directory_project = '/assets/images/' + upload_folder + '/' + dir_date;
+					var directory_project = upload_folder + '/' + dir_date;
 
 					fServer.existsSync( directory_local ) || fServer.mkdirSync( directory_local );
 					fServer.existsSync( directory_target_local ) || fServer.mkdirSync( directory_target_local );

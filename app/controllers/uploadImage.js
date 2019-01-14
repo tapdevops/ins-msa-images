@@ -113,6 +113,7 @@
 					TR_CODE: result.TR_CODE,
 					IMAGE_CODE: result.IMAGE_CODE,
 					IMAGE_NAME: result.IMAGE_NAME,
+					IMAGE_PATH_LOCAL: result.IMAGE_PATH_LOCAL,
 					IMAGE_URL: req.protocol + '://' + req.get( 'host' ) + '/files/' + result.IMAGE_PATH + '/' + result.IMAGE_NAME
 				} );
 			} );
@@ -181,6 +182,7 @@
 					TR_CODE: result.TR_CODE,
 					IMAGE_CODE: result.IMAGE_CODE,
 					IMAGE_NAME: result.IMAGE_NAME,
+					IMAGE_PATH_LOCAL: result.IMAGE_PATH_LOCAL,
 					IMAGE_URL: req.protocol + '://' + req.get( 'host' ) + '/files/' + result.IMAGE_PATH + '/' + result.IMAGE_NAME
 				} );
 			} );
@@ -258,14 +260,15 @@
 				TR_CODE: req.body.TR_CODE || "",
 				IMAGE_NAME: new_filename_rep,
 				IMAGE_PATH: "",
+				IMAGE_PATH_LOCAL: req.body.IMAGE_PATH_LOCAL || "",
 				STATUS_IMAGE: req.body.STATUS_IMAGE || "",
 				MIME_TYPE: "",
 				STATUS_SYNC: req.body.STATUS_SYNC || "",
 				SYNC_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
 				INSERT_USER: req.body.INSERT_USER || "",
-				INSERT_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
+				INSERT_TIME: date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
 				UPDATE_USER: req.body.INSERT_USER || "",
-				UPDATE_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
+				UPDATE_TIME: date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
 				DELETE_USER: "",
 				DELETE_TIME: 0
 			} );

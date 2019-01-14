@@ -235,16 +235,13 @@
 		var file = req.files.FILENAME;
 		var filename = file.name;
 		
-		console.log( file )
-		console.log( auth )
-		console.log( filename )
 		/** 
 		 * Check MIME Type
 		 * Allowed MIME Type : ➤ IMAGE/JPEG
 		 * 					   ➤ IMAGE/JPG
 		 * ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬●
 		 */
-		/*
+		
 		if ( file.mimetype == 'image/jpeg' || file.mimetype == 'image/jpg' ) {
 			
 			var new_filename = req.body.TR_CODE + '_' + filename;
@@ -276,7 +273,8 @@
 						data: {}
 					} );
 				}
-
+				console.log('ok')
+				/*
 				
 				var upload_folder = 'images-inspeksi';
 
@@ -346,7 +344,7 @@
 						} );
 					});
 				} );
-				
+				*/
 			} ).catch( err => {
 				console.log('catch_err');
 				res.send( {
@@ -363,7 +361,6 @@
 				data: {}
 			} );
 		}
-		*/
 
 	};
 	exports.createFile3 = ( req, res ) => {

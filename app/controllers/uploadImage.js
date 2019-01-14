@@ -290,7 +290,7 @@
 
 					var dir_date = date.convert( String( data_client.data.INSERT_TIME ), 'YYYYMMDD' ).substr(0, 6);
 					var directory_local = __basedir + '/assets/images/' + upload_folder + '/' + dir_date;
-					var directory_target_local = directory_local + '/' + req.body.TR_CODE;
+					var directory_target_local = directory_local;
 
 					fServer.existsSync( directory_local ) || fServer.mkdirSync( directory_local );
 					fServer.existsSync( directory_target_local ) || fServer.mkdirSync( directory_target_local );

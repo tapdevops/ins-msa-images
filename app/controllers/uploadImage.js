@@ -215,7 +215,6 @@
  		console.log( req.files );
  		console.log( req.body );
 
- 		/*
 		if( !req.files ) {
 			return res.send( {
 				status: false,
@@ -235,7 +234,10 @@
 		var auth = req.auth;
 		var file = req.files.FILENAME;
 		var filename = file.name;
-		*/
+		
+		console.log( file )
+		console.log( auth )
+		console.log( filename )
 		/** 
 		 * Check MIME Type
 		 * Allowed MIME Type : ➤ IMAGE/JPEG

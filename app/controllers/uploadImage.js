@@ -177,17 +177,12 @@
 
 			var results = [];
 			data.forEach( function( result ) {
-				console.log( result );
-				var pth = result.IMAGE_PATH + '/' + result.IMAGE_NAME;
-				console.log(pth);
-				if ( fServer.existsSync( pth ) ) {
-					var bitmap = fServer.readFileSync( pth );
-					results.push( {
-						IMAGE_CODE: result.IMAGE_CODE,
-						IMAGE_NAME: result.IMAGE_NAME,
-						IMAGE_SOURCE: 'data:' + result.MIME_TYPE + ';base64,' + new Buffer( bitmap ).toString( 'base64' )
-					} );
-				}
+				results.push( {
+					TR_CODE: result.TR_CODE,
+					IMAGE_CODE: result.IMAGE_CODE,
+					IMAGE_NAME: result.IMAGE_NAME,
+					IMAGE_URL: req.protocol + '://' + req.get( 'host' ) + '/files/' + result.IMAGE_PATH + '/' + result.IMAGE_NAME
+				} );
 			} );
 			res.send( {
 				status: true,

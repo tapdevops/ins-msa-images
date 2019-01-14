@@ -11,7 +11,7 @@ module.exports = ( app ) => {
 	// ROUTE - IMAGE
 	//app.get( '/sync-mobile/images/:start_date/:end_date', token_verify, uploadImage.syncMobile );
 	app.post( '/sync-mobile/images/', token_verify, uploadImage.syncMobile );
-	app.post( '/images/:id', token_verify, uploadImage.find );
+	app.get( '/images/:id', token_verify, uploadImage.find );
 	app.post( '/image/description', token_verify, uploadImage.createDesc );
 	app.post( '/image/upload-file', token_verify, uploadImage.createFile );
 

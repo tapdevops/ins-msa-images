@@ -313,13 +313,13 @@
 
 					imageUploadModel.findOneAndUpdate( { 
 						IMAGE_CODE : req.body.IMAGE_CODE,
-						IMAGE_NAME : req.body.IMAGE_NAME,
-						TR_CODE : req.body.TR_CODE
+						//IMAGE_NAME : req.body.IMAGE_NAME,
+						//TR_CODE : req.body.TR_CODE
 					}, {
 						MIME_TYPE: file.mimetype,
 						IMAGE_PATH : directory_target_local,
-						//UPDATE_USER: req.body.INSERT_USER || "",
-						//UPDATE_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
+						UPDATE_USER: req.body.INSERT_USER || "",
+						UPDATE_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
 					}, { new: true } )
 					.then( data => {
 						if( !data ) {

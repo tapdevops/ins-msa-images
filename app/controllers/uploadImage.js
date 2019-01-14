@@ -321,6 +321,7 @@
 							IMAGE_NAME : new_filename,
 							TR_CODE : req.body.TR_CODE
 						}, {
+							IMAGE_NAME : new_filename_rep,
 							MIME_TYPE: file.mimetype,
 							IMAGE_PATH : directory_target_local,
 							UPDATE_USER: req.body.INSERT_USER || "",

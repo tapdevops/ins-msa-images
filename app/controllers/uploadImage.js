@@ -273,9 +273,7 @@
 						data: {}
 					} );
 				}
-				res.json({
-					message: 'OK'
-				})
+				
 				var upload_folder = 'images-inspeksi';
 
 				if ( String( req.body.TR_CODE.substr( 0, 1 ) ) == 'F' ) {

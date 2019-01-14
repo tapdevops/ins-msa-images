@@ -103,10 +103,10 @@
 				}*/
 
 				var type_tr = 'F';
-				var path_tr = 'images-finding';
+				var path_tr = 'finding';
 				if ( result.TR_CODE.substr( 0, 1 ) == 'I' ) {
 					type_tr = 'I';
-					path_tr = 'images-inspeksi';
+					path_tr = 'inspeksi';
 				}
 
 				results.push( {
@@ -298,6 +298,7 @@
 					console.log( dir_date );
 					var directory_local = __basedir + '/assets/images/' + upload_folder + '/' + dir_date;
 					var directory_target_local = directory_local;
+					var directory_project = '/assets/images/' + upload_folder + '/' + dir_date;
 
 					fServer.existsSync( directory_local ) || fServer.mkdirSync( directory_local );
 					fServer.existsSync( directory_target_local ) || fServer.mkdirSync( directory_target_local );
@@ -324,7 +325,7 @@
 						}, {
 							IMAGE_NAME : new_filename_rep,
 							MIME_TYPE: file.mimetype,
-							IMAGE_PATH : directory_target_local,
+							IMAGE_PATH : directory_project,
 							UPDATE_USER: req.body.INSERT_USER || "",
 							UPDATE_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
 						}, { new: true } )

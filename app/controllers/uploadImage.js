@@ -250,13 +250,17 @@
 
 			var client = new Client();
 			
-			var new_filename = String( req.body.TR_CODE + '_' + filename );
+			var new_filename = req.body.TR_CODE + '_' + filename;
 			var new_filename_rep = '';
 			if ( file.mimetype == 'image/jpeg' ) {
+				console.log('B')
 				new_filename_rep = new_filename.replace( '.jpeg', '' );
+				console.log( new_filename.replace( '.jpeg', '' ) )
 			}
 			else if ( file.mimetype == 'image/jpg' ) {
+				console.log('B')
 				new_filename_rep = new_filename.replace( '.jpg', '' );
+				console.log( new_filename.replace( '.jpg', '' ) )
 			}
 
 			console.log( '---- REPLACE: ' + new_filename_rep );

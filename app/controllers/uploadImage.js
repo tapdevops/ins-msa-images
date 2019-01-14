@@ -324,7 +324,7 @@
 						//dp = data;
 					});
 
-					console.log(dx);
+					console.log(dx.data);
 
 					console.log( 'DATA PARSE ---------------------------------------' )
 					console.log(dp)

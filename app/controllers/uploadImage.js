@@ -355,6 +355,20 @@
 					} );
 				} );
 			})
+			.on( 'requestTimeout', function ( req ) {
+				res.send( {
+					status: false,
+					message: 'Request has expired',
+					data: {}
+				} );
+			})
+			.on( 'responseTimeout', function ( res ) {
+				res.send( {
+					status: false,
+					message: 'Response has expired',
+					data: {}
+				} );
+			})
 			.on( 'error', function ( err ) {
 				res.send( {
 					status: false,

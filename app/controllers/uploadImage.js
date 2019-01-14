@@ -275,7 +275,7 @@
 				console.log('DATA CLIENT ------------------------------')
 				console.log(data_client.data.INSERT_TIME)
 
-				console.log(    date.convert( String( data_client.data.INSERT_TIME ), 'YYYYMMDD' )    )
+				console.log(    date.convert( data_client.data.INSERT_TIME, 'YYYYMMDD' )    )
 				console.log('DATA CLIENT ------------------------------')
 				set.save()
 				.then( data => {

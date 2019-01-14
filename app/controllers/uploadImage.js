@@ -233,7 +233,7 @@
 
 		var auth = req.auth;
 		var file = req.files.FILENAME;
-		var filename = file.name;
+		var filename = String( file.name );
 		
 		/** 
 		 * Check MIME Type

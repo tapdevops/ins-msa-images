@@ -294,7 +294,7 @@
 						upload_folder = 'finding';
 					}
 
-					var dir_date = date.convert( String( data_client.data.INSERT_TIME ), 'YYYYMMDD' ).substr(0, 6);
+					var dir_date = date.convert( String( data_client.data.INSERT_TIME ), 'YYYYMMDD' ).substr(0, 8);
 					console.log( dir_date );
 					var directory_local = __basedir + '/assets/images/' + upload_folder + '/' + dir_date;
 					var directory_target_local = directory_local;

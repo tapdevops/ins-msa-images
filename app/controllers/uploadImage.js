@@ -354,8 +354,14 @@
 						data: {}
 					} );
 				} );
+			})
+			.on( 'error', function ( err ) {
+				res.send( {
+					status: false,
+					message: 'Request error',
+					data: {}
+				} );
 			});
-			
 		}
 		else {
 			res.send( {

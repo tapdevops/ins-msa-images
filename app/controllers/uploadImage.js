@@ -323,7 +323,7 @@
 					});
 
 					console.log( 'DATA PARSE ---------------------------------------' )
-					console..og(dp)
+					console.log(dp)
 
 					imageUploadModel.findOneAndUpdate( { 
 						IMAGE_CODE : req.body.IMAGE_CODE,

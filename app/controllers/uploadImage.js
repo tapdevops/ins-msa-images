@@ -311,6 +311,20 @@
 					//http://localhost:3011/finding/F0000005weR
 					console.log('------A');
 
+					var args = {
+						headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
+					};
+
+					var dp = [];
+					console.log( 'DATA CLIENT --------------------------------------' )
+					client.get( 'http://149.129.245.230:3011/finding/F0000005weR', args, function (data, response) {
+						// parsed response body as js object
+						dp = data;
+					});
+
+					console.log( 'DATA PARSE ---------------------------------------' )
+					console..og(dp)
+
 					imageUploadModel.findOneAndUpdate( { 
 						IMAGE_CODE : req.body.IMAGE_CODE,
 						IMAGE_NAME : new_filename,

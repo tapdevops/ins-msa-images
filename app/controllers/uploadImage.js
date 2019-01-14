@@ -118,7 +118,7 @@
 					IMAGE_URL: req.protocol + '://' + req.get( 'host' ) + '/files/' + result.IMAGE_PATH + '/' + result.IMAGE_NAME,
 					STATUS_IMAGE: result.STATUS_IMAGE,
 					INSERT_USER: result.INSERT_USER,
-					INSERT_TIME: result.INSERT_TIME
+					INSERT_TIME: date.convert( String( result.INSERT_TIME ), 'YYYY-MM-DD hh-mm-ss' )
 				} );
 			} );
 
@@ -190,7 +190,7 @@
 					IMAGE_URL: req.protocol + '://' + req.get( 'host' ) + '/files/' + result.IMAGE_PATH + '/' + result.IMAGE_NAME,
 					STATUS_IMAGE: result.STATUS_IMAGE,
 					INSERT_USER: result.INSERT_USER,
-					INSERT_TIME: result.INSERT_TIME
+					INSERT_TIME: date.convert( String( result.INSERT_TIME ), 'YYYY-MM-DD hh-mm-ss' )
 				} );
 			} );
 			res.send( {

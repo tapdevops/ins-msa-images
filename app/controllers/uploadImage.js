@@ -117,8 +117,7 @@
 					IMAGE_PATH_LOCAL: result.IMAGE_PATH_LOCAL,
 					IMAGE_URL: req.protocol + '://' + req.get( 'host' ) + '/files/' + result.IMAGE_PATH + '/' + result.IMAGE_NAME,
 					STATUS_IMAGE: result.STATUS_IMAGE,
-					INSERT_USER: result.INSERT_USER,
-					INSERT_TIME: date.convert( result.INSERT_TIME, 'YYYYMMDDhhmmss' )
+					INSERT_USER: result.INSERT_USER
 				} );
 			} );
 
@@ -189,8 +188,7 @@
 					IMAGE_PATH_LOCAL: result.IMAGE_PATH_LOCAL,
 					IMAGE_URL: req.protocol + '://' + req.get( 'host' ) + '/files/' + result.IMAGE_PATH + '/' + result.IMAGE_NAME,
 					STATUS_IMAGE: result.STATUS_IMAGE,
-					INSERT_USER: result.INSERT_USER,
-					INSERT_TIME: date.convert( result.INSERT_TIME, 'YYYYMMDDhhmmss' )
+					INSERT_USER: result.INSERT_USER
 				} );
 			} );
 			res.send( {

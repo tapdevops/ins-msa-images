@@ -250,7 +250,7 @@
 
 			var client = new Client();
 			
-			var new_filename = req.body.TR_CODE + '_' + filename;
+			var new_filename = String( req.body.TR_CODE + '_' + filename );
 			var new_filename_rep = '';
 			if ( file.mimetype == 'image/jpeg' ) {
 				new_filename_rep = new_filename.replace( '.jpeg', '' );
@@ -260,6 +260,11 @@
 			}
 
 			console.log( '---- REPLACE: ' + new_filename_rep );
+
+			console.log( '------------>>' )
+			var xyz ='doremi.dore';
+			console.log( xyz.replace( '.do', '' ) );
+			console.log( '<<------------' )
 
 			const set = new imageUploadModel( {
 				IMAGE_CODE: req.body.IMAGE_CODE,

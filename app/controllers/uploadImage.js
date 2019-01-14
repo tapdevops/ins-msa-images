@@ -317,9 +317,9 @@
 						TR_CODE : req.body.TR_CODE
 					}, {
 						MIME_TYPE: file.mimetype,
-						IMAGE_PATH : directory_target_local,
-						UPDATE_USER: req.body.INSERT_USER || "",
-						UPDATE_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
+						//IMAGE_PATH : directory_target_local,
+						//UPDATE_USER: req.body.INSERT_USER || "",
+						//UPDATE_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
 					}, { new: true } )
 					.then( data => {
 						if( !data ) {
@@ -343,7 +343,7 @@
 							data: {}
 						} );
 					});
-					
+
 				} );
 				
 			} ).catch( err => {

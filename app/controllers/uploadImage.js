@@ -318,11 +318,13 @@
 					var dp = [];
 					console.log( 'DATA CLIENT --------------------------------------' )
 					var client = new Client();
-					client.get( 'http://149.129.245.230:3011/finding/F0000005weR', args, function (data, response) {
+					var dx = client.get( 'http://149.129.245.230:3011/finding/F0000005weR', args, function (data, response) {
 						// parsed response body as js object
-						console.log(data);
-						dp = data;
+						//console.log(data);
+						//dp = data;
 					});
+
+					console.log(dx);
 
 					console.log( 'DATA PARSE ---------------------------------------' )
 					console.log(dp)

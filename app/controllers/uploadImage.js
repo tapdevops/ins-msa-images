@@ -291,7 +291,7 @@
 
 				fServer.existsSync( directory_local ) || fServer.mkdirSync( directory_local );
 				fServer.existsSync( directory_target_local ) || fServer.mkdirSync( directory_target_local );
-				/*
+				
 				file.mv( directory_target_local + '/' + filename, function( err ) {
 
 					if ( err ) {
@@ -342,7 +342,7 @@
 						} );
 					});
 				} );
-				*/
+				
 			} ).catch( err => {
 				console.log('catch_err');
 				res.send( {

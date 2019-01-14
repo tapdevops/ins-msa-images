@@ -244,6 +244,12 @@
 		
 		if ( file.mimetype == 'image/jpeg' || file.mimetype == 'image/jpg' ) {
 			
+			var args = {
+				headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
+			};
+
+			var client = new Client();
+			
 			var new_filename = req.body.TR_CODE + '_' + filename;
 			var new_filename_rep = new_filename.replace( '.jpeg', new_filename.replace( '.jpg', '' ) );
 
@@ -264,114 +270,92 @@
 				DELETE_TIME: 0
 			} );
 
-			set.save()
-			.then( data => {
-				if ( !data ) {
-					return res.send( {
-						status: false,
-						message: config.error_message.create_404,
-						data: {}
-					} );
-				}
+			client.get( 'http://149.129.245.230:3011/finding/F0000005weR', args, function (data_client, response) {
 				
-				var upload_folder = 'images-inspeksi';
-
-				if ( String( req.body.TR_CODE.substr( 0, 1 ) ) == 'F' ) {
-					upload_folder = 'images_finding';
-				}
-
-				var directory_local = __basedir + '/assets/images/' + upload_folder;
-				var directory_target_local = directory_local + '/' + req.body.TR_CODE;
-
-				console.log( __basedir );
-				console.log( __rootdir );
-				console.log( directory_local );
-				console.log( directory_target_local );
-				console.log( file );
-
-				fServer.existsSync( directory_local ) || fServer.mkdirSync( directory_local );
-				fServer.existsSync( directory_target_local ) || fServer.mkdirSync( directory_target_local );
-				console.log('A');
-				file.mv( directory_target_local + '/' + filename, function( err ) {
-					console.log('--A');
-					if ( err ) {
+				console.log(data_client)
+				set.save()
+				.then( data => {
+					if ( !data ) {
 						return res.send( {
 							status: false,
-							message: config.error_message.upload_404,
+							message: config.error_message.create_404,
 							data: {}
 						} );
 					}
-					console.log('----A');
-					fs.rename( directory_target_local + '/' + filename, directory_target_local + '/' + new_filename, function(err) {
-						if ( err ) console.log( 'ERROR: ' + err );
-					});
+					
+					var upload_folder = 'images-inspeksi';
 
-					console.log( new_filename.replace( '.jpg', '' ) );
-					console.log( new_filename.replace( '.jpeg', '' ) );
-					//http://localhost:3011/finding/F0000005weR
-					console.log('------A');
+					if ( String( req.body.TR_CODE.substr( 0, 1 ) ) == 'F' ) {
+						upload_folder = 'images_finding';
+					}
 
-					var args = {
-						headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
-					};
+					var directory_local = __basedir + '/assets/images/' + upload_folder;
+					var directory_target_local = directory_local + '/' + req.body.TR_CODE;
 
-					var dp = [];
-					console.log( 'DATA CLIENT --------------------------------------' )
-					var client = new Client();
-					var dx = client.get( 'http://149.129.245.230:3011/finding/F0000005weR', args, function (data, response) {
-						// parsed response body as js object
-						//console.log(data);
-						//dp = data;
-					});
+					fServer.existsSync( directory_local ) || fServer.mkdirSync( directory_local );
+					fServer.existsSync( directory_target_local ) || fServer.mkdirSync( directory_target_local );
+					
 
-					console.log(dx.data);
+					file.mv( directory_target_local + '/' + filename, function( err ) {
+						
 
-					console.log( 'DATA PARSE ---------------------------------------' )
-					console.log(dp)
-
-					imageUploadModel.findOneAndUpdate( { 
-						IMAGE_CODE : req.body.IMAGE_CODE,
-						IMAGE_NAME : new_filename,
-						TR_CODE : req.body.TR_CODE
-					}, {
-						MIME_TYPE: file.mimetype,
-						IMAGE_PATH : directory_target_local,
-						UPDATE_USER: req.body.INSERT_USER || "",
-						UPDATE_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
-					}, { new: true } )
-					.then( data => {
-						if( !data ) {
+						if ( err ) {
 							return res.send( {
 								status: false,
-								message: config.error_message.put_404,
+								message: config.error_message.upload_404,
 								data: {}
 							} );
 						}
 
-						res.send( {
-							status: true,
-							message: config.error_message.put_200,
-							data: {}
-						} );
-						
-					}).catch( err => {
-						res.send( {
-							status: false,
-							message: config.error_message.put_500,
-							data: {}
-						} );
-					});
+						fs.rename( directory_target_local + '/' + filename, directory_target_local + '/' + new_filename, function(err) {
+							if ( err ) console.log( 'ERROR: ' + err );
+						});
 
+						imageUploadModel.findOneAndUpdate( { 
+							IMAGE_CODE : req.body.IMAGE_CODE,
+							IMAGE_NAME : new_filename,
+							TR_CODE : req.body.TR_CODE
+						}, {
+							MIME_TYPE: file.mimetype,
+							IMAGE_PATH : directory_target_local,
+							UPDATE_USER: req.body.INSERT_USER || "",
+							UPDATE_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
+						}, { new: true } )
+						.then( data => {
+							if( !data ) {
+								return res.send( {
+									status: false,
+									message: config.error_message.put_404,
+									data: {}
+								} );
+							}
+
+							res.send( {
+								status: true,
+								message: config.error_message.put_200,
+								data: {}
+							} );
+							
+						}).catch( err => {
+							res.send( {
+								status: false,
+								message: config.error_message.put_500,
+								data: {}
+							} );
+						});
+
+					} );
+					
+				} ).catch( err => {
+					console.log('catch_err');
+					res.send( {
+						status: false,
+						message: config.error_message.create_500,
+						data: {}
+					} );
 				} );
-				
-			} ).catch( err => {
-				console.log('catch_err');
-				res.send( {
-					status: false,
-					message: config.error_message.create_500,
-					data: {}
-				} );
-			} );
+			});
+			
 		}
 		else {
 			res.send( {

@@ -273,9 +273,7 @@
 						data: {}
 					} );
 				}
-				console.log('ok')
-				/*
-				
+
 				var upload_folder = 'images-inspeksi';
 
 				if ( String( req.body.TR_CODE.substr( 0, 1 ) ) == 'F' ) {
@@ -293,7 +291,7 @@
 
 				fServer.existsSync( directory_local ) || fServer.mkdirSync( directory_local );
 				fServer.existsSync( directory_target_local ) || fServer.mkdirSync( directory_target_local );
-				
+				/*
 				file.mv( directory_target_local + '/' + filename, function( err ) {
 
 					if ( err ) {

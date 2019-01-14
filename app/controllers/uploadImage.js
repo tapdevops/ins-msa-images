@@ -273,7 +273,9 @@
 						data: {}
 					} );
 				}
-
+				res.json({
+					message: 'OK'
+				})
 				var upload_folder = 'images-inspeksi';
 
 				if ( String( req.body.TR_CODE.substr( 0, 1 ) ) == 'F' ) {
@@ -310,38 +312,7 @@
 					console.log( new_filename.replace( '.jpeg', '' ) );
 					//http://localhost:3011/finding/F0000005weR
 					console.log('------A');
-					imageUploadModel.findOneAndUpdate( { 
-						IMAGE_CODE : req.body.IMAGE_CODE,
-						IMAGE_NAME : req.body.IMAGE_NAME,
-						TR_CODE : req.body.TR_CODE
-					}, {
-						MIME_TYPE: file.mimetype,
-						IMAGE_PATH : directory_target_local,
-						UPDATE_USER: req.body.INSERT_USER || "",
-						UPDATE_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
-					}, { new: true } )
-					.then( data => {
-						if( !data ) {
-							return res.send( {
-								status: false,
-								message: config.error_message.put_404,
-								data: {}
-							} );
-						}
-
-						res.send( {
-							status: true,
-							message: config.error_message.put_200,
-							data: {}
-						} );
-						
-					}).catch( err => {
-						res.send( {
-							status: false,
-							message: config.error_message.put_500,
-							data: {}
-						} );
-					});
+					
 				} );
 				
 			} ).catch( err => {

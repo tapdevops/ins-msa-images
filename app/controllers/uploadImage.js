@@ -215,6 +215,7 @@
 
  	exports.createFile = ( req, res ) => {
 
+ 		console.log( req.header );
  		console.log( req.files );
  		console.log( req.body );
 

@@ -410,7 +410,9 @@
 		var base64Image = base64String.split( ';base64,' ).pop();
 		fs.writeFile( 'assets/' + req.body.FILENAME, base64Image, { encoding: 'base64' }, function(err) {
 			res.json( {
-				message : 'OK'
+				status: true,
+				message: 'Success! ',
+				data: []
 			} )
 		});
 		

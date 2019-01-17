@@ -117,6 +117,7 @@
 					IMAGE_PATH_LOCAL: result.IMAGE_PATH_LOCAL,
 					IMAGE_URL: req.protocol + '://' + req.get( 'host' ) + '/files/' + result.IMAGE_PATH + '/' + result.IMAGE_NAME,
 					STATUS_IMAGE: result.STATUS_IMAGE,
+					STATUS_SYNC: result.STATUS_SYNC,
 					INSERT_USER: result.INSERT_USER,
 					INSERT_TIME: date.convert( String( result.INSERT_TIME ), 'YYYY-MM-DD hh-mm-ss' )
 				} );

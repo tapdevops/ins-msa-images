@@ -209,7 +209,7 @@
 
 /**
  * createFile
- * Untuk menyimpan data yang diupload
+ * Untuk menyimpan data yang diupload dengan multipart/form-data
  * --------------------------------------------------------------------------
  */
 
@@ -400,7 +400,22 @@
 
 	};
 	
+/**
+ * createFile - Base64
+ * Untuk menyimpan data yang diupload dengan BASE64
+ * --------------------------------------------------------------------------
+ */
+ 	exports.createFileWithBase64 = ( req, res ) => {
+		var base64String = req.body.BASE64;
+		var base64Image = base64String.split( ';base64,' ).pop();
+		fs.writeFile( 'assets/' + req.body.FILENAME, base64Image, { encoding: 'base64' }, function(err) {
+			res.json( {
+				message : 'OK'
+			} )
+		});
+		
 
+ 	}
 /**
  * createDesc
  * Untuk membuat dan menyimpan data baru

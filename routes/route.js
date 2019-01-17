@@ -14,6 +14,9 @@ module.exports = ( app ) => {
 	app.get( '/images/:id', token_verify, uploadImage.find );
 	app.post( '/image/description', token_verify, uploadImage.createDesc );
 	app.post( '/image/upload-file', token_verify, uploadImage.createFile );
+	//app.post( '/image/upload-file-base64', token_verify, uploadImage.createFileWithBase64 );
+	app.post( '/image/upload-file-base64', uploadImage.createFileWithBase64 );
+	
 
 	app.get( '/testing', token_verify, uploadImage.readfile );
 	app.get( '/testing2', uploadImage.readfile2 );

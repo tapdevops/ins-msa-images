@@ -322,6 +322,11 @@
 						if ( err ) console.log( 'ERROR: ' + err );
 					});
 
+					console.log( '.-`-.-`-.-`-.-`-.-`-.-`-.-`-.-`-.-`-.' );
+					console.log( 'New Filename : ' + new_filename_rep );
+					console.log( 'Directory Project : ' + directory_project );
+					console.log( '.-`-.-`-.-`-.-`-.-`-.-`-.-`-.-`-.-`-.' );
+
 					imageUploadModel.findOneAndUpdate( { 
 						IMAGE_CODE : req.body.IMAGE_CODE,
 						IMAGE_NAME : new_filename,

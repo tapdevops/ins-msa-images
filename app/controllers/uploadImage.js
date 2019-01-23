@@ -281,7 +281,7 @@
 				INSERT_TIME: req.body.INSERT_TIME || 0,
 				UPDATE_USER: req.body.INSERT_USER || "",
 				//UPDATE_TIME: date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
-				UPDATE_TIME: req.body.UPDATE_TIME || 0,
+				UPDATE_TIME: req.body.INSERT_TIME || 0,
 				DELETE_USER: "",
 				DELETE_TIME: 0
 			} );
@@ -301,7 +301,7 @@
 				if ( String( req.body.TR_CODE.substr( 0, 1 ) ) == 'F' ) {
 					upload_folder = 'finding';
 				}
-
+				
 				var dir_date = date.convert( String( req.body.INSERT_TIME ), 'YYYYMMDD' ).substr(0, 8);
 				console.log( dir_date );
 				var directory_local = __basedir + '/assets/images/' + upload_folder + '/' + dir_date;
@@ -310,7 +310,6 @@
 
 				fServer.existsSync( directory_local ) || fServer.mkdirSync( directory_local );
 				fServer.existsSync( directory_target_local ) || fServer.mkdirSync( directory_target_local );
-				
 
 				file.mv( directory_target_local + '/' + filename, function( err ) {
 					
@@ -388,197 +387,6 @@
 
 	};
 
- 	exports.createFile2 = ( req, res ) => {
-
- 		console.log( req.header );
- 		console.log( req.files );
- 		console.log( req.body );
-
-		if( !req.files ) {
-			return res.send( {
-				status: false,
-				message: config.error_message.invalid_input + 'REQUEST FILES.',
-				data: {}
-			} );
-		}
-
-		if ( !req.body.TR_CODE  ) {
-			return res.send( {
-				status: false,
-				message: config.error_message.invalid_input + ' TR_CODE.',
-				data: {}
-			} );
-		}
-
-		var auth = req.auth;
-		var file = req.files.FILENAME;
-		var filename = String( file.name );
-		
-		/** 
-		 * Check MIME Type
-		 * Allowed MIME Type : ➤ IMAGE/JPEG
-		 * 					   ➤ IMAGE/JPG
-		 * ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬●
-		 */
-		
-		if ( file.mimetype == 'image/jpeg' || file.mimetype == 'image/jpg' ) {
-			
-			var args = {
-				headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
-			};
-
-			var client = new Client();
-			
-			var new_filename = req.body.TR_CODE + '_' + filename;
-			var new_filename_rep = '';
-			if ( file.mimetype == 'image/jpeg' ) {
-				new_filename_rep = new_filename.replace( '.jpeg', '' );
-			}
-			else if ( file.mimetype == 'image/jpg' ) {
-				new_filename_rep = new_filename.replace( '.jpg', '' );
-			}
-
-			const set = new imageUploadModel( {
-				IMAGE_CODE: req.body.IMAGE_CODE,
-				TR_CODE: req.body.TR_CODE || "",
-				IMAGE_NAME: new_filename_rep,
-				IMAGE_PATH: "",
-				IMAGE_PATH_LOCAL: req.body.IMAGE_PATH_LOCAL || "",
-				STATUS_IMAGE: req.body.STATUS_IMAGE || "",
-				MIME_TYPE: "",
-				STATUS_SYNC: req.body.STATUS_SYNC || "",
-				//SYNC_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
-				SYNC_TIME: req.body.SYNC_TIME || 0,
-				INSERT_USER: req.body.INSERT_USER || "",
-				//INSERT_TIME: date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
-				INSERT_TIME: req.body.INSERT_TIME || 0,
-				UPDATE_USER: req.body.INSERT_USER || "",
-				UPDATE_TIME: req.body.INSERT_TIME || 0,
-				//UPDATE_TIME: date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
-				DELETE_USER: "",
-				DELETE_TIME: 0
-			} );
-
-			client.get( 'http://149.129.245.230:3011/finding/' + req.body.TR_CODE, args, function (data_client, response) {
-				
-				set.save()
-				.then( data => {
-					if ( !data ) {
-						return res.send( {
-							status: false,
-							message: config.error_message.create_404,
-							data: {}
-						} );
-					}
-					
-					var upload_folder = 'inspeksi';
-
-					if ( String( req.body.TR_CODE.substr( 0, 1 ) ) == 'F' ) {
-						upload_folder = 'finding';
-					}
-
-					//var dir_date = date.convert( String( data_client.data.INSERT_TIME ), 'YYYYMMDD' ).substr(0, 8);
-					var dir_date = data_client.data.INSERT_TIME.substr(0, 8);
-					console.log( dir_date );
-					var directory_local = __basedir + '/assets/images/' + upload_folder + '/' + dir_date;
-					var directory_target_local = directory_local;
-					var directory_project = upload_folder + '/' + dir_date;
-
-					fServer.existsSync( directory_local ) || fServer.mkdirSync( directory_local );
-					fServer.existsSync( directory_target_local ) || fServer.mkdirSync( directory_target_local );
-					
-
-					file.mv( directory_target_local + '/' + filename, function( err ) {
-						
-						if ( err ) {
-							return res.send( {
-								status: false,
-								message: config.error_message.upload_404,
-								data: {}
-							} );
-						}
-
-						fs.rename( directory_target_local + '/' + filename, directory_target_local + '/' + new_filename, function(err) {
-							if ( err ) console.log( 'ERROR: ' + err );
-						});
-
-						imageUploadModel.findOneAndUpdate( { 
-							IMAGE_CODE : req.body.IMAGE_CODE,
-							IMAGE_NAME : new_filename,
-							TR_CODE : req.body.TR_CODE
-						}, {
-							IMAGE_NAME : new_filename_rep,
-							MIME_TYPE: file.mimetype,
-							IMAGE_PATH : directory_project,
-							UPDATE_USER: req.body.INSERT_USER || "",
-							UPDATE_TIME: req.body.SYNC_TIME || 0
-							//UPDATE_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
-						}, { new: true } )
-						.then( data => {
-							if( !data ) {
-								return res.send( {
-									status: false,
-									message: config.error_message.put_404,
-									data: {}
-								} );
-							}
-
-							res.send( {
-								status: true,
-								message: config.error_message.put_200,
-								data: {}
-							} );
-							
-						}).catch( err => {
-							res.send( {
-								status: false,
-								message: config.error_message.put_500,
-								data: {}
-							} );
-						});
-
-					} );
-					
-				} ).catch( err => {
-					console.log('catch_err');
-					res.send( {
-						status: false,
-						message: config.error_message.create_500,
-						data: {}
-					} );
-				} );
-			})
-			.on( 'requestTimeout', function ( req ) {
-				res.send( {
-					status: false,
-					message: 'Request has expired',
-					data: {}
-				} );
-			})
-			.on( 'responseTimeout', function ( res ) {
-				res.send( {
-					status: false,
-					message: 'Response has expired',
-					data: {}
-				} );
-			})
-			.on( 'error', function ( err ) {
-				res.send( {
-					status: false,
-					message: 'Request error',
-					data: {}
-				} );
-			});
-		}
-		else {
-			res.send( {
-				status: false,
-				message: config.error_message.upload_406,
-				data: {}
-			} );
-		}
-
-	};
 	
 /**
  * createFile - Base64

@@ -119,7 +119,8 @@
 					STATUS_IMAGE: result.STATUS_IMAGE,
 					STATUS_SYNC: result.STATUS_SYNC,
 					INSERT_USER: result.INSERT_USER,
-					INSERT_TIME: date.convert( String( result.INSERT_TIME ), 'YYYY-MM-DD hh-mm-ss' )
+					//INSERT_TIME: date.convert( String( result.INSERT_TIME ), 'YYYY-MM-DD hh-mm-ss' )
+					INSERT_TIME: result.INSERT_TIME || 0
 				} );
 			} );
 
@@ -191,7 +192,7 @@
 					IMAGE_URL: req.protocol + '://' + req.get( 'host' ) + '/files/' + result.IMAGE_PATH + '/' + result.IMAGE_NAME,
 					STATUS_IMAGE: result.STATUS_IMAGE,
 					INSERT_USER: result.INSERT_USER,
-					INSERT_TIME: date.convert( String( result.INSERT_TIME ), 'YYYY-MM-DD hh-mm-ss' )
+					INSERT_TIME: result.INSERT_TIME || 0
 				} );
 			} );
 			res.send( {
@@ -273,11 +274,14 @@
 				STATUS_IMAGE: req.body.STATUS_IMAGE || "",
 				MIME_TYPE: "",
 				STATUS_SYNC: req.body.STATUS_SYNC || "",
-				SYNC_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
+				//SYNC_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
+				SYNC_TIME: req.body.SYNC_TIME || 0,
 				INSERT_USER: req.body.INSERT_USER || "",
-				INSERT_TIME: date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
+				//INSERT_TIME: date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
+				INSERT_TIME: req.body.INSERT_TIME || 0,
 				UPDATE_USER: req.body.INSERT_USER || "",
-				UPDATE_TIME: date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
+				//UPDATE_TIME: date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
+				UPDATE_TIME: req.body.UPDATE_TIME || 0,
 				DELETE_USER: "",
 				DELETE_TIME: 0
 			} );
@@ -336,7 +340,8 @@
 						MIME_TYPE: file.mimetype,
 						IMAGE_PATH : directory_project,
 						UPDATE_USER: req.body.INSERT_USER || "",
-						UPDATE_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
+						//UPDATE_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
+						UPDATE_TIME: req.body.SYNC_TIME || 0
 					}, { new: true } )
 					.then( data => {
 						if( !data ) {
@@ -442,11 +447,14 @@
 				STATUS_IMAGE: req.body.STATUS_IMAGE || "",
 				MIME_TYPE: "",
 				STATUS_SYNC: req.body.STATUS_SYNC || "",
-				SYNC_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
+				//SYNC_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
+				SYNC_TIME: req.body.SYNC_TIME || 0,
 				INSERT_USER: req.body.INSERT_USER || "",
-				INSERT_TIME: date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
+				//INSERT_TIME: date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
+				INSERT_TIME: req.body.INSERT_TIME || 0,
 				UPDATE_USER: req.body.INSERT_USER || "",
-				UPDATE_TIME: date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
+				UPDATE_TIME: req.body.INSERT_TIME || 0,
+				//UPDATE_TIME: date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
 				DELETE_USER: "",
 				DELETE_TIME: 0
 			} );
@@ -502,7 +510,8 @@
 							MIME_TYPE: file.mimetype,
 							IMAGE_PATH : directory_project,
 							UPDATE_USER: req.body.INSERT_USER || "",
-							UPDATE_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
+							UPDATE_TIME: req.body.SYNC_TIME || 0
+							//UPDATE_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
 						}, { new: true } )
 						.then( data => {
 							if( !data ) {

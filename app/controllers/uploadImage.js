@@ -34,6 +34,15 @@
 	// Variable
 	var localdir = '/Users/mac/Documents/NodeJS/Microservices-TAP-MobileInspection-Dev/SourceImages';
 
+exports.testProtocol = ( req, res ) => {
+	console.log( req.protocol );
+	console.log( req.get( 'host' ) );
+	res.json({
+		protocol: req.protocol,
+		host: req.host
+	})
+};
+
 /**
  * syncMobile
  * Untuk 

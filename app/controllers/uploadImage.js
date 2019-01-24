@@ -34,15 +34,6 @@
 	// Variable
 	var localdir = '/Users/mac/Documents/NodeJS/Microservices-TAP-MobileInspection-Dev/SourceImages';
 
-exports.testProtocol = ( req, res ) => {
-	console.log( req.protocol );
-	console.log( req.get( 'host' ) );
-	res.json({
-		protocol: req.protocol,
-		host: req.host
-	})
-};
-
 /**
  * syncMobile
  * Untuk 
@@ -79,6 +70,7 @@ exports.testProtocol = ( req, res ) => {
 			DELETE_USER: 1,
 			DELETE_TIME: 1
 		})
+		.limit( 20 )
 		.then( data => {
 			if( !data ) {
 				return res.send( {
@@ -111,7 +103,6 @@ exports.testProtocol = ( req, res ) => {
 					} );
 				}*/
 
-				var host = req.protocol + '://s' + req.get( 'host' );
 				var type_tr = 'F';
 				var path_tr = 'finding';
 				if ( result.TR_CODE.substr( 0, 1 ) == 'I' ) {
@@ -124,11 +115,11 @@ exports.testProtocol = ( req, res ) => {
 					IMAGE_CODE: result.IMAGE_CODE,
 					IMAGE_NAME: result.IMAGE_NAME,
 					IMAGE_PATH_LOCAL: result.IMAGE_PATH_LOCAL,
-					IMAGE_URL: host + '/files/' + result.IMAGE_PATH + '/' + result.IMAGE_NAME,
+					IMAGE_URL: req.protocol + '://' + req.get( 'host' ) + '/files/' + result.IMAGE_PATH + '/' + result.IMAGE_NAME,
 					STATUS_IMAGE: result.STATUS_IMAGE,
 					STATUS_SYNC: result.STATUS_SYNC,
 					INSERT_USER: result.INSERT_USER,
-					//INSERT_TIME: date.convert( String( result.INSERT_TIME ), 'YYYY-MM-DD hh-mm-ss' ),
+					//INSERT_TIME: date.convert( String( result.INSERT_TIME ), 'YYYY-MM-DD hh-mm-ss' )
 					INSERT_TIME: result.INSERT_TIME || 0
 				} );
 			} );
@@ -192,14 +183,13 @@ exports.testProtocol = ( req, res ) => {
 			}
 
 			var results = [];
-			var host = req.protocol + '://s' + req.get( 'host' );
 			data.forEach( function( result ) {
 				results.push( {
 					TR_CODE: result.TR_CODE,
 					IMAGE_CODE: result.IMAGE_CODE,
 					IMAGE_NAME: result.IMAGE_NAME,
 					IMAGE_PATH_LOCAL: result.IMAGE_PATH_LOCAL,
-					IMAGE_URL: host + '/file/' + result.IMAGE_PATH + '/' + result.IMAGE_NAME,
+					IMAGE_URL: req.protocol + '://' + req.get( 'host' ) + '/files/' + result.IMAGE_PATH + '/' + result.IMAGE_NAME,
 					STATUS_IMAGE: result.STATUS_IMAGE,
 					INSERT_USER: result.INSERT_USER,
 					INSERT_TIME: result.INSERT_TIME || 0

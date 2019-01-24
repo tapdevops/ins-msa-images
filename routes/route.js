@@ -20,7 +20,6 @@ module.exports = ( app ) => {
 
 	app.get( '/testing', token_verify, uploadImage.readfile );
 	app.get( '/testing2', uploadImage.readfile2 );
-	app.get( '/testing3', uploadImage.testProtocol );
 }
 
 function token_verify( req, res, next ) {

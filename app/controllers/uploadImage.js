@@ -124,7 +124,7 @@ exports.testProtocol = ( req, res ) => {
 					IMAGE_CODE: result.IMAGE_CODE,
 					IMAGE_NAME: result.IMAGE_NAME,
 					IMAGE_PATH_LOCAL: result.IMAGE_PATH_LOCAL,
-					IMAGE_URL: host + '/fileszz/' + result.IMAGE_PATH + '/' + result.IMAGE_NAME,
+					IMAGE_URL: host + '/files/' + result.IMAGE_PATH + '/' + result.IMAGE_NAME,
 					STATUS_IMAGE: result.STATUS_IMAGE,
 					STATUS_SYNC: result.STATUS_SYNC,
 					INSERT_USER: result.INSERT_USER,
@@ -192,13 +192,14 @@ exports.testProtocol = ( req, res ) => {
 			}
 
 			var results = [];
+			var host = req.protocol + '://' + req.get( 'host' );
 			data.forEach( function( result ) {
 				results.push( {
 					TR_CODE: result.TR_CODE,
 					IMAGE_CODE: result.IMAGE_CODE,
 					IMAGE_NAME: result.IMAGE_NAME,
 					IMAGE_PATH_LOCAL: result.IMAGE_PATH_LOCAL,
-					IMAGE_URL: req.protocol + '://' + req.get( 'host' ) + '/files/' + result.IMAGE_PATH + '/' + result.IMAGE_NAME,
+					IMAGE_URL: host + '/filez/' + result.IMAGE_PATH + '/' + result.IMAGE_NAME,
 					STATUS_IMAGE: result.STATUS_IMAGE,
 					INSERT_USER: result.INSERT_USER,
 					INSERT_TIME: result.INSERT_TIME || 0

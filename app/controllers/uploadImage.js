@@ -154,7 +154,7 @@ exports.testProtocol = ( req, res ) => {
  */
 	exports.find = ( req, res ) => {
 
-		if( !req.params.id ) {$
+		if( !req.params.id ) {
 			return res.send( {
 				status: false,
 				message: config.error_message.invalid_input + 'TR_CODE.',

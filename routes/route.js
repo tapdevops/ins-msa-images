@@ -10,17 +10,17 @@ module.exports = ( app ) => {
 
 	// ROUTE - IMAGE
 	//app.get( '/sync-mobile/images/:start_date/:end_date', token_verify, uploadImage.syncMobile );
-	app.post( '/ssync-mobile/images/', token_verify, uploadImage.syncMobile );
-	app.get( '/simages/:id', token_verify, uploadImage.find );
-	app.post( '/simage/description', token_verify, uploadImage.createDesc );
-	app.post( '/simage/upload-file', token_verify, uploadImage.createFile );
+	app.post( '/sync-mobile/images/', token_verify, uploadImage.syncMobile );
+	app.get( '/images/:id', token_verify, uploadImage.find );
+	app.post( '/image/description', token_verify, uploadImage.createDesc );
+	app.post( '/image/upload-file', token_verify, uploadImage.createFile );
 	//app.post( '/image/upload-file-base64', token_verify, uploadImage.createFileWithBase64 );
-	app.post( '/ismage/upload-file-base64', uploadImage.createFileWithBase64 );
+	app.post( '/image/upload-file-base64', uploadImage.createFileWithBase64 );
 	
 
-	app.get( '/stesting', token_verify, uploadImage.readfile );
-	app.get( '/stesting2', uploadImage.readfile2 );
-	app.get( '/stesting3', uploadImage.testProtocol );
+	app.get( '/testing', token_verify, uploadImage.readfile );
+	app.get( '/testing2', uploadImage.readfile2 );
+	app.get( '/testing3', uploadImage.testProtocol );
 }
 
 function token_verify( req, res, next ) {

@@ -296,10 +296,10 @@
 					} );
 				}
 				
-				var upload_folder = 'inspeksi';
+				var upload_folder = 'images-inspeksi';
 
 				if ( String( req.body.TR_CODE.substr( 0, 1 ) ) == 'F' ) {
-					upload_folder = 'finding';
+					upload_folder = 'images-finding';
 				}
 				
 				var dir_date = String( req.body.INSERT_TIME ).substr(0, 8);
@@ -311,7 +311,7 @@
 
 				fServer.existsSync( directory_local ) || fServer.mkdirSync( directory_local );
 				fServer.existsSync( directory_target_local ) || fServer.mkdirSync( directory_target_local );
-				/*
+				
 				file.mv( directory_target_local + '/' + filename, function( err ) {
 					
 					if ( err ) {
@@ -366,7 +366,7 @@
 						} );
 					});
 
-				} );*/
+				} );
 				
 			} ).catch( err => {
 				console.log('catch_err');

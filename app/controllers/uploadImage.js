@@ -119,8 +119,8 @@
 					STATUS_IMAGE: result.STATUS_IMAGE,
 					STATUS_SYNC: result.STATUS_SYNC,
 					INSERT_USER: result.INSERT_USER,
-					//INSERT_TIME: date.convert( String( result.INSERT_TIME ), 'YYYY-MM-DD hh-mm-ss' )
-					INSERT_TIME: result.INSERT_TIME || 0
+					INSERT_TIME: date.convert( String( result.INSERT_TIME ), 'YYYY-MM-DD hh-mm-ss' )
+					//INSERT_TIME: result.INSERT_TIME || 0
 				} );
 			} );
 
@@ -274,14 +274,14 @@
 				STATUS_IMAGE: req.body.STATUS_IMAGE || "",
 				MIME_TYPE: "",
 				STATUS_SYNC: req.body.STATUS_SYNC || "",
-				//SYNC_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
-				SYNC_TIME: req.body.SYNC_TIME || 0,
+				SYNC_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
+				//SYNC_TIME: req.body.SYNC_TIME || 0,
 				INSERT_USER: req.body.INSERT_USER || "",
-				//INSERT_TIME: date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
-				INSERT_TIME: req.body.INSERT_TIME || 0,
+				INSERT_TIME: date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
+				//INSERT_TIME: req.body.INSERT_TIME || 0,
 				UPDATE_USER: req.body.INSERT_USER || "",
-				//UPDATE_TIME: date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
-				UPDATE_TIME: req.body.INSERT_TIME || 0,
+				UPDATE_TIME: date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
+				//UPDATE_TIME: req.body.INSERT_TIME || 0,
 				DELETE_USER: "",
 				DELETE_TIME: 0
 			} );
@@ -302,7 +302,7 @@
 					upload_folder = 'images-finding';
 				}
 				
-				var dir_date = String( req.body.INSERT_TIME ).substr(0, 8);
+				var dir_date = date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ).substr( 0, 8 );
 				console.log( dir_date );
 				var directory_local = __basedir + '/assets/images/' + upload_folder + '/' + dir_date;
 				console.log(directory_local)
@@ -340,8 +340,8 @@
 						MIME_TYPE: file.mimetype,
 						IMAGE_PATH : directory_project,
 						UPDATE_USER: req.body.INSERT_USER || "",
-						//UPDATE_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
-						UPDATE_TIME: req.body.SYNC_TIME || 0
+						UPDATE_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
+						//UPDATE_TIME: req.body.SYNC_TIME || 0
 					}, { new: true } )
 					.then( data => {
 						if( !data ) {

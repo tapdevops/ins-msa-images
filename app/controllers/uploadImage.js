@@ -302,9 +302,10 @@
 					upload_folder = 'finding';
 				}
 				
-				var dir_date = date.convert( String( req.body.INSERT_TIME ), 'YYYYMMDD' ).substr(0, 8);
+				var dir_date = String( req.body.INSERT_TIME ).substr(0, 8);
 				console.log( dir_date );
 				var directory_local = __basedir + '/assets/images/' + upload_folder + '/' + dir_date;
+				console.log(directory_local)
 				var directory_target_local = directory_local;
 				var directory_project = upload_folder + '/' + dir_date;
 

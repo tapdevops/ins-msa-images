@@ -109,7 +109,7 @@
 					type_tr = 'I';
 					path_tr = 'inspeksi';
 				}
-
+				
 				results.push( {
 					TR_CODE: result.TR_CODE,
 					IMAGE_CODE: result.IMAGE_CODE,
@@ -119,7 +119,7 @@
 					STATUS_IMAGE: result.STATUS_IMAGE,
 					STATUS_SYNC: result.STATUS_SYNC,
 					INSERT_USER: result.INSERT_USER,
-					INSERT_TIME: date.convert( String( result.INSERT_TIME ), 'YYYY-MM-DD hh-mm-ss' )
+					INSERT_TIME: date.convert( String( result.INSERT_TIME ), 'YYYY-MM-DD hh:mm:ss' )
 					//INSERT_TIME: result.INSERT_TIME || 0
 				} );
 			} );
@@ -256,7 +256,7 @@
 
 			var client = new Client();
 			
-			var new_filename = req.body.TR_CODE + '_' + filename;
+			var new_filename = filename;
 			var new_filename_rep = '';
 			if ( file.mimetype == 'image/jpeg' ) {
 				new_filename_rep = new_filename.replace( '.jpeg', '' );
@@ -340,8 +340,7 @@
 						MIME_TYPE: file.mimetype,
 						IMAGE_PATH : directory_project,
 						UPDATE_USER: req.body.INSERT_USER || "",
-						UPDATE_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
-						//UPDATE_TIME: req.body.SYNC_TIME || 0
+						UPDATE_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' )
 					}, { new: true } )
 					.then( data => {
 						if( !data ) {

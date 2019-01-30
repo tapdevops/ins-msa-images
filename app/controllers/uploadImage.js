@@ -70,7 +70,7 @@
 			DELETE_USER: 1,
 			DELETE_TIME: 1
 		})
-		.limit( 20 )
+		//.limit( 20 )
 		.then( data => {
 			if( !data ) {
 				return res.send( {

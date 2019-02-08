@@ -70,7 +70,7 @@
 			DELETE_USER: 1,
 			DELETE_TIME: 1
 		})
-		//.limit( 20 )
+		.limit( 20 )
 		.then( data => {
 			if( !data ) {
 				return res.send( {
@@ -83,7 +83,8 @@
 			var results = [];
 			data.forEach( function( result ) {
 				var pth = result.IMAGE_PATH + '/' + result.IMAGE_NAME;
-				/*if ( fs.existsSync( pth ) ) {
+				/*
+				if ( fs.existsSync( pth ) ) {
 					var bitmap = fServer.readFileSync( pth );
 
 					results.push( {
@@ -101,7 +102,8 @@
 						IMAGE_CODE: result.IMAGE_CODE,
 						IMAGE_NAME: result.IMAGE_NAME,
 					} );
-				}*/
+				}
+				*/
 
 				var type_tr = 'F';
 				var path_tr = 'finding';

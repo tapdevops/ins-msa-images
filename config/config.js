@@ -53,7 +53,6 @@ module.exports = {
 		upload_404: 'Error! Data gagal diupload ',
 		upload_406: 'Error! Data yang diupload harus IMAGE/JPG atau IMAGE/JPEG ',
 		upload_500: 'Error! Terjadi kesalahan dalam upload data ',
-
 	}
 
 }

@@ -164,6 +164,7 @@
 			IMAGE_CODE: 1,
 			IMAGE_NAME: 1,
 			IMAGE_PATH: 1,
+			IMAGE_PATH_LOCAL: 1,
 			TR_CODE: 1,
 			STATUS_IMAGE: 1,
 			STATUS_SYNC: 1,
@@ -184,6 +185,7 @@
 				} );
 			}
 
+			console.log(data);
 			var results = [];
 			data.forEach( function( result ) {
 				results.push( {

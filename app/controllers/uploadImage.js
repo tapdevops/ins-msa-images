@@ -185,7 +185,6 @@
 				} );
 			}
 
-			console.log(data);
 			var results = [];
 			data.forEach( function( result ) {
 				results.push( {

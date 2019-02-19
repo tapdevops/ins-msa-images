@@ -72,7 +72,7 @@
 		} )
 		.limit( 20 )
 		.sort( {
-			INSERT_TIME: 1
+			TR_CODE: -1
 		} )
 		.then( data => {
 			if( !data ) {
@@ -410,8 +410,6 @@
 				data: []
 			} )
 		});
-		
-
  	}
 /**
  * createDesc

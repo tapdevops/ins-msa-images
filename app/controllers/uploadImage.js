@@ -49,6 +49,9 @@
 			} );
 		}
 
+		console.log( "TR_CODE FINDING :" );
+		console.log( req.body.TR_CODE );
+
 		imageUploadModel.find( { 
 			TR_CODE : req.body.TR_CODE,
 			DELETE_USER: ""

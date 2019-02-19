@@ -71,6 +71,9 @@
 			DELETE_TIME: 1
 		})
 		.limit( 20 )
+		.sort( {
+			INSERT_TIME: -1
+		} )
 		.then( data => {
 			if( !data ) {
 				return res.send( {

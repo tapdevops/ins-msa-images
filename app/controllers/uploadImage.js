@@ -53,7 +53,7 @@
 			TR_CODE : req.body.TR_CODE,
 			DELETE_USER: ""
 		} )
-		.select({
+		.select( {
 			_id: 0,
 			IMAGE_CODE: 1,
 			IMAGE_NAME: 1,
@@ -69,10 +69,10 @@
 			UPDATE_TIME: 1,
 			DELETE_USER: 1,
 			DELETE_TIME: 1
-		})
+		} )
 		.limit( 20 )
 		.sort( {
-			INSERT_TIME: -1
+			INSERT_TIME: 1
 		} )
 		.then( data => {
 			if( !data ) {

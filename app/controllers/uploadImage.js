@@ -72,7 +72,7 @@
 		} )
 		.limit( 20 )
 		.sort( {
-			TR_CODE: -1,
+			//TR_CODE: -1,
 			INSERT_TIME: 1
 		} )
 		.then( data => {

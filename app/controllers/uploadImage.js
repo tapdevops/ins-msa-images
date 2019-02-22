@@ -72,7 +72,8 @@
 		} )
 		.limit( 20 )
 		.sort( {
-			TR_CODE: -1
+			TR_CODE: -1,
+			STATUS_IMAGE: 1
 		} )
 		.then( data => {
 			if( !data ) {

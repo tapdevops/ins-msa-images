@@ -39,7 +39,7 @@
  * Untuk 
  * --------------------------------------------------------------------------
  */
- 
+
 	exports.syncMobile = ( req, res ) => {
 
 		if( !req.body.TR_CODE ) {
@@ -94,6 +94,8 @@
 					path_tr = 'inspeksi';
 				}
 				
+				console.log(result);
+
 				results.push( {
 					TR_CODE: result.TR_CODE,
 					IMAGE_CODE: result.IMAGE_CODE,
@@ -103,7 +105,7 @@
 					STATUS_IMAGE: result.STATUS_IMAGE,
 					STATUS_SYNC: result.STATUS_SYNC,
 					INSERT_USER: result.INSERT_USER,
-					INSERT_TIME: date.convert( String( result.INSERT_TIME ), 'YYYY-MM-DD hh:mm:ss' )
+					INSERT_TIME: date.convert( String( result.INSERT_TIME ), 'YYYY-MM-DD hh-mm-ss' )
 				} );
 			} );
 

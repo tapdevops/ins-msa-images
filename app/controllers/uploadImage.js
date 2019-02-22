@@ -49,9 +49,6 @@
 			} );
 		}
 
-		console.log( "TR_CODE FINDING :" );
-		console.log( req.body.TR_CODE );
-
 		imageUploadModel.find( { 
 			TR_CODE : req.body.TR_CODE,
 			DELETE_USER: ""
@@ -88,29 +85,6 @@
 
 			var results = [];
 			data.forEach( function( result ) {
-				var pth = result.IMAGE_PATH + '/' + result.IMAGE_NAME;
-				/*
-				if ( fs.existsSync( pth ) ) {
-					var bitmap = fServer.readFileSync( pth );
-
-					results.push( {
-						TR_CODE: result.TR_CODE,
-						IMAGE_CODE: result.IMAGE_CODE,
-						IMAGE_NAME: result.IMAGE_NAME,
-
-						IMAGE_SOURCE: 'data:image/jpg;base64,' + new Buffer( bitmap ).toString( 'base64' )
-					} );
-				}
-				else {
-					results.push( {
-						TR_CODE: result.TR_CODE,
-						pth: pth,
-						IMAGE_CODE: result.IMAGE_CODE,
-						IMAGE_NAME: result.IMAGE_NAME,
-					} );
-				}
-				*/
-
 				var type_tr = 'F';
 				var path_tr = 'finding';
 				if ( result.TR_CODE.substr( 0, 1 ) == 'I' ) {
@@ -128,7 +102,6 @@
 					STATUS_SYNC: result.STATUS_SYNC,
 					INSERT_USER: result.INSERT_USER,
 					INSERT_TIME: date.convert( String( result.INSERT_TIME ), 'YYYY-MM-DD hh:mm:ss' )
-					//INSERT_TIME: result.INSERT_TIME || 0
 				} );
 			} );
 

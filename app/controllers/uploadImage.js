@@ -105,7 +105,7 @@
 					STATUS_IMAGE: result.STATUS_IMAGE,
 					STATUS_SYNC: result.STATUS_SYNC,
 					INSERT_USER: result.INSERT_USER,
-					INSERT_TIME: date.convert( String( result.INSERT_TIME ), 'YYYY-MM-DD hh-mm-ss' )
+					INSERT_TIME: date.convert( String( result.INSERT_TIME ), 'YYYY-MM-DD hh:mm:ss' )
 				} );
 			} );
 

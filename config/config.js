@@ -6,7 +6,8 @@ module.exports = {
 	|--------------------------------------------------------------------------
 	*/
 	app_port: process.env.PORT || 3012,
-	app_name: 'Microservice Image (03-01-2019 17:14)s',
+	app_name: 'Microservice Images',
+	app_env: 'production', // production, qa, development
 
 	/*
 	|--------------------------------------------------------------------------
@@ -23,6 +24,16 @@ module.exports = {
 	|--------------------------------------------------------------------------
 	*/
 	url: {},
+
+	/*
+	|--------------------------------------------------------------------------
+	| Path
+	|--------------------------------------------------------------------------
+	| Config tambahan untuk mengatur jika ada path yang tidak sesuai dengan
+	| parameter URL.
+	*/
+	path_production: 'mobileinspection/ins-msa-images',
+	path_development: '',
 	
 	/*
 	|--------------------------------------------------------------------------

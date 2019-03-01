@@ -59,25 +59,3 @@ app.get( '/', ( req, res ) => {
 } );
 
 require( './routes/route.js' )( app );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

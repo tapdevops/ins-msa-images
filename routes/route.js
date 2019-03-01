@@ -9,17 +9,9 @@ module.exports = ( app ) => {
 	const uploadImage = require( '../app/controllers/uploadImage.js' );
 
 	// ROUTE - IMAGE
-	//app.get( '/sync-mobile/images/:start_date/:end_date', token_verify, uploadImage.syncMobile );
 	app.post( '/sync-mobile/images/', token_verify, uploadImage.syncMobile );
 	app.get( '/images/:id', token_verify, uploadImage.find );
-	app.post( '/image/description', token_verify, uploadImage.createDesc );
 	app.post( '/image/upload-file', token_verify, uploadImage.createFile );
-	//app.post( '/image/upload-file-base64', token_verify, uploadImage.createFileWithBase64 );
-	app.post( '/image/upload-file-base64', uploadImage.createFileWithBase64 );
-	
-
-	app.get( '/testing', token_verify, uploadImage.readfile );
-	app.get( '/testing2', uploadImage.readfile2 );
 }
 
 function token_verify( req, res, next ) {
@@ -49,23 +41,6 @@ function token_verify( req, res, next ) {
 			}
 		} );
 		
-	}
-	else {
-		// Forbidden
-		res.sendStatus( 403 );
-	}
-}
-
-function verifyToken( req, res, next ) {
-	// Get auth header value
-	const bearerHeader = req.headers['authorization'];
-
-	if ( typeof bearerHeader !== 'undefined' ) {
-		const bearer = bearerHeader.split( ' ' );
-		const bearerToken = bearer[1];
-
-		req.token = bearerToken;
-		next();
 	}
 	else {
 		// Forbidden

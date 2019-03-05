@@ -7,7 +7,7 @@ module.exports = {
 	*/
 	app_port: process.env.PORT || 3012,
 	app_name: 'Microservice Images',
-	app_env: 'production', // production, qa, development
+	app_env: 'development', // production, qa, development
 
 	/*
 	|--------------------------------------------------------------------------
@@ -34,6 +34,10 @@ module.exports = {
 	*/
 	path_production: 'mobileinspection/ins-msa-images',
 	path_development: '',
+	path_images: {
+		production: 'images',
+		development: 'images-dev'
+	},
 	
 	/*
 	|--------------------------------------------------------------------------

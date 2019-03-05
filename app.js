@@ -24,7 +24,12 @@ const config = require( './config/config.js' );
 // Define App
 const app = express();
 
-app.use( '/files', express.static( 'assets/images' ) );
+if ( config.app_env == 'production' ) {
+	app.use( '/files', express.static( 'assets/images' ) );
+}
+else if ( config.app_env == 'development' ) {
+	app.use( '/files', express.static( 'assets/images-dev' ) );
+}
 
 // Parse request of content-type - application/x-www-form-urlencoded
 app.use( bodyParser.urlencoded( { extended: true } ) );

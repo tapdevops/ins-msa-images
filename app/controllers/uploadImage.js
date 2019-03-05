@@ -91,6 +91,10 @@
 					type_tr = 'I';
 					path_tr = 'inspeksi';
 				}
+				else if ( result.TR_CODE.substr( 0, 1 ) == 'E' ) {
+					type_tr = 'E';
+					path_tr = 'ebcc';
+				}
 
 				results.push( {
 					TR_CODE: result.TR_CODE,
@@ -103,6 +107,10 @@
 					INSERT_USER: result.INSERT_USER,
 					INSERT_TIME: date.convert( String( result.INSERT_TIME ), 'YYYY-MM-DD hh-mm-ss' )
 				} );
+
+				console.log(path_global + '/files/' + result.IMAGE_PATH + '/' + result.IMAGE_NAME)
+				console.log(path_global + '/files/' + result.IMAGE_PATH + '/')
+				console.log(path_global + '/files/')
 			} );
 
 			res.send( {
@@ -200,10 +208,6 @@
 
  	exports.createFile = ( req, res ) => {
 
- 		console.log( req.header );
- 		console.log( req.files );
- 		console.log( req.body );
-
 		if( !req.files ) {
 			return res.send( {
 				status: false,
@@ -284,9 +288,19 @@
 				if ( String( req.body.TR_CODE.substr( 0, 1 ) ) == 'F' ) {
 					upload_folder = 'images-finding';
 				}
+				else if ( String( req.body.TR_CODE.substr( 0, 1 ) ) == 'E' ) {
+					upload_folder = 'images-ebcc';
+				}
 				
 				var dir_date = date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ).substr( 0, 8 );
-				var directory_local = __basedir + '/assets/images/' + upload_folder + '/' + dir_date;
+				var directory_local = '';
+				if ( config.app_env == 'production' ) {
+					directory_local = __basedir + '/assets/' + config.path_images.production + '/' + upload_folder + '/' + dir_date;
+				}
+				else if ( config.app_env == 'development' ) {
+					directory_local = __basedir + '/assets/' + config.path_images.development + '/' + upload_folder + '/' + dir_date;
+				}
+ 
 				var directory_target_local = directory_local;
 				var directory_project = upload_folder + '/' + dir_date;
 
@@ -302,6 +316,13 @@
 							data: {}
 						} );
 					}
+
+					if ( directory_project == '' ) {
+						res.json({
+							message: "ERROR"
+						})
+					}
+					//console.log(directory_project)
 
 					fs.rename( directory_target_local + '/' + filename, directory_target_local + '/' + new_filename, function(err) {
 						if ( err ) console.log( 'ERROR: ' + err );
@@ -319,7 +340,7 @@
 					}, {
 						IMAGE_NAME : new_filename_rep,
 						MIME_TYPE: file.mimetype,
-						IMAGE_PATH : directory_project,
+						IMAGE_PATH : directory_project.toString(),
 						UPDATE_USER: req.body.INSERT_USER || "",
 						UPDATE_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' )
 					}, { new: true } )

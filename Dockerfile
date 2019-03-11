@@ -12,8 +12,6 @@ RUN npm install
 # If you are building your code for production
 # RUN npm install --only=production
 
-RUN chmod 777 ./assets/temp
-
 # Bundle app source
 COPY . /usr/src/app
 

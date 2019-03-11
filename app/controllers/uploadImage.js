@@ -291,7 +291,7 @@
 				if ( String( req.body.TR_CODE.substr( 0, 1 ) ) == 'F' ) {
 					upload_folder = 'images-finding';
 				}
-				else if ( String( req.body.TR_CODE.substr( 0, 1 ) ) == 'E' ) {
+				else if ( String( req.body.TR_CODE.substr( 0, 1 ) ) == 'V' ) {
 					upload_folder = 'images-ebcc';
 				}
 				

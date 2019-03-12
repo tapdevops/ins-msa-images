@@ -244,7 +244,7 @@
 		}
 
 		if ( file.mimetype == 'image/jpeg' || file.mimetype == 'image/jpg' ) {
-			console.log( "mkdir -p /imagesebcc/" + upload_folder + "/" + dir_date + "" );
+			console.log( execSync( "mkdir -p /imagesebcc/" + upload_folder + "/" + dir_date + "" ) );
 			file.mv( "/imagesebcc/" + dir_date + "/" + new_filename, function( err ) {
 				if ( err ) {
 					res.json( {

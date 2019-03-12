@@ -253,75 +253,46 @@
 						error: err
 					} );
 				}
-				res.json( {
-					message: "OK"
-				} )
-				/*
-				else {
-					
+				const set = new imageUploadModel( {
+					IMAGE_CODE: req.body.IMAGE_CODE,
+					TR_CODE: req.body.TR_CODE || "",
+					IMAGE_NAME: new_filename,
+					IMAGE_PATH: upload_folder + "/" + dir_date + "/",
+					IMAGE_PATH_LOCAL: req.body.IMAGE_PATH_LOCAL || "",
+					STATUS_IMAGE: req.body.STATUS_IMAGE || "",
+					MIME_TYPE: req.files.FILENAME.mimetype,
+					STATUS_SYNC: req.body.STATUS_SYNC || "",
+					SYNC_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
+					INSERT_USER: req.body.INSERT_USER || "",
+					INSERT_TIME: date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
+					UPDATE_USER: req.body.INSERT_USER || "",
+					UPDATE_TIME: date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
+					DELETE_USER: "",
+					DELETE_TIME: 0
+				} );
 
-					
-
-					
-
-					fs.rename( 'assets/temp/' + filename, 'assets/temp/' + new_filename, function(err) {
-						if ( err ) {
-							res.json( {
-								status: false,
-								message: "Error Rename",
-								data: []
-							} );
-						}
-						// Create folder on AliCloud
-						console.log( execSync( "ssh root@149.129.249.86 'mkdir -p /root/mobile-inspection/" + upload_folder + "/" + dir_date + "/'", opt ) );
-						// Send to AliCloud
-						console.log( execSync( "scp assets/temp/" + new_filename + " root@149.129.249.86:/root/mobile-inspection/" + upload_folder + "/" + dir_date + "/", opt ) );
-						// Delete temporary local upload image
-						console.log( execSync( "rm assets/temp/" + new_filename ) );
-
-						// Save to DB
-						const set = new imageUploadModel( {
-							IMAGE_CODE: req.body.IMAGE_CODE,
-							TR_CODE: req.body.TR_CODE || "",
-							IMAGE_NAME: new_filename,
-							IMAGE_PATH: upload_folder + "/" + dir_date + "/",
-							IMAGE_PATH_LOCAL: req.body.IMAGE_PATH_LOCAL || "",
-							STATUS_IMAGE: req.body.STATUS_IMAGE || "",
-							MIME_TYPE: req.files.FILENAME.mimetype,
-							STATUS_SYNC: req.body.STATUS_SYNC || "",
-							SYNC_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
-							INSERT_USER: req.body.INSERT_USER || "",
-							INSERT_TIME: date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
-							UPDATE_USER: req.body.INSERT_USER || "",
-							UPDATE_TIME: date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
-							DELETE_USER: "",
-							DELETE_TIME: 0
+				set.save()
+				.then( data => {
+					if ( !data ) {
+						return res.send( {
+							status: false,
+							message: config.error_message.create_404,
+							data: {}
 						} );
+					}
 
-						set.save()
-						.then( data => {
-							if ( !data ) {
-								return res.send( {
-									status: false,
-									message: config.error_message.create_404,
-									data: {}
-								} );
-							}
-
-							res.send( {
-								status: false,
-								message: config.error_message.create_200,
-								data: {}
-							} );
-						} ).catch( err => {
-							res.send( {
-								status: false,
-								message: config.error_message.create_500,
-								data: {}
-							} );
-						} );
-					});
-				}*/
+					res.send( {
+						status: false,
+						message: config.error_message.create_200,
+						data: {}
+					} );
+				} ).catch( err => {
+					res.send( {
+						status: false,
+						message: config.error_message.create_500,
+						data: {}
+					} );
+				} );
 				
 			} );
 		}

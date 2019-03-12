@@ -343,7 +343,7 @@
 					}, {
 						IMAGE_NAME : new_filename_rep,
 						MIME_TYPE: file.mimetype,
-						IMAGE_PATH : directory_project.toString(),
+						IMAGE_PATH : directory_project,
 						UPDATE_USER: req.body.INSERT_USER || "",
 						UPDATE_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' )
 					}, { new: true } )
@@ -355,7 +355,13 @@
 								data: {}
 							} );
 						}
-
+						console.log({
+						IMAGE_NAME : new_filename_rep,
+						MIME_TYPE: file.mimetype,
+						IMAGE_PATH : directory_project,
+						UPDATE_USER: req.body.INSERT_USER || "",
+						UPDATE_TIME: date.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' )
+					})
 						res.send( {
 							status: true,
 							message: config.error_message.put_200,

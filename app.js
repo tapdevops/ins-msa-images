@@ -25,7 +25,9 @@ const config = require( './config/config.js' );
 const app = express();
 
 //app.use( '/files', express.static( '/imagesebcc' ) );
-app.use('/files', express.static(path.join('/', 'imagesebcc')))
+//app.use('/files', express.static(path.join('/', 'imagesebcc')));
+app.use( '/files', express.static( '/imagesebcc' ) );
+
 
 
 // Parse request of content-type - application/x-www-form-urlencoded

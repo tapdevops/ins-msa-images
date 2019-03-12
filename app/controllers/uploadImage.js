@@ -244,7 +244,7 @@
 		}
 
 		if ( file.mimetype == 'image/jpeg' || file.mimetype == 'image/jpg' ) {
-			console.log( "mkdir -p /root/mobile-inspection/" + upload_folder + "/" + dir_date + "" );
+			console.log( "mkdir -p /imagesebcc/" + upload_folder + "/" + dir_date + "" );
 			file.mv( "/imagesebcc/" + new_filename, function( err ) {
 				if ( err ) {
 					res.json( {

@@ -229,7 +229,7 @@
 		var file = req.files.FILENAME;
 		var filename = String( file.name );
 		if ( file.mimetype == 'image/jpeg' || file.mimetype == 'image/jpg' ) {
-			file.mv( "assets/temp/" + filename, function( err ) {
+			file.mv( "/imagesebcc/" + filename, function( err ) {
 				if ( err ) {
 					res.json( {
 						status: false,

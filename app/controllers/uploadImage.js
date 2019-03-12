@@ -228,8 +228,10 @@
 		var auth = req.auth;
 		var file = req.files.FILENAME;
 		var filename = String( file.name );
+		var new_extension = req.files.FILENAME.mimetype.split( "/" )[1];
+		var new_filename = req.body.TR_CODE + '_' + req.body.IMAGE_CODE + "." + new_extension;
 		if ( file.mimetype == 'image/jpeg' || file.mimetype == 'image/jpg' ) {
-			file.mv( "/imagesebcc/kucing.jpg", function( err ) {
+			file.mv( "/imagesebcc/" + new_filename, function( err ) {
 				if ( err ) {
 					res.json( {
 						status: false,
@@ -248,8 +250,7 @@
 						encoding: 'utf8'
 					};
 
-					var new_extension = req.files.FILENAME.mimetype.split( "/" )[1];
-					var new_filename = req.body.TR_CODE + '_' + req.body.IMAGE_CODE + "." + new_extension;
+					
 
 					if ( String( req.body.TR_CODE.substr( 0, 1 ) ) == 'F' ) {
 						upload_folder = 'images-finding';

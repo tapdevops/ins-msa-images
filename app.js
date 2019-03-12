@@ -24,14 +24,8 @@ const config = require( './config/config.js' );
 // Define App
 const app = express();
 
-const path = require('path');
-//app.use( '/files', express.static( '/imagesebcc' ) );
-app.use( '/files', express.static( path.basename( '/imagesebcc' ) ) );
-//app.use( '/files', express.static( '/imagesebcc' ) );
+app.use( '/files', express.static( 'assets/images' ) );
 
-//console.log( path.join( '/', 'imagesebcc' ) );
-
-//console.log(path.basename( '/imagesebcc' ))
 // Parse request of content-type - application/x-www-form-urlencoded
 app.use( bodyParser.urlencoded( { extended: true } ) );
 

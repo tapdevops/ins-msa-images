@@ -102,7 +102,7 @@
 					IMAGE_CODE: result.IMAGE_CODE,
 					IMAGE_NAME: result.IMAGE_NAME,
 					IMAGE_PATH_LOCAL: result.IMAGE_PATH_LOCAL,
-					IMAGE_URL: path_global + '/files/' + result.IMAGE_PATH + '/' + result.IMAGE_NAME,
+					IMAGE_URL: req.protocol + '://' + req.get( 'host' ) + '/files/' + result.IMAGE_PATH + result.IMAGE_NAME,
 					STATUS_IMAGE: result.STATUS_IMAGE,
 					STATUS_SYNC: result.STATUS_SYNC,
 					INSERT_USER: result.INSERT_USER,
@@ -134,8 +134,6 @@
  * --------------------------------------------------------------------------
  */
 	exports.find = ( req, res ) => {
-
-		console.log( url.pathToFileURL( '/imagesebcc') );
 
 		if( !req.params.id ) {
 			return res.send( {
@@ -182,9 +180,7 @@
 					IMAGE_CODE: result.IMAGE_CODE,
 					IMAGE_NAME: result.IMAGE_NAME,
 					IMAGE_PATH_LOCAL: result.IMAGE_PATH_LOCAL,
-
-					//IMAGE_URL: req.protocol + '://' + req.get( 'host' ) + '/files/' + result.IMAGE_PATH + result.IMAGE_NAME,
-					IMAGE_URL: '/imagesebcc/' + result.IMAGE_PATH + result.IMAGE_NAME,
+					IMAGE_URL: req.protocol + '://' + req.get( 'host' ) + '/files/' + result.IMAGE_PATH + result.IMAGE_NAME,
 					STATUS_IMAGE: result.STATUS_IMAGE,
 					STATUS_SYNC: result.STATUS_SYNC, // Tambahan
 					INSERT_USER: result.INSERT_USER,
@@ -302,10 +298,10 @@
 				var dir_date = date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ).substr( 0, 8 );
 				var directory_local = '';
 				if ( config.app_env == 'production' ) {
-					directory_local = __basedir + '/assets/' + config.path_images.production + '/' + upload_folder + '/' + dir_date;
+					directory_local = __basedir + '/assets/images/' + upload_folder + '/' + dir_date;
 				}
 				else if ( config.app_env == 'development' ) {
-					directory_local = __basedir + '/assets/' + config.path_images.development + '/' + upload_folder + '/' + dir_date;
+					directory_local = __basedir + '/assets/images/' + upload_folder + '/' + dir_date;
 				}
  
 				var directory_target_local = directory_local;
@@ -394,7 +390,7 @@
 		}
 
 	};
-	
+
  	exports.createFile4 = ( req, res ) => {
 
 

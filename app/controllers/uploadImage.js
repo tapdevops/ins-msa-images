@@ -207,7 +207,7 @@
  * --------------------------------------------------------------------------
  */
  	exports.createFile = ( req, res ) => {
- 		
+
 
 		if( !req.files ) {
 			return res.send( {
@@ -237,6 +237,10 @@
 						error: err
 					} );
 				}
+				res.json( {
+					message: "OK"
+				} )
+				/*
 				else {
 					var upload_folder = 'images-inspeksi';
 					var dir_date = date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ).substr( 0, 8 );
@@ -312,6 +316,7 @@
 						} );
 					});
 				}
+				*/
 			} );
 		}
 		else {

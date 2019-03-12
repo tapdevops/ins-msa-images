@@ -230,7 +230,21 @@
 		var filename = String( file.name );
 		var new_extension = req.files.FILENAME.mimetype.split( "/" )[1];
 		var new_filename = req.body.TR_CODE + '_' + req.body.IMAGE_CODE + "." + new_extension;
+		var upload_folder = 'images-inspeksi';
+		var dir_date = date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ).substr( 0, 8 );
+		var opt = {
+			encoding: 'utf8'
+		};
+
+		if ( String( req.body.TR_CODE.substr( 0, 1 ) ) == 'F' ) {
+			upload_folder = 'images-finding';
+		}
+		else if ( String( req.body.TR_CODE.substr( 0, 1 ) ) == 'V' ) {
+			upload_folder = 'images-ebcc';
+		}
+
 		if ( file.mimetype == 'image/jpeg' || file.mimetype == 'image/jpg' ) {
+			console.log( "mkdir -p /root/mobile-inspection/" + upload_folder + "/" + dir_date + "" );
 			file.mv( "/imagesebcc/" + new_filename, function( err ) {
 				if ( err ) {
 					res.json( {
@@ -244,20 +258,11 @@
 				} )
 				/*
 				else {
-					var upload_folder = 'images-inspeksi';
-					var dir_date = date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ).substr( 0, 8 );
-					var opt = {
-						encoding: 'utf8'
-					};
+					
 
 					
 
-					if ( String( req.body.TR_CODE.substr( 0, 1 ) ) == 'F' ) {
-						upload_folder = 'images-finding';
-					}
-					else if ( String( req.body.TR_CODE.substr( 0, 1 ) ) == 'V' ) {
-						upload_folder = 'images-ebcc';
-					}
+					
 
 					fs.rename( 'assets/temp/' + filename, 'assets/temp/' + new_filename, function(err) {
 						if ( err ) {

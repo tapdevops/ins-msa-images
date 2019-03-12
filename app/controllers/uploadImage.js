@@ -229,7 +229,7 @@
 		var file = req.files.FILENAME;
 		var filename = String( file.name );
 		if ( file.mimetype == 'image/jpeg' || file.mimetype == 'image/jpg' ) {
-			file.mv( "/imagesebcc/" + filename, function( err ) {
+			file.mv( "/imagesebcc/kucing.jpg", function( err ) {
 				if ( err ) {
 					res.json( {
 						status: false,
@@ -315,8 +315,8 @@
 							} );
 						} );
 					});
-				}
-				*/
+				}*/
+				
 			} );
 		}
 		else {

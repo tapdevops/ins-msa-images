@@ -92,8 +92,8 @@
 					type_tr = 'I';
 					path_tr = 'inspeksi';
 				}
-				else if ( result.TR_CODE.substr( 0, 1 ) == 'E' ) {
-					type_tr = 'E';
+				else if ( result.TR_CODE.substr( 0, 1 ) == 'V' ) {
+					type_tr = 'V';
 					path_tr = 'ebcc';
 				}
 
@@ -109,9 +109,6 @@
 					INSERT_TIME: date.convert( String( result.INSERT_TIME ), 'YYYY-MM-DD hh-mm-ss' )
 				} );
 
-				console.log(path_global + '/files/' + result.IMAGE_PATH + '/' + result.IMAGE_NAME)
-				console.log(path_global + '/files/' + result.IMAGE_PATH + '/')
-				console.log(path_global + '/files/')
 			} );
 
 			res.send( {

@@ -272,7 +272,7 @@
 				DELETE_USER: "",
 				DELETE_TIME: 0
 			} );
-				
+
 			set.save()
 			.then( data => {
 				if ( !data ) {
@@ -291,16 +291,11 @@
 				else if ( String( req.body.TR_CODE.substr( 0, 1 ) ) == 'V' ) {
 					upload_folder = 'images-ebcc';
 				}
-				
+
 				var dir_date = date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ).substr( 0, 8 );
-				var directory_local = '';
-				if ( config.app_env == 'production' ) {
-					directory_local = __basedir + '/assets/images/' + upload_folder + '/' + dir_date;
-				}
-				else if ( config.app_env == 'development' ) {
-					directory_local = __basedir + '/assets/images/' + upload_folder + '/' + dir_date;
-				}
- 
+				var directory_local = __basedir + '/assets/images/' + upload_folder + '/' + dir_date;
+ 				
+ 				
 				var directory_target_local = directory_local;
 				var directory_project = upload_folder + '/' + dir_date;
 
@@ -372,7 +367,6 @@
 							data: {}
 						} );
 					});
-
 				} );
 				
 			} ).catch( err => {

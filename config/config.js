@@ -5,9 +5,9 @@ module.exports = {
 	| App Config
 	|--------------------------------------------------------------------------
 	*/
-	app_port: process.env.PORT || 3012,
-	app_name: 'Microservice Images',
-	app_env: 'development', // production, qa, development
+	port: process.env.PORT || 3012,
+	name: 'Microservice Images',
+	env: 'development', // production, qa, development
 
 	/*
 	|--------------------------------------------------------------------------
@@ -46,10 +46,10 @@ module.exports = {
 	*/
 	error_message: {
 		invalid_token: 'Token expired! ',
-		invalid_input: 'Invalid input! ',
+		invalid_request: 'Invalid Request! ',
 		create_200: 'Success! ',
 		create_403: 'Forbidden ',
-		create_404: 'Error! Data gagal diproses ',
+		create_404: 'Error! Data gagal diproses. ',
 		create_500: 'Error! Terjadi kesalahan dalam pembuatan data ',
 		find_200: 'Success! ',
 		find_403: 'Forbidden ',
@@ -63,11 +63,7 @@ module.exports = {
 		delete_403: 'Forbidden ',
 		delete_404: 'Error! Data gagal dihapus ',
 		delete_500: 'Error! Terjadi kesalahan dalam penghapusan data ',
-		upload_200: 'Success! ',
-		upload_403: 'Forbidden ',
-		upload_404: 'Error! Data gagal diupload ',
-		upload_406: 'Error! Data yang diupload harus IMAGE/JPG atau IMAGE/JPEG ',
-		upload_500: 'Error! Terjadi kesalahan dalam upload data ',
 	}
+
 
 }

@@ -266,8 +266,8 @@
 				INSERT_USER: req.body.INSERT_USER || "",
 				INSERT_TIME: date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
 				//INSERT_TIME: req.body.INSERT_TIME || 0,
-				UPDATE_USER: req.body.INSERT_USER || "",
-				UPDATE_TIME: date.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
+				UPDATE_USER: "",
+				UPDATE_TIME: 0,
 				//UPDATE_TIME: req.body.INSERT_TIME || 0,
 				DELETE_USER: "",
 				DELETE_TIME: 0

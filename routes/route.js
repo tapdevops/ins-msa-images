@@ -14,6 +14,7 @@
 	const jwtDecode = require( 'jwt-decode' );
 	const nJwt = require( 'njwt' );
 	const uuid = require( 'uuid' );
+	const RoutesVersioning = require( 'express-routes-versioning' )();
 
 	// Declare Controllers
 	const ImageController = require( _directory_base + '/app/controllers/ImageController.js' );

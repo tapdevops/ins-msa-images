@@ -208,7 +208,7 @@
 		if( !req.files ) {
 			return res.send( {
 				status: false,
-				message: config.error_message.invalid_input + 'REQUEST FILES.',
+				message: config.error_message.invalid_input + ' REQUEST FILES.',
 				data: {}
 			} );
 		}

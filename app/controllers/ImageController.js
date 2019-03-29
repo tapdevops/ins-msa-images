@@ -79,12 +79,6 @@
 			}
 
 			var results = [];
-			if ( config.app_env == 'production' ) {
-				var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.path_production + '/';
-			}
-			else {
-				var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.path_development ;
-			}
 			data.forEach( function( result ) {
 				var type_tr = 'F';
 				var path_tr = 'finding';
@@ -205,6 +199,15 @@
  */
  	exports.createFile = ( req, res ) => {
 
+ 		res.send( {
+			status: false,
+			message: config.error_message.find_500,
+			data: {}
+		} );
+
+
+		/* START HERE
+
 		if( !req.files ) {
 			return res.send( {
 				status: false,
@@ -224,7 +227,7 @@
 		var auth = req.auth;
 		var file = req.files.FILENAME;
 		var filename = String( file.name );
-
+		TO HERE */
 		
 		
 		/** 
@@ -234,6 +237,7 @@
 		 * ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬●
 		 */
 		
+		/* START HERE
 		if ( file.mimetype == 'image/jpeg' || file.mimetype == 'image/jpg' ) {
 			
 			var args = {
@@ -385,6 +389,8 @@
 				data: {}
 			} );
 		}
+
+		TO HERE*/ 
 
 	};
 

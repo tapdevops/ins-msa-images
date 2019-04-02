@@ -199,11 +199,6 @@
  */
  	exports.createFile = ( req, res ) => {
 
- 		res.send( {
-			status: false,
-			message: config.error_message.find_500,
-			data: {}
-		} );
 
 		if( !req.files ) {
 			return res.send( {

@@ -205,9 +205,6 @@
 			data: {}
 		} );
 
-
-		/* START HERE
-
 		if( !req.files ) {
 			return res.send( {
 				status: false,
@@ -227,7 +224,6 @@
 		var auth = req.auth;
 		var file = req.files.FILENAME;
 		var filename = String( file.name );
-		TO HERE */
 		
 		
 		/** 
@@ -237,7 +233,6 @@
 		 * ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬●
 		 */
 		
-		/* START HERE
 		if ( file.mimetype == 'image/jpeg' || file.mimetype == 'image/jpg' ) {
 			
 			var args = {
@@ -389,8 +384,6 @@
 				data: {}
 			} );
 		}
-
-		TO HERE*/ 
 
 	};
 

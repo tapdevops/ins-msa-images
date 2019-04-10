@@ -5,7 +5,7 @@
 */
 	module.exports = {
 		production: {
-			url: 'mongodb://dbapp:dbapp123@dbapp.tap-agri.com:27017/s_images?authSource=admin',
+			url: 'mongodb://s_images:1m4g3s2019@dbapp.tap-agri.com:4848/s_images?authSource=s_images',
 			ssl: false
 		},
 		development: {
@@ -13,6 +13,3 @@
 			ssl: false
 		}
 	}
-
-
-	

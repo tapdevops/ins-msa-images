@@ -15,7 +15,7 @@
 	const FileSystem = require( 'file-system' );
 
 	// Libraries
-	const DateLibrary = require( _directory_base + '/app/v1.0/Http/Libraries/Date.js' );
+	const HelperLib = require( _directory_base + '/app/v1.0/Http/Libraries/HelperLib.js' );
 
 /**
  * Find File Foto Profile
@@ -143,7 +143,7 @@
 					{
 						"$set": {
 							"DELETE_USER": req.auth.USER_AUTH_CODE,
-							"DELETE_TIME": parseInt( DateLibrary.convert( 'now', 'YYYYMMDDhhmmss' ) )
+							"DELETE_TIME": parseInt( HelperLib.date_format( 'now', 'YYYYMMDDhhmmss' ) )
 						}
 					}
 				);
@@ -152,7 +152,7 @@
 					IMAGE_NAME: new_filename_rep,
 					IMAGE_PATH: "/images-profile/" + req.auth.USER_AUTH_CODE,
 					INSERT_USER: req.auth.USER_AUTH_CODE,
-					INSERT_TIME: parseInt( DateLibrary.convert( 'now', 'YYYYMMDDhhmmss' ) ),
+					INSERT_TIME: parseInt( HelperLib.date_format( 'now', 'YYYYMMDDhhmmss' ) ),
 					UPDATE_USER: "",
 					UPDATE_TIME: 0,
 					DELETE_USER: "",
@@ -230,10 +230,10 @@
 				STATUS_IMAGE: req.body.STATUS_IMAGE || "",
 				MIME_TYPE: "",
 				STATUS_SYNC: req.body.STATUS_SYNC || "",
-				SYNC_TIME: DateLibrary.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
+				SYNC_TIME: HelperLib.date_format( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
 				//SYNC_TIME: req.body.SYNC_TIME || 0,
 				INSERT_USER: req.body.INSERT_USER || "",
-				INSERT_TIME: DateLibrary.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
+				INSERT_TIME: HelperLib.date_format( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
 				//INSERT_TIME: req.body.INSERT_TIME || 0,
 				UPDATE_USER: "",
 				UPDATE_TIME: 0,
@@ -261,7 +261,7 @@
 					upload_folder = 'images-ebcc';
 				}
 
-				var dir_date = DateLibrary.convert( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ).substr( 0, 8 );
+				var dir_date = HelperLib.date_format( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ).substr( 0, 8 );
 				var directory_local = __basedir + '/assets/images/' + upload_folder + '/' + dir_date;
  				
  				
@@ -305,7 +305,7 @@
 						MIME_TYPE: file.mimetype,
 						IMAGE_PATH : directory_project,
 						UPDATE_USER: req.body.INSERT_USER || "",
-						UPDATE_TIME: DateLibrary.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' )
+						UPDATE_TIME: HelperLib.date_format( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' )
 					}, { new: true } )
 					.then( data => {
 						if( !data ) {
@@ -320,7 +320,7 @@
 							MIME_TYPE: file.mimetype,
 							IMAGE_PATH : directory_project,
 							UPDATE_USER: req.body.INSERT_USER || "",
-							UPDATE_TIME: DateLibrary.convert( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' )
+							UPDATE_TIME: HelperLib.date_format( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' )
 						} );
 						return res.send( {
 							status: true,
@@ -412,7 +412,7 @@
 					STATUS_IMAGE: result.STATUS_IMAGE,
 					STATUS_SYNC: result.STATUS_SYNC, // Tambahan
 					INSERT_USER: result.INSERT_USER,
-					INSERT_TIME: DateLibrary.convert( String( result.INSERT_TIME ), 'YYYY-MM-DD hh:mm:ss' )
+					INSERT_TIME: HelperLib.date_format( String( result.INSERT_TIME ), 'YYYY-MM-DD hh:mm:ss' )
 				} );
 			} );
 			return res.send( {
@@ -501,7 +501,7 @@
 					STATUS_IMAGE: result.STATUS_IMAGE,
 					STATUS_SYNC: result.STATUS_SYNC,
 					INSERT_USER: result.INSERT_USER,
-					INSERT_TIME: DateLibrary.convert( String( result.INSERT_TIME ), 'YYYY-MM-DD hh-mm-ss' )
+					INSERT_TIME: HelperLib.date_format( String( result.INSERT_TIME ), 'YYYY-MM-DD hh-mm-ss' )
 				} );
 
 			} );

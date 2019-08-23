@@ -1,0 +1,31 @@
+{
+  "name": "ms-images",
+  "version": "1.0.0",
+  "description": "Microservice Images",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ferdinand",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "date-and-time": "^0.6.3",
+    "express": "^4.16.4",
+    "express-fileupload": "^1.0.0",
+    "express-routes-versioning": "^1.0.1",
+    "file-system": "^2.2.2",
+    "file-url": "^2.0.2",
+    "http": "0.0.0",
+    "jsonwebtoken": "^8.4.0",
+    "jwt-decode": "^2.2.0",
+    "moment": "^2.23.0",
+    "moment-timezone": "^0.5.23",
+    "mongoose": "^5.3.13",
+    "njwt": "^0.4.0",
+    "node-rest-client": "^3.1.0",
+    "scp2": "^0.5.0",
+    "ssh2-sftp-client": "^2.5.0",
+    "uuid": "^3.3.2"
+  }
+}

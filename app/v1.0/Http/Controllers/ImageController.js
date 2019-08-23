@@ -23,13 +23,47 @@
  * --------------------------------------------------------------------------
  */
  	exports.find_one_file_foto_profile = async ( req, res ) => {
-
-	 	return res.send( {
-			status: true,
-			message: 'OK',
-			data: {}
+		if( !req.auth.USER_AUTH_CODE ){
+			return res.send( {
+				status: false,
+				message: config.app.error_message.find_404,
+				data: {}
+			} );
+		}
+	 	
+		UploadFotoProfileModel.find( { 
+			INSERT_USER: req.auth.USER_AUTH_CODE,
+			DELETE_USER: "",
+			DELETE_TIME: 0
+		} )
+		.select( {
+			_id: 0,
+			IMAGE_NAME: 1,
+			IMAGE_PATH: 1,
+		} )
+		.then( data => {
+			if( !data ) {
+				return res.send( {
+					status: false,
+					message: config.app.error_message.find_404,
+					data: {}
+				} );
+			}
+			return res.send( {
+				status: true,
+				message: config.app.error_message.find_200,
+				data: {
+					URL: req.protocol + '://' + req.get( 'host' ) + '/files' + data[0].IMAGE_PATH + '/' + data[0].IMAGE_NAME
+				}
+			} );
+		} ).catch( err => {
+			return res.send( {
+				status: false,
+				message: config.app.error_message.find_500,
+				data: {}
+			} );
 		} );
- 	};
+	}
 
 /**
  * Create File Foto Profile

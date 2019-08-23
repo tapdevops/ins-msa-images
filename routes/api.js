@@ -55,8 +55,9 @@
 			app.get( '/api/v1.0/foto-profile', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.Image.find_one_file_foto_profile );
 
 		 	// Upload Image Foto Profile
+		 	app.get( '/api/v1.0/upload/image/foto-profile', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.Image.find_one_file_foto_profile );
 		 	app.post( '/api/v1.0/upload/image/foto-profile', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.Image.create_file_foto_profile );
-
+		 	
 		 	// Sync Mobile Images
 			app.post( '/api/v1.0/sync-mobile/images', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.Image.sync_mobile );
 			

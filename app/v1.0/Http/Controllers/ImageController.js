@@ -520,6 +520,10 @@
 					type_tr = 'V';
 					path_tr = 'ebcc';
 				}
+				else if ( result.TR_CODE.substr( 0, 1 ) == 'M' ) {
+					type_tr = 'M';
+					path_tr = 'ebcc';
+				}
 
 				results.push( {
 					TR_CODE: result.TR_CODE,

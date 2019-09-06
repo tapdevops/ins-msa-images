@@ -194,10 +194,10 @@
 		}
 
 		// Return FALSE jika tidak terdapat variabel TR_CODE
-		if ( !req.body.TR_CODE  ) {
+		if ( !req.body.TR_CODE || !req.body.IMAGE_CODE  ) {
 			return res.send( {
 				status: false,
-				message: config.app.error_message.invalid_input + ' TR_CODE.',
+				message: 'Body input tidak valid, periksa TR_CODE atau IMAGE_CODE.',
 				data: {}
 			} );
 		}
@@ -220,128 +220,157 @@
 			else if ( file.mimetype == 'image/jpg' ) {
 				new_filename_rep = new_filename.replace( '.jpg', '' );
 			}
-			
-			const set = new UploadImageModel( {
-				IMAGE_CODE: req.body.IMAGE_CODE,
-				TR_CODE: req.body.TR_CODE || "",
-				IMAGE_NAME: new_filename_rep,
-				IMAGE_PATH: "",
-				IMAGE_PATH_LOCAL: req.body.IMAGE_PATH_LOCAL || "",
-				STATUS_IMAGE: req.body.STATUS_IMAGE || "",
-				MIME_TYPE: "",
-				STATUS_SYNC: req.body.STATUS_SYNC || "",
-				SYNC_TIME: HelperLib.date_format( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
-				//SYNC_TIME: req.body.SYNC_TIME || 0,
-				INSERT_USER: req.body.INSERT_USER || "",
-				INSERT_TIME: HelperLib.date_format( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
-				//INSERT_TIME: req.body.INSERT_TIME || 0,
-				UPDATE_USER: "",
-				UPDATE_TIME: 0,
-				//UPDATE_TIME: req.body.INSERT_TIME || 0,
-				DELETE_USER: "",
-				DELETE_TIME: 0
-			} );
 
-			set.save()
-			.then( data => {
-				if ( !data ) {
-					return res.send( {
-						status: false,
-						message: config.app.error_message.create_404,
-						data: {}
+			// Cari TR_CODE dan IMAGE_CODE gambar, apakah sudah ada di Database atau belum
+			// Jika sudah, maka akan di return false
+			UploadImageModel.findOne( {
+				IMAGE_CODE: req.body.IMAGE_CODE,
+				TR_CODE: req.body.TR_CODE,
+			} ).then( img => {
+				if ( !img ) {
+					const set = new UploadImageModel( {
+						IMAGE_CODE: req.body.IMAGE_CODE,
+						TR_CODE: req.body.TR_CODE || "",
+						IMAGE_NAME: new_filename_rep,
+						IMAGE_PATH: "",
+						IMAGE_PATH_LOCAL: req.body.IMAGE_PATH_LOCAL || "",
+						STATUS_IMAGE: req.body.STATUS_IMAGE || "",
+						MIME_TYPE: "",
+						STATUS_SYNC: req.body.STATUS_SYNC || "",
+						SYNC_TIME: HelperLib.date_format( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
+						INSERT_USER: req.body.INSERT_USER || "",
+						INSERT_TIME: HelperLib.date_format( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
+						UPDATE_USER: "",
+						UPDATE_TIME: 0,
+						DELETE_USER: "",
+						DELETE_TIME: 0
+					} ).save().then( data => {
+
+						// Set Upload folder
+						var upload_folder = '';
+						switch ( String( req.body.TR_CODE.substr( 0, 1 ) ) ) {
+							// Finding
+							case 'F':
+								upload_folder = 'images-finding';
+							break;
+							// Inspection
+							case 'I':
+								upload_folder = 'images-inspeksi';
+							break;
+							// EBCC Validation - Estate
+							case 'V':
+								upload_folder = 'images-ebcc';
+							break;
+							// EBCC Validation - Mill
+							case 'M':
+								upload_folder = 'images-ebcc';
+							break;
+						}
+
+						var dir_date = HelperLib.date_format( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ).substr( 0, 8 );
+						var directory_local = __basedir + '/assets/images/' + upload_folder + '/' + dir_date;
+						var directory_target_local = directory_local;
+						var directory_project = upload_folder + '/' + dir_date;
+
+						FileServer.existsSync( directory_local ) || FileServer.mkdirSync( directory_local );
+						FileServer.existsSync( directory_target_local ) || FileServer.mkdirSync( directory_target_local );
+						
+						file.mv( directory_target_local + '/' + filename, function( err ) {
+							
+							if ( err ) {
+								return res.send( {
+									status: false,
+									message: config.app.error_message.upload_404,
+									data: {}
+								} );
+							}
+
+							if ( directory_project == '' ) {
+								return res.send( {
+									status: false,
+									message: 'Direktori Project kosong.',
+									data: {}
+								} );
+							}
+
+							FileSystem.rename( directory_target_local + '/' + filename, directory_target_local + '/' + new_filename, function(err) {
+								if ( err ) {
+									return res.send( {
+										status: false,
+										message: config.app.error_message.create_500 + ' - 2',
+										data: {}
+									} );
+								}
+								else {
+									UploadImageModel.findOneAndUpdate( { 
+										IMAGE_CODE : req.body.IMAGE_CODE,
+										IMAGE_NAME : new_filename,
+										TR_CODE : req.body.TR_CODE
+									}, {
+										IMAGE_NAME : new_filename_rep,
+										MIME_TYPE: file.mimetype,
+										IMAGE_PATH : directory_project,
+										UPDATE_USER: req.body.INSERT_USER || "",
+										UPDATE_TIME: HelperLib.date_format( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' )
+									}, { new: true } )
+									.then( img_update => {
+										if( !img_update ) {
+											return res.send( {
+												status: false,
+												message: config.app.error_message.put_404,
+												data: {}
+											} );
+										}
+										console.log( {
+											IMAGE_NAME : new_filename_rep,
+											MIME_TYPE: file.mimetype,
+											IMAGE_PATH : directory_project,
+											UPDATE_USER: req.body.INSERT_USER || "",
+											UPDATE_TIME: HelperLib.date_format( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' )
+										} );
+										return res.send( {
+											status: true,
+											message: 'OK',
+											data: {}
+										} );
+										
+									}).catch( err => {
+										return res.send( {
+											status: false,
+											message: config.app.error_message.put_500,
+											data: {}
+										} );
+									});
+								}
+								if ( err ) console.log( 'ERROR: ' + err );
+							});
+
+						} );
+
+						return res.json( {
+							status: true,
+							message: 'Success!',
+							data: []
+						} );
+					} ).catch( err => {
+						return res.send( {
+							status: false,
+							message: config.app.error_message.create_500,
+							data: {}
+						} );
 					} );
 				}
-				
-				var upload_folder = 'images-inspeksi';
-
-				if ( String( req.body.TR_CODE.substr( 0, 1 ) ) == 'F' ) {
-					upload_folder = 'images-finding';
+				else {
+					return res.json( {
+						status: false,
+						message: 'Image Code sudah ada di database, gunakan Image Code yang lain.',
+						data: []
+					} );
 				}
-				else if ( String( req.body.TR_CODE.substr( 0, 1 ) ) == 'V' ) {
-					upload_folder = 'images-ebcc';
-				}
-
-				var dir_date = HelperLib.date_format( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ).substr( 0, 8 );
-				var directory_local = __basedir + '/assets/images/' + upload_folder + '/' + dir_date;
- 				
- 				
-				var directory_target_local = directory_local;
-				var directory_project = upload_folder + '/' + dir_date;
-
-				FileServer.existsSync( directory_local ) || FileServer.mkdirSync( directory_local );
-				FileServer.existsSync( directory_target_local ) || FileServer.mkdirSync( directory_target_local );
-				
-				file.mv( directory_target_local + '/' + filename, function( err ) {
-					
-					if ( err ) {
-						return res.send( {
-							status: false,
-							message: config.app.error_message.upload_404,
-							data: {}
-						} );
-					}
-
-					if ( directory_project == '' ) {
-						res.json({
-							message: "ERROR"
-						})
-					}
-
-					FileSystem.rename( directory_target_local + '/' + filename, directory_target_local + '/' + new_filename, function(err) {
-						if ( err ) console.log( 'ERROR: ' + err );
-					});
-
-					console.log( '.-`-.-`-.-`-.-`-.-`-.-`-.-`-.-`-.-`-.' );
-					console.log( 'New Filename : ' + new_filename_rep );
-					console.log( 'Directory Project : ' + directory_project );
-					console.log( '.-`-.-`-.-`-.-`-.-`-.-`-.-`-.-`-.-`-.' );
-
-					UploadImageModel.findOneAndUpdate( { 
-						IMAGE_CODE : req.body.IMAGE_CODE,
-						IMAGE_NAME : new_filename,
-						TR_CODE : req.body.TR_CODE
-					}, {
-						IMAGE_NAME : new_filename_rep,
-						MIME_TYPE: file.mimetype,
-						IMAGE_PATH : directory_project,
-						UPDATE_USER: req.body.INSERT_USER || "",
-						UPDATE_TIME: HelperLib.date_format( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' )
-					}, { new: true } )
-					.then( data => {
-						if( !data ) {
-							return res.send( {
-								status: false,
-								message: config.app.error_message.put_404,
-								data: {}
-							} );
-						}
-						console.log( {
-							IMAGE_NAME : new_filename_rep,
-							MIME_TYPE: file.mimetype,
-							IMAGE_PATH : directory_project,
-							UPDATE_USER: req.body.INSERT_USER || "",
-							UPDATE_TIME: HelperLib.date_format( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' )
-						} );
-						return res.send( {
-							status: true,
-							message: config.app.error_message.put_200,
-							data: {}
-						} );
-						
-					}).catch( err => {
-						return res.send( {
-							status: false,
-							message: config.app.error_message.put_500,
-							data: {}
-						} );
-					});
-				} );
-				
 			} ).catch( err => {
-				console.log('catch_err');
 				return res.send( {
 					status: false,
-					message: config.app.error_message.create_500,
+					message: 'Catch Error',
 					data: {}
 				} );
 			} );
@@ -489,6 +518,10 @@
 				}
 				else if ( result.TR_CODE.substr( 0, 1 ) == 'V' ) {
 					type_tr = 'V';
+					path_tr = 'ebcc';
+				}
+				else if ( result.TR_CODE.substr( 0, 1 ) == 'M' ) {
+					type_tr = 'M';
 					path_tr = 'ebcc';
 				}
 

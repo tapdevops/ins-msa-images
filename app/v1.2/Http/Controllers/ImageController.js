@@ -7,24 +7,15 @@
  |
  */
  	// Models
-<<<<<<< HEAD
- 	const UploadImageModel = require( _directory_base + '/app/v1.0/Http/Models/UploadImageModel.js' );
- 	const UploadFotoProfileModel = require( _directory_base + '/app/v1.0/Http/Models/UploadFotoProfileModel.js' );
-=======
- 	const UploadImageModel = require( _directory_base + '/app/v1.1/Http/Models/UploadImageModel.js' );
- 	const UploadFotoProfileModel = require( _directory_base + '/app/v1.1/Http/Models/UploadFotoProfileModel.js' );
->>>>>>> cdd06e82318270194165ad4e4a4e17e9f0d44868
+ 	const UploadImageModel = require( _directory_base + '/app/v1.2/Http/Models/UploadImageModel.js' );
+ 	const UploadFotoProfileModel = require( _directory_base + '/app/v1.2/Http/Models/UploadFotoProfileModel.js' );
 
 	// Node Modules
 	const FileServer = require( 'fs' );
 	const FileSystem = require( 'file-system' );
 
 	// Libraries
-<<<<<<< HEAD
-	const HelperLib = require( _directory_base + '/app/v1.0/Http/Libraries/HelperLib.js' );
-=======
-	const HelperLib = require( _directory_base + '/app/v1.1/Http/Libraries/HelperLib.js' );
->>>>>>> cdd06e82318270194165ad4e4a4e17e9f0d44868
+	const HelperLib = require( _directory_base + '/app/v1.2/Http/Libraries/HelperLib.js' );
 
 /**
  * Find File Foto Profile

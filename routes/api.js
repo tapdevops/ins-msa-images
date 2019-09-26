@@ -101,10 +101,7 @@
 			
 			// Get Images By TR_CODE
 			app.get( '/api/v1.1/images/:id', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Image.find );
-<<<<<<< HEAD
-=======
-		/*
->>>>>>> cdd06e82318270194165ad4e4a4e17e9f0d44868
+
 
 		/*
 		 |--------------------------------------------------------------------------
@@ -134,5 +131,4 @@
 			app.post( '/sync-mobile/images/', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.Image.sync_mobile );
 			app.get( '/images/:id', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.Image.find );
 			app.post( '/image/upload-file', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.Image.create_file );
-
 	}

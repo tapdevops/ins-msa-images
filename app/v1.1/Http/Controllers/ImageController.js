@@ -7,15 +7,15 @@
  |
  */
  	// Models
- 	const UploadImageModel = require( _directory_base + '/app/v1.0/Http/Models/UploadImageModel.js' );
- 	const UploadFotoProfileModel = require( _directory_base + '/app/v1.0/Http/Models/UploadFotoProfileModel.js' );
+ 	const UploadImageModel = require( _directory_base + '/app/v1.1/Http/Models/UploadImageModel.js' );
+ 	const UploadFotoProfileModel = require( _directory_base + '/app/v1.1/Http/Models/UploadFotoProfileModel.js' );
 
 	// Node Modules
 	const FileServer = require( 'fs' );
 	const FileSystem = require( 'file-system' );
 
 	// Libraries
-	const HelperLib = require( _directory_base + '/app/v1.0/Http/Libraries/HelperLib.js' );
+	const HelperLib = require( _directory_base + '/app/v1.1/Http/Libraries/HelperLib.js' );
 
 /**
  * Find File Foto Profile
@@ -362,7 +362,7 @@
 				}
 				else {
 					return res.json( {
-						status: false,
+						status: true,
 						message: 'Image Code sudah ada di database, gunakan Image Code yang lain.',
 						data: []
 					} );

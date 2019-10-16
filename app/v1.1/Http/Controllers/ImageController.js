@@ -33,7 +33,7 @@
 	 if( !req.body.TR_CODE || !req.body.STATUS_IMAGE ) {
 		res.send( {
 			status: false,
-			message: "Isi TR_CODE dan STATUS!",
+			message: "Isi TR_CODE dan STATUS",
 			data: []
 		} )
 	 }

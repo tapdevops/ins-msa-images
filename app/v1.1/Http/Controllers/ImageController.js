@@ -18,6 +18,68 @@
 	// Libraries
 	const HelperLib = require( _directory_base + '/app/v1.1/Http/Libraries/HelperLib.js' );
 
+	//config
+	const config = require( '../../../../config/config.js' )
+
+/**
+ * Find image 
+ * Untuk mengambil data image berdasarkan TR_CODE.
+ * --------------------------------------------------------------------------
+ */
+
+ exports.find_one_image = async ( req, res ) => {
+	 const env = config.env;
+	 let image_url = config.url[env] + '/files/';
+	 if( !req.body.TR_CODE || !req.body.STATUS_IMAGE ) {
+		res.send( {
+			status: false,
+			message: "Isi TR_CODE dan STATUS!",
+			data: []
+		} )
+	 }
+	 else {
+		try{
+			let query = await UploadImageModel.aggregate( [
+			   {
+				   $match: {
+					   TR_CODE: req.body.TR_CODE,
+					   STATUS_IMAGE: req.body.STATUS_IMAGE
+				   }
+			   }
+		   ] );
+		   console.log( query.length );
+		   if( query.length > 0 ) {
+				let http = [];
+				query.forEach( function( data ) {
+					http.push( image_url + data.IMAGE_PATH + '/' + data.IMAGE_NAME );
+				} );
+				res.send( {
+					status: true,
+					message: "sukses",
+					data: {
+						http: http
+					}
+				} );
+		   }
+		   else {
+			   res.send( {
+				   status: true, 
+				   message: "sukses",
+				   data: "data kosong"
+			   } )
+		   }   
+	   }
+	   catch( error ) {
+		   res.send( {
+			   status: false,
+			   message: error.message,
+			   data: []
+		   } );
+	   }
+	 }
+	 
+ }
+
 /**
  * Find File Foto Profile
  * Untuk mengambil data foto profile berdasarkan USER_AUTH_CODE pada TOKEN.

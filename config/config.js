@@ -23,7 +23,11 @@ module.exports = {
 	| URL
 	|--------------------------------------------------------------------------
 	*/
-	url: {},
+	url: {
+		development: 'http://149.129.250.199:3012',
+		qa: 'http://149.129.246.66:5012',
+		prod: 'http://149.129.245.230:3012'
+	},
 
 	/*
 	|--------------------------------------------------------------------------
@@ -64,6 +68,4 @@ module.exports = {
 		delete_404: 'Error! Data gagal dihapus ',
 		delete_500: 'Error! Terjadi kesalahan dalam penghapusan data ',
 	}
-
-
 }

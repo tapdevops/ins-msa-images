@@ -19,7 +19,7 @@
 	const HelperLib = require( _directory_base + '/app/v1.1/Http/Libraries/HelperLib.js' );
 
 	//config
-	const config = require( '../../../../config/config.js' )
+	const config = require( _directory_base + '/config/config.js' )
 
 /**
  * Find image 

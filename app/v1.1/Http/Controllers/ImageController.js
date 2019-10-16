@@ -27,7 +27,7 @@
  * --------------------------------------------------------------------------
  */
 
- exports.find_one_image = async ( req, res ) => {
+ exports.find_image = async ( req, res ) => {
 	 const env = config.env;
 	 let image_url = config.url[env] + '/files/';
 	 if( !req.body.TR_CODE || !req.body.STATUS_IMAGE ) {
@@ -47,7 +47,7 @@
 				   }
 			   }
 		   ] );
-		   console.log( query.length );
+		   
 		   if( query.length > 0 ) {
 				let http = [];
 				query.forEach( function( data ) {

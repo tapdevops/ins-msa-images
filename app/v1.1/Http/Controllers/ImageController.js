@@ -22,15 +22,17 @@
 	const config = require( _directory_base + '/config/config.js' )
 
 /**
- * Find image 
- * Untuk mengambil data image berdasarkan TR_CODE.
+ * Find image transaksi
+ * Untuk mengambil data image berdasarkan TR_CODE dan STATUS_IMAGE.
  * --------------------------------------------------------------------------
  */
 
  exports.find_image = async ( req, res ) => {
+	 
 	 const env = config.env;
 	 let image_url = config.url[env] + '/files/';
-	 if( !req.body.TR_CODE || !req.body.STATUS_IMAGE ) {
+	//  if( !req.body.TR_CODE || !req.body.STATUS_IMAGE ) {
+	if( !req.params.tr_code ){
 		res.send( {
 			status: false,
 			message: "Isi TR_CODE dan STATUS_IMAGE",
@@ -39,16 +41,18 @@
 	 }
 	 else {
 		try{
+			let condition = {};
+			condition.TR_CODE = req.params.tr_code;
+			if( req.query.status_image ) {
+				condition.STATUS_IMAGE = req.query.status_image;
+			}
 			let query = await UploadImageModel.aggregate( [
 			   {
-				   $match: {
-					   TR_CODE: req.body.TR_CODE,
-					   STATUS_IMAGE: req.body.STATUS_IMAGE
-				   }
+				   $match: condition
 			   }
-		   ] );
+		    ] );
 		   
-		   if( query.length > 0 ) {
+		    if( query.length > 0 ) {
 				let http = [];
 				query.forEach( function( data ) {
 					http.push( image_url + data.IMAGE_PATH + '/' + data.IMAGE_NAME );

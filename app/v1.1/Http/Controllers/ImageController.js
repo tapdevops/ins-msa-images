@@ -50,12 +50,14 @@
 			   {
 				   $match: condition
 			   }
+				
+				console.log(condition)
 		    ] );
 		   
 		    if( query.length > 0 ) {
 				let http = [];
 				query.forEach( function( data ) {
-					http.push( image_url + '/' +data.IMAGE_PATH + '/' + data.IMAGE_NAME );
+					http.push( image_url + '/' + data.IMAGE_PATH + '/' + data.IMAGE_NAME );
 				} );
 				res.send( {
 					status: true,
@@ -69,7 +71,7 @@
 			   res.send( {
 				   status: true, 
 				   message: "sukses",
-				   data: "data kosong"
+				   data: []
 			   } )
 		   }   
 	   }

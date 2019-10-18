@@ -30,7 +30,7 @@
  exports.find_image = async ( req, res ) => {
 	 
 	 const env = config.env;
-	 let image_url = config.url[env] + '/files/';
+	 let image_url = req.protocol + '://' + req.get( 'host' ) + '/files';
 	//  if( !req.body.TR_CODE || !req.body.STATUS_IMAGE ) {
 	if( !req.params.tr_code ){
 		res.send( {
@@ -55,7 +55,7 @@
 		    if( query.length > 0 ) {
 				let http = [];
 				query.forEach( function( data ) {
-					http.push( image_url + data.IMAGE_PATH + '/' + data.IMAGE_NAME );
+					http.push( image_url + '/' +data.IMAGE_PATH + '/' + data.IMAGE_NAME );
 				} );
 				res.send( {
 					status: true,

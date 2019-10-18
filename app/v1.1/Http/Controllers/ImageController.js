@@ -46,12 +46,14 @@
 			if( req.query.status_image ) {
 				condition.STATUS_IMAGE = req.query.status_image;
 			}
+			
+			console.log(condition)
 			let query = await UploadImageModel.aggregate( [
 			   {
 				   $match: condition
 			   }
 				
-				console.log(condition)
+				
 		    ] );
 		   
 		    if( query.length > 0 ) {

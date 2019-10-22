@@ -69,7 +69,7 @@
 			   res.send( {
 				   status: true, 
 				   message: "sukses",
-				   data: "data kosong"
+				   data: []
 			   } )
 		   }   
 	   }

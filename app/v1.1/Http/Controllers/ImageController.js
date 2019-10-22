@@ -35,7 +35,7 @@
 	if( !req.params.tr_code ){
 		res.send( {
 			status: false,
-			message: "Isi TR_CODE dan STATUS_IMAGE",
+			message: "Isi TR_CODE",
 			data: []
 		} )
 	 }

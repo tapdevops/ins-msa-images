@@ -624,3 +624,57 @@
 		} );
 	}
 
+	exports.find_random = async ( req, res ) => {
+		const trCodes = req.body.TR_CODE;
+		let image_url = req.protocol + '://' + req.get( 'host' ) + '/files';
+		let data = [];
+		if( !trCodes ) {
+			return res.send( {
+				status: true,
+				message: 'OK',
+				data: []
+			} );
+		}
+		let images = await UploadImageModel.aggregate( [
+			{
+				$match: {
+					TR_CODE: {
+						$in: trCodes
+					}
+				}
+			},
+			{
+				$project: {
+					_id: 0,
+					__v: 0
+				}
+			},
+			{
+				$limit: 5
+			}
+		] );
+		if( images.length < 5 ) {
+			let imagesRegex = await UploadImageModel.aggregate( [
+				{
+					$match: {
+						TR_CODE: /^I/
+					}
+				}, 
+				{
+					$limit: 5 - images.length
+				}
+			] );
+			imagesRegex.forEach( function( image ) {
+				data.push( image_url + '/' + image.IMAGE_PATH + '/' + image.IMAGE_NAME );
+			} );
+		}
+		images.forEach( function( image ) {
+			data.push( image_url + '/' + image.IMAGE_PATH + '/' + image.IMAGE_NAME );
+		} );
+		res.send( {
+			status: true,
+			message: 'OK',
+			data
+		} );
+	}
+

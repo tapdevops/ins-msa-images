@@ -105,6 +105,9 @@
 			// Get Images By TR_CODE
 			app.get( '/api/v1.1/images/:id', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Image.find );
 
+			//Get Random Image
+			app.get( '/api/v1.1/random-images', Controllers.v_1_1.Image.find_random );
+
 
 		/*
 		 |--------------------------------------------------------------------------

@@ -659,14 +659,12 @@
 					$match: {
 						TR_CODE: /^I/
 					}
-				}, 
-				{
-					$limit: 5 - images.length
 				}
 			] );
-			imagesRegex.forEach( function( image ) {
-				data.push( image_url + '/' + image.IMAGE_PATH + '/' + image.IMAGE_NAME );
-			} );
+			for( let i = 0; i < 5 - images.length; i++ ) {
+				let random = Math.floor(Math.random() * imagesRegex.length - 1);
+				data.push( image_url + '/' + imagesRegex[random].IMAGE_PATH + '/' + imagesRegex[random].IMAGE_NAME );
+			}
 		}
 		images.forEach( function( image ) {
 			data.push( image_url + '/' + image.IMAGE_PATH + '/' + image.IMAGE_NAME );

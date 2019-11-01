@@ -635,44 +635,60 @@
 				data: []
 			} );
 		}
-		let images = await UploadImageModel.aggregate( [
-			{
-				$match: {
-					TR_CODE: {
-						$in: trCodes
-					}
-				}
-			},
-			{
-				$project: {
-					_id: 0,
-					__v: 0
-				}
-			},
-			{
-				$limit: 5
-			}
-		] );
-		images.forEach( function( image ) {
-			data.push( image_url + '/' + image.IMAGE_PATH + '/' + image.IMAGE_NAME );
-		} );
-		if( images.length < 5 ) {
-			let imagesRegex = await UploadImageModel.aggregate( [
+		try{
+			let images = await UploadImageModel.aggregate( [
 				{
 					$match: {
-						TR_CODE: /^I/
+						TR_CODE: {
+							$in: trCodes
+						}
 					}
+				},
+				{
+					$project: {
+						_id: 0,
+						__v: 0
+					}
+				},
+				{
+					$limit: 5
 				}
 			] );
-			for( let i = 0; i < 5 - images.length; i++ ) {
-				let random = Math.floor(Math.random() * imagesRegex.length - 1);
-				data.push( image_url + '/' + imagesRegex[random].IMAGE_PATH + '/' + imagesRegex[random].IMAGE_NAME );
+			images.forEach( function( image ) {
+				data.push( image_url + '/' + image.IMAGE_PATH + '/' + image.IMAGE_NAME );
+			} );
+			if( images.length < 5 ) {
+				try {
+						let imagesRegex = await UploadImageModel.aggregate( [
+						{
+							$match: {
+								TR_CODE: /^I/
+							}
+						}
+					] );
+					for( let i = 0; i < 5 - images.length; i++ ) {
+						let random = Math.floor(Math.random() * imagesRegex.length - 1);
+						data.push( image_url + '/' + imagesRegex[random].IMAGE_PATH + '/' + imagesRegex[random].IMAGE_NAME );
+					}
+					res.send( {
+						status: true,
+						message: 'OK',
+						data
+					} );
+				} catch ( error ) {
+					res.send( {
+						status: false,
+						message: error.message,
+						data: []
+					} );
+				}
 			}
+		} catch ( err ) {
+			res.send( {
+				status: false,
+				message: err.message,
+				data: []
+			} );
 		}
-		res.send( {
-			status: true,
-			message: 'OK',
-			data
-		} );
 	}
 

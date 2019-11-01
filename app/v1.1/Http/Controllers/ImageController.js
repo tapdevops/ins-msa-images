@@ -625,17 +625,13 @@
 	}
 
 	exports.find_random = async ( req, res ) => {
-		const trCodes = req.body.TR_CODE;
+		let trCodes = req.body.TR_CODE;
 		let image_url = req.protocol + '://' + req.get( 'host' ) + '/files';
 		let data = [];
 		if( !trCodes ) {
-			return res.send( {
-				status: true,
-				message: 'OK',
-				data: []
-			} );
+			trCodes = [];
 		}
-		try{
+		try {
 			let images = await UploadImageModel.aggregate( [
 				{
 					$match: {
@@ -659,7 +655,7 @@
 			} );
 			if( images.length < 5 ) {
 				try {
-						let imagesRegex = await UploadImageModel.aggregate( [
+					let imagesRegex = await UploadImageModel.aggregate( [
 						{
 							$match: {
 								TR_CODE: /^I/

@@ -97,11 +97,10 @@
 		if( !req.auth.USER_AUTH_CODE ){
 			return res.send( {
 				status: false,
-				message: config.app.error_message.find_404,
+				message: config.error_message.find_404,
 				data: {}
 			} );
 		}
-	 	
 		UploadFotoProfileModel.find( { 
 			INSERT_USER: req.auth.USER_AUTH_CODE,
 			DELETE_USER: "",
@@ -113,16 +112,16 @@
 			IMAGE_PATH: 1,
 		} )
 		.then( data => {
-			if( !data ) {
+			if( data.length === 0 ) {
 				return res.send( {
 					status: false,
-					message: config.app.error_message.find_404,
+					message: config.error_message.find_404,
 					data: {}
 				} );
 			}
 			return res.send( {
 				status: true,
-				message: config.app.error_message.find_200,
+				message: config.error_message.find_200,
 				data: {
 					URL: req.protocol + '://' + req.get( 'host' ) + '/files' + data[0].IMAGE_PATH + '/' + data[0].IMAGE_NAME
 				}
@@ -130,7 +129,7 @@
 		} ).catch( err => {
 			return res.send( {
 				status: false,
-				message: config.app.error_message.find_500,
+				message: config.error_message.find_500,
 				data: {}
 			} );
 		} );
@@ -147,7 +146,7 @@
  		if( !req.files ) {
 			return res.send( {
 				status: false,
-				message: config.app.error_message.invalid_input + ' REQUEST FILES.',
+				message: config.error_message.invalid_input + ' REQUEST FILES.',
 				data: {}
 			} );
 		}
@@ -185,7 +184,7 @@
 				if ( err ) {
 					return res.send( {
 						status: false,
-						message: config.app.error_message.upload_404,
+						message: config.error_message.upload_404,
 						data: {}
 					} );
 				}
@@ -259,7 +258,7 @@
 		if( !req.files ) {
 			return res.send( {
 				status: false,
-				message: config.app.error_message.invalid_input + ' REQUEST FILES.',
+				message: config.error_message.invalid_input + ' REQUEST FILES.',
 				data: {}
 			} );
 		}
@@ -351,7 +350,7 @@
 							if ( err ) {
 								return res.send( {
 									status: false,
-									message: config.app.error_message.upload_404,
+									message: config.error_message.upload_404,
 									data: {}
 								} );
 							}
@@ -368,7 +367,7 @@
 								if ( err ) {
 									return res.send( {
 										status: false,
-										message: config.app.error_message.create_500 + ' - 2',
+										message: config.error_message.create_500 + ' - 2',
 										data: {}
 									} );
 								}
@@ -388,7 +387,7 @@
 										if( !img_update ) {
 											return res.send( {
 												status: false,
-												message: config.app.error_message.put_404,
+												message: config.error_message.put_404,
 												data: {}
 											} );
 										}
@@ -408,7 +407,7 @@
 									}).catch( err => {
 										return res.send( {
 											status: false,
-											message: config.app.error_message.put_500,
+											message: config.error_message.put_500,
 											data: {}
 										} );
 									});
@@ -426,7 +425,7 @@
 					} ).catch( err => {
 						return res.send( {
 							status: false,
-							message: config.app.error_message.create_500,
+							message: config.error_message.create_500,
 							data: {}
 						} );
 					} );
@@ -449,7 +448,7 @@
 		else {
 			return res.send( {
 				status: false,
-				message: config.app.error_message.upload_406,
+				message: config.error_message.upload_406,
 				data: {}
 			} );
 		}
@@ -466,7 +465,7 @@
 		if( !req.params.id ) {
 			return res.send( {
 				status: false,
-				message: config.app.error_message.invalid_input + 'TR_CODE.',
+				message: config.error_message.invalid_input + 'TR_CODE.',
 				data: {}
 			} );
 		}
@@ -496,7 +495,7 @@
 			if( !data ) {
 				return res.send( {
 					status: false,
-					message: config.app.error_message.find_404,
+					message: config.error_message.find_404,
 					data: {}
 				} );
 			}
@@ -517,13 +516,13 @@
 			} );
 			return res.send( {
 				status: true,
-				message: config.app.error_message.find_200,
+				message: config.error_message.find_200,
 				data: results
 			} );
 		} ).catch( err => {
 			return res.send( {
 				status: false,
-				message: config.app.error_message.find_500,
+				message: config.error_message.find_500,
 				data: {}
 			} );
 		} );
@@ -539,7 +538,7 @@
 		if( !req.body.TR_CODE ) {
 			return res.send( {
 				status: false,
-				message: config.app.error_message.find_404,
+				message: config.error_message.find_404,
 				data: {}
 			} );
 		}
@@ -574,7 +573,7 @@
 			if( !data ) {
 				return res.send( {
 					status: false,
-					message: config.app.error_message.find_404,
+					message: config.error_message.find_404,
 					data: {}
 				} );
 			}
@@ -612,13 +611,13 @@
 
 			return res.send( {
 				status: true,
-				message: config.app.error_message.find_200,
+				message: config.error_message.find_200,
 				data: results
 			} );
 		} ).catch( err => {
 			return res.send( {
 				status: false,
-				message: config.app.error_message.find_500,
+				message: config.error_message.find_500,
 				data: {}
 			} );
 		} );

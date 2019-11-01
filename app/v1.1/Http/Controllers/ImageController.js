@@ -653,6 +653,9 @@
 				$limit: 5
 			}
 		] );
+		images.forEach( function( image ) {
+			data.push( image_url + '/' + image.IMAGE_PATH + '/' + image.IMAGE_NAME );
+		} );
 		if( images.length < 5 ) {
 			let imagesRegex = await UploadImageModel.aggregate( [
 				{
@@ -666,9 +669,6 @@
 				data.push( image_url + '/' + imagesRegex[random].IMAGE_PATH + '/' + imagesRegex[random].IMAGE_NAME );
 			}
 		}
-		images.forEach( function( image ) {
-			data.push( image_url + '/' + image.IMAGE_PATH + '/' + image.IMAGE_NAME );
-		} );
 		res.send( {
 			status: true,
 			message: 'OK',

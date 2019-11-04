@@ -90,7 +90,7 @@
 		 	app.post( '/api/v1.1/upload/image/foto-transaksi', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Image.create_file );
 		 	
 		 	// Get Foto Profile
-			app.get( '/api/v1.1/foto-profile', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Image.find_one_file_foto_profile );
+			app.post( '/api/v1.1/foto-profile', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Image.find_one_file_foto_profile );
 
 			//Get Image
 			app.get( '/api/v1.1/foto-transaksi/:tr_code', Controllers.v_1_1.Image.find_image );

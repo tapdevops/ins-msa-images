@@ -94,15 +94,15 @@
  * --------------------------------------------------------------------------
  */
  	exports.find_one_file_foto_profile = async ( req, res ) => {
-		if( !req.auth.USER_AUTH_CODE ){
+		if ( !req.body.USER_AUTH_CODE ) {
 			return res.send( {
 				status: false,
 				message: config.error_message.find_404,
 				data: {}
 			} );
 		}
-		UploadFotoProfileModel.find( { 
-			INSERT_USER: req.auth.USER_AUTH_CODE,
+		UploadFotoProfileModel.findOne( { 
+			INSERT_USER: req.body.USER_AUTH_CODE,
 			DELETE_USER: "",
 			DELETE_TIME: 0
 		} )
@@ -112,7 +112,7 @@
 			IMAGE_PATH: 1,
 		} )
 		.then( data => {
-			if( data.length === 0 ) {
+			if( !data ) {
 				return res.send( {
 					status: false,
 					message: config.error_message.find_404,
@@ -123,7 +123,7 @@
 				status: true,
 				message: config.error_message.find_200,
 				data: {
-					URL: req.protocol + '://' + req.get( 'host' ) + '/files' + data[0].IMAGE_PATH + '/' + data[0].IMAGE_NAME
+					URL: req.protocol + '://' + req.get( 'host' ) + '/files' + data.IMAGE_PATH + '/' + data.IMAGE_NAME
 				}
 			} );
 		} ).catch( err => {

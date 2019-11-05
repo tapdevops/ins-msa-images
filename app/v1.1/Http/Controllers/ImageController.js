@@ -110,6 +110,7 @@
 			_id: 0,
 			IMAGE_NAME: 1,
 			IMAGE_PATH: 1,
+			INSERT_TIME: 1
 		} )
 		.then( data => {
 			if( !data ) {
@@ -124,7 +125,8 @@
 				message: config.error_message.find_200,
 				data: {
 					URL: req.protocol + '://' + req.get( 'host' ) + '/files' + data.IMAGE_PATH + '/' + data.IMAGE_NAME,
-					IMAGE_NAME: data.IMAGE_NAME
+					IMAGE_NAME: data.IMAGE_NAME,
+					INSERT_TIME: HelperLib.date_format( String( data.INSERT_TIME ), 'YYYY-MM-DD hh-mm-ss' )
 				}
 			} );
 		} ).catch( err => {

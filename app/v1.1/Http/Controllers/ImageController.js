@@ -123,7 +123,8 @@
 				status: true,
 				message: config.error_message.find_200,
 				data: {
-					URL: req.protocol + '://' + req.get( 'host' ) + '/files' + data.IMAGE_PATH + '/' + data.IMAGE_NAME
+					URL: req.protocol + '://' + req.get( 'host' ) + '/files' + data.IMAGE_PATH + '/' + data.IMAGE_NAME,
+					IMAGE_NAME: data.IMAGE_NAME
 				}
 			} );
 		} ).catch( err => {
@@ -650,7 +651,10 @@
 				}
 			] );
 			images.forEach( function( image ) {
-				data.push( image_url + '/' + image.IMAGE_PATH + '/' + image.IMAGE_NAME );
+				data.push( { 
+					url: image_url + '/' + image.IMAGE_PATH + '/' + image.IMAGE_NAME,
+					image_name: image.IMAGE_NAME
+				} );
 			} );
 			if( images.length < 5 ) {
 				try {
@@ -663,7 +667,10 @@
 					] );
 					for( let i = 0; i < 5 - images.length; i++ ) {
 						let random = Math.floor(Math.random() * imagesRegex.length - 1);
-						data.push( image_url + '/' + imagesRegex[random].IMAGE_PATH + '/' + imagesRegex[random].IMAGE_NAME );
+						data.push( { 
+							url: image_url + '/' + imagesRegex[random].IMAGE_PATH + '/' + imagesRegex[random].IMAGE_NAME,
+							image_name:  imagesRegex[random].IMAGE_NAME
+						} );
 					}
 					res.send( {
 						status: true,

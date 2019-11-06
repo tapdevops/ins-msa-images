@@ -7,83 +7,15 @@
  |
  */
  	// Models
- 	const UploadImageModel = require( _directory_base + '/app/v1.1/Http/Models/UploadImageModel.js' );
- 	const UploadFotoProfileModel = require( _directory_base + '/app/v1.1/Http/Models/UploadFotoProfileModel.js' );
+ 	const UploadImageModel = require( _directory_base + '/app/v1.2/Http/Models/UploadImageModel.js' );
+ 	const UploadFotoProfileModel = require( _directory_base + '/app/v1.2/Http/Models/UploadFotoProfileModel.js' );
 
 	// Node Modules
 	const FileServer = require( 'fs' );
 	const FileSystem = require( 'file-system' );
 
 	// Libraries
-	const HelperLib = require( _directory_base + '/app/v1.1/Http/Libraries/HelperLib.js' );
-	//config
-	const config = require( _directory_base + '/config/config.js' )
-
-/**
- * Find image transaksi
- * Untuk mengambil data image berdasarkan TR_CODE dan STATUS_IMAGE.
- * --------------------------------------------------------------------------
- */
-
- exports.find_image = async ( req, res ) => {
-	 
-	 let image_url = req.protocol + '://' + req.get( 'host' ) + '/files';
-	//  if( !req.body.TR_CODE || !req.body.STATUS_IMAGE ) {
-	if( !req.params.tr_code ){
-		res.send( {
-			status: false,
-			message: "Isi TR_CODE",
-			data: []
-		} )
-	 }
-	 else {
-		try{
-			let condition = {};
-			condition.TR_CODE = req.params.tr_code;
-			if( req.query.status_image ) {
-				condition.STATUS_IMAGE = req.query.status_image;
-			}
-			
-			console.log(condition)
-			let query = await UploadImageModel.aggregate( [
-			   {
-				   $match: condition
-			   }
-				
-				
-		    ] );
-		   
-		    if( query.length > 0 ) {
-				let http = [];
-				query.forEach( function( data ) {
-					http.push( image_url + '/' + data.IMAGE_PATH + '/' + data.IMAGE_NAME );
-				} );
-				res.send( {
-					status: true,
-					message: "sukses",
-					data: {
-						http: http
-					}
-				} );
-		   }
-		   else {
-			   res.send( {
-				   status: true, 
-				   message: "sukses",
-				   data: []
-			   } )
-		   }   
-	   }
-	   catch( error ) {
-		   res.send( {
-			   status: false,
-			   message: error.message,
-			   data: []
-		   } );
-	   }
-	 }
-	 
- }
+	const HelperLib = require( _directory_base + '/app/v1.2/Http/Libraries/HelperLib.js' );
 
 /**
  * Find File Foto Profile
@@ -91,15 +23,16 @@
  * --------------------------------------------------------------------------
  */
  	exports.find_one_file_foto_profile = async ( req, res ) => {
-		if ( !req.body.USER_AUTH_CODE ) {
+		if( !req.auth.USER_AUTH_CODE ){
 			return res.send( {
 				status: false,
-				message: config.error_message.find_404,
+				message: config.app.error_message.find_404,
 				data: {}
 			} );
 		}
-		UploadFotoProfileModel.findOne( { 
-			INSERT_USER: req.body.USER_AUTH_CODE,
+	 	
+		UploadFotoProfileModel.find( { 
+			INSERT_USER: req.auth.USER_AUTH_CODE,
 			DELETE_USER: "",
 			DELETE_TIME: 0
 		} )
@@ -107,29 +40,26 @@
 			_id: 0,
 			IMAGE_NAME: 1,
 			IMAGE_PATH: 1,
-			INSERT_TIME: 1
 		} )
 		.then( data => {
 			if( !data ) {
 				return res.send( {
 					status: false,
-					message: config.error_message.find_404,
+					message: config.app.error_message.find_404,
 					data: {}
 				} );
 			}
 			return res.send( {
 				status: true,
-				message: config.error_message.find_200,
+				message: config.app.error_message.find_200,
 				data: {
-					URL: req.protocol + '://' + req.get( 'host' ) + '/files' + data.IMAGE_PATH + '/' + data.IMAGE_NAME,
-					IMAGE_NAME: data.IMAGE_NAME,
-					INSERT_TIME: HelperLib.date_format( String( data.INSERT_TIME ), 'YYYY-MM-DD hh-mm-ss' )
+					URL: req.protocol + '://' + req.get( 'host' ) + '/files' + data[0].IMAGE_PATH + '/' + data[0].IMAGE_NAME
 				}
 			} );
 		} ).catch( err => {
 			return res.send( {
 				status: false,
-				message: config.error_message.find_500,
+				message: config.app.error_message.find_500,
 				data: {}
 			} );
 		} );
@@ -146,7 +76,7 @@
  		if( !req.files ) {
 			return res.send( {
 				status: false,
-				message: config.error_message.invalid_input + ' REQUEST FILES.',
+				message: config.app.error_message.invalid_input + ' REQUEST FILES.',
 				data: {}
 			} );
 		}
@@ -184,7 +114,7 @@
 				if ( err ) {
 					return res.send( {
 						status: false,
-						message: config.error_message.upload_404,
+						message: config.app.error_message.upload_404,
 						data: {}
 					} );
 				}
@@ -258,7 +188,7 @@
 		if( !req.files ) {
 			return res.send( {
 				status: false,
-				message: config.error_message.invalid_input + ' REQUEST FILES.',
+				message: config.app.error_message.invalid_input + ' REQUEST FILES.',
 				data: {}
 			} );
 		}
@@ -350,7 +280,7 @@
 							if ( err ) {
 								return res.send( {
 									status: false,
-									message: config.error_message.upload_404,
+									message: config.app.error_message.upload_404,
 									data: {}
 								} );
 							}
@@ -367,7 +297,7 @@
 								if ( err ) {
 									return res.send( {
 										status: false,
-										message: config.error_message.create_500 + ' - 2',
+										message: config.app.error_message.create_500 + ' - 2',
 										data: {}
 									} );
 								}
@@ -387,7 +317,7 @@
 										if( !img_update ) {
 											return res.send( {
 												status: false,
-												message: config.error_message.put_404,
+												message: config.app.error_message.put_404,
 												data: {}
 											} );
 										}
@@ -407,7 +337,7 @@
 									}).catch( err => {
 										return res.send( {
 											status: false,
-											message: config.error_message.put_500,
+											message: config.app.error_message.put_500,
 											data: {}
 										} );
 									});
@@ -425,14 +355,14 @@
 					} ).catch( err => {
 						return res.send( {
 							status: false,
-							message: config.error_message.create_500,
+							message: config.app.error_message.create_500,
 							data: {}
 						} );
 					} );
 				}
 				else {
 					return res.json( {
-						status: true,
+						status: false,
 						message: 'Image Code sudah ada di database, gunakan Image Code yang lain.',
 						data: []
 					} );
@@ -448,7 +378,7 @@
 		else {
 			return res.send( {
 				status: false,
-				message: config.error_message.upload_406,
+				message: config.app.error_message.upload_406,
 				data: {}
 			} );
 		}
@@ -465,7 +395,7 @@
 		if( !req.params.id ) {
 			return res.send( {
 				status: false,
-				message: config.error_message.invalid_input + 'TR_CODE.',
+				message: config.app.error_message.invalid_input + 'TR_CODE.',
 				data: {}
 			} );
 		}
@@ -495,7 +425,7 @@
 			if( !data ) {
 				return res.send( {
 					status: false,
-					message: config.error_message.find_404,
+					message: config.app.error_message.find_404,
 					data: {}
 				} );
 			}
@@ -516,13 +446,13 @@
 			} );
 			return res.send( {
 				status: true,
-				message: config.error_message.find_200,
+				message: config.app.error_message.find_200,
 				data: results
 			} );
 		} ).catch( err => {
 			return res.send( {
 				status: false,
-				message: config.error_message.find_500,
+				message: config.app.error_message.find_500,
 				data: {}
 			} );
 		} );
@@ -538,7 +468,7 @@
 		if( !req.body.TR_CODE ) {
 			return res.send( {
 				status: false,
-				message: config.error_message.find_404,
+				message: config.app.error_message.find_404,
 				data: {}
 			} );
 		}
@@ -573,7 +503,7 @@
 			if( !data ) {
 				return res.send( {
 					status: false,
-					message: config.error_message.find_404,
+					message: config.app.error_message.find_404,
 					data: {}
 				} );
 			}
@@ -611,85 +541,15 @@
 
 			return res.send( {
 				status: true,
-				message: config.error_message.find_200,
+				message: config.app.error_message.find_200,
 				data: results
 			} );
 		} ).catch( err => {
 			return res.send( {
 				status: false,
-				message: config.error_message.find_500,
+				message: config.app.error_message.find_500,
 				data: {}
 			} );
 		} );
-	}
-
-	exports.find_random = async ( req, res ) => {
-		let trCodes = req.body.TR_CODE;
-		let image_url = req.protocol + '://' + req.get( 'host' ) + '/files';
-		let data = [];
-		if( !trCodes ) {
-			trCodes = [];
-		}
-		try {
-			let images = await UploadImageModel.aggregate( [
-				{
-					$match: {
-						TR_CODE: {
-							$in: trCodes
-						}
-					}
-				},
-				{
-					$project: {
-						_id: 0,
-						__v: 0
-					}
-				},
-				{
-					$limit: 5
-				}
-			] );
-			images.forEach( function( image ) {
-				data.push( { 
-					url: image_url + '/' + image.IMAGE_PATH + '/' + image.IMAGE_NAME,
-					image_name: image.IMAGE_NAME
-				} );
-			} );
-			if( images.length < 5 ) {
-				try {
-					let imagesRegex = await UploadImageModel.aggregate( [
-						{
-							$match: {
-								TR_CODE: /^I/
-							}
-						}
-					] );
-					for( let i = 0; i < 5 - images.length; i++ ) {
-						let random = Math.floor(Math.random() * imagesRegex.length - 1);
-						data.push( { 
-							url: image_url + '/' + imagesRegex[random].IMAGE_PATH + '/' + imagesRegex[random].IMAGE_NAME,
-							image_name:  imagesRegex[random].IMAGE_NAME
-						} );
-					}
-					res.send( {
-						status: true,
-						message: 'OK',
-						data
-					} );
-				} catch ( error ) {
-					res.send( {
-						status: false,
-						message: error.message,
-						data: []
-					} );
-				}
-			}
-		} catch ( err ) {
-			res.send( {
-				status: false,
-				message: err.message,
-				data: []
-			} );
-		}
 	}
 

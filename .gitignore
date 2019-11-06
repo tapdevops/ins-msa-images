@@ -2,3 +2,4 @@
 
 Dockerfile
 config/app.js
+config/config.js

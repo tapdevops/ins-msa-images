@@ -658,7 +658,7 @@
 				if ( images.length > 0 ) {
 					resultObject[ key ] = image_url + '/' + images[0].IMAGE_PATH + '/' + images[0].IMAGE_NAME;
 				} else {
-					resultObject[key] =  image_url + '/assets/images/default-suggestion.jpg'
+					resultObject[key] =  image_url + '/default-suggestion.jpg'
 				}
 			} catch ( err ) {
 				return res.send( {

@@ -626,6 +626,9 @@
 		} );
 	}
 
+	// exports.find_random = async ( req, res ) => {
+	// 	res.json( req.body );
+	// }
 	exports.find_random = async ( req, res ) => {
 		let trCodes = req.body.TR_CODE;
 		let image_url = req.protocol + '://' + req.get( 'host' ) + '/files';

@@ -670,6 +670,7 @@
 		}
 		res.send( {
 			status: true,
+			message: "Success!",
 			data: resultObject
 		} );
 	}

@@ -630,72 +630,47 @@
 	// 	res.json( req.body );
 	// }
 	exports.find_random = async ( req, res ) => {
-		let trCodes = req.body.TR_CODE;
 		let image_url = req.protocol + '://' + req.get( 'host' ) + '/files';
-		let data = [];
-		if( !trCodes ) {
-			trCodes = [];
-		}
-		try {
-			let images = await UploadImageModel.aggregate( [
-				{
-					$match: {
-						TR_CODE: {
-							$in: trCodes
-						}
-					}
-				},
-				{
-					$project: {
-						_id: 0,
-						__v: 0
-					}
-				},
-				{
-					$limit: 5
-				}
-			] );
-			images.forEach( function( image ) {
-				data.push( { 
-					url: image_url + '/' + image.IMAGE_PATH + '/' + image.IMAGE_NAME,
-					image_name: image.IMAGE_NAME
-				} );
-			} );
-			if( images.length < 5 ) {
-				try {
-					let imagesRegex = await UploadImageModel.aggregate( [
-						{
-							$match: {
-								TR_CODE: /^I/
+		const body = req.body;
+		const codes =  Object.keys( req.body );
+		let resultObject = {  };
+		for ( let i = 0; i < codes.length; i++ ) {
+			let key = codes[i];
+			try {
+				let images = await UploadImageModel.aggregate( [
+					{
+						$match: {
+							TR_CODE: {
+								$in: body[ codes[i] ]
 							}
 						}
-					] );
-					for( let i = 0; i < 5 - images.length; i++ ) {
-						let random = Math.floor(Math.random() * imagesRegex.length - 1);
-						data.push( { 
-							url: image_url + '/' + imagesRegex[random].IMAGE_PATH + '/' + imagesRegex[random].IMAGE_NAME,
-							image_name:  imagesRegex[random].IMAGE_NAME
-						} );
+					},
+					{
+						$project: {
+							_id: 0,
+							__v: 0
+						}
+					},
+					{
+						$limit: 1
 					}
-					res.send( {
-						status: true,
-						message: 'OK',
-						data
-					} );
-				} catch ( error ) {
-					res.send( {
-						status: false,
-						message: error.message,
-						data: []
-					} );
+				] );
+				if ( images.length > 0 ) {
+					resultObject[ key ] = image_url + '/' + images[0].IMAGE_PATH + '/' + images[0].IMAGE_NAME;
+				} else {
+					resultObject[key] =  image_url + '/assets/images/default-suggestion.jpg'
 				}
+			} catch ( err ) {
+				return res.send( {
+					status: false,
+					message: err.message,
+					data: []
+				} );
 			}
-		} catch ( err ) {
-			res.send( {
-				status: false,
-				message: err.message,
-				data: []
-			} );
 		}
+		res.send( {
+			status: true,
+			data: resultObject
+		} );
 	}
 

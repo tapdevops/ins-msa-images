@@ -252,6 +252,55 @@
  	}
 
 /**
+ * importRealm
+ * Untuk menyimpan data yang diupload dari auth upload realm
+ * --------------------------------------------------------------------------
+ */
+
+	exports.create = ( req, res ) => {
+		// Cari TR_CODE dan IMAGE_CODE gambar, apakah sudah ada di Database atau belum
+		// Jika sudah, maka akan di return false
+		UploadImageModel.findOne( {
+			IMAGE_CODE: req.body.IMAGE_CODE,
+			TR_CODE: req.body.TR_CODE,
+		} ).then( img => {
+			if ( !img ) {
+				const set = new UploadImageModel( {
+					IMAGE_CODE: req.body.IMAGE_CODE,
+					TR_CODE: req.body.TR_CODE || "",
+					IMAGE_NAME: req.body.IMAGE_NAME,
+					IMAGE_PATH: req.body.IMAGE_PATH,
+					IMAGE_PATH_LOCAL: req.body.IMAGE_PATH_LOCAL || "",
+					STATUS_IMAGE: req.body.STATUS_IMAGE || "",
+					MIME_TYPE: req.body.MIME_TYPE,
+					STATUS_SYNC: req.body.STATUS_SYNC || "",
+					SYNC_TIME: HelperLib.date_format( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
+					INSERT_USER: req.body.INSERT_USER || "",
+					INSERT_TIME: HelperLib.date_format( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
+					UPDATE_USER: "",
+					UPDATE_TIME: 0,
+					DELETE_USER: "",
+					DELETE_TIME: 0
+				} ).save().then( () => {
+					console.log( 'Sukses simpan' );
+					res.send( {
+						status: true,
+						message: 'Success!',
+						data: []
+					} );
+				} ).catch( err => {
+					console.log( err.message );
+					res.send( {
+						status: false,
+						message: config.error_message.put_500,
+						data: []
+					} );
+				} ); 
+			}
+		} );
+	}
+
+/**
  * createFile
  * Untuk menyimpan data yang diupload dengan multipart/form-data
  * --------------------------------------------------------------------------

@@ -86,7 +86,10 @@
 		 | API Versi 1.1
 		 |--------------------------------------------------------------------------
 		 */
-		 	// Upload Image Transaksi
+			// Upload Image Transaksi dari node rest client msa auth
+			app.post( '/api/v1.1/auth/upload/image/foto-transaksi', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Image.create );
+			 
+			// Upload Image Transaksi
 		 	app.post( '/api/v1.1/upload/image/foto-transaksi', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Image.create_file );
 		 	
 		 	// Get Foto Profile

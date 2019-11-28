@@ -296,6 +296,12 @@
 						data: []
 					} );
 				} ); 
+			} else {
+				res.send( {
+					status: true,
+					message: 'Skip save!',
+					data: []
+				} );
 			}
 		} );
 	}

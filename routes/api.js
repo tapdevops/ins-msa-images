@@ -9,7 +9,9 @@ const RoutesVersioning = require('express-routes-versioning')();
 // Controllers
 
 const Controllers = {
-
+	v_2_0: {
+		Image: require(_directory_base + '/app/v2.0/Http/Controllers/ImageController.js'),
+	},
 	v_1_2: {
 		Image: require(_directory_base + '/app/v1.2/Http/Controllers/ImageController.js'),
 	},
@@ -23,10 +25,12 @@ const Controllers = {
 
 // Middleware
 const Middleware = {
+	v_2_0: {
+		VerifyToken: require(_directory_base + '/app/v2.0/Http/Middleware/VerifyToken.js')
+	},
 	v_1_2: {
 		VerifyToken: require(_directory_base + '/app/v1.2/Http/Middleware/VerifyToken.js')
 	},
-
 	v_1_1: {
 		VerifyToken: require(_directory_base + '/app/v1.1/Http/Middleware/VerifyToken.js')
 	},
@@ -57,6 +61,36 @@ module.exports = (app) => {
 			}
 		})
 	});
+
+	/*
+	 |--------------------------------------------------------------------------
+	 | API Versi 2.0
+	 |--------------------------------------------------------------------------
+	 */
+	// Upload Image Transaksi dari node rest client msa auth
+	app.post('/api/v2.0/auth/upload/image/foto-transaksi', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.Image.create);
+
+	// Upload Image Transaksi
+	app.post('/api/v2.0/upload/image/foto-transaksi', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.Image.create_file);
+
+	// Get Foto Profile
+	app.post('/api/v2.0/foto-profile', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.Image.find_one_file_foto_profile);
+
+	//Get Image
+	app.get('/api/v2.0/foto-transaksi/:tr_code', Controllers.v_2_0.Image.find_image);
+
+	// Upload Image Foto Profile
+	app.get('/api/v2.0/upload/image/foto-profile', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.Image.find_one_file_foto_profile);
+	app.post('/api/v2.0/upload/image/foto-profile', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.Image.create_file_foto_profile);
+
+	// Sync Mobile Images
+	app.post('/api/v2.0/sync-mobile/images', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.Image.sync_mobile);
+
+	// Get Images By TR_CODE
+	app.get('/api/v2.0/images/:id', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.Image.find);
+
+	//Get Random Image
+	app.post('/api/v2.0/inspection/suggestion', Controllers.v_2_0.Image.find_random);
 
 	/*
 	 |--------------------------------------------------------------------------

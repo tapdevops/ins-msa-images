@@ -7,6 +7,7 @@
  |
  */
  	// Models
+
  	const UploadImageModel = require( _directory_base + '/app/v1.2/Http/Models/UploadImageModel.js' );
  	const UploadFotoProfileModel = require( _directory_base + '/app/v1.2/Http/Models/UploadFotoProfileModel.js' );
 
@@ -17,22 +18,91 @@
 	// Libraries
 	const HelperLib = require( _directory_base + '/app/v1.2/Http/Libraries/HelperLib.js' );
 
+	//config
+	const config = require( _directory_base + '/config/config.js' )
+
+/**
+ * Find image transaksi
+ * Untuk mengambil data image berdasarkan TR_CODE dan STATUS_IMAGE.
+ * --------------------------------------------------------------------------
+ */
+
+ exports.find_image = async ( req, res ) => {
+	 
+	 const env = config.env;
+	 let image_url = req.protocol + '://' + req.get( 'host' ) + '/files';
+	//  if( !req.body.TR_CODE || !req.body.STATUS_IMAGE ) {
+	if( !req.params.tr_code ){
+		res.send( {
+			status: false,
+			message: "Isi TR_CODE",
+			data: []
+		} )
+	 }
+	 else {
+		try{
+			let condition = {};
+			condition.TR_CODE = req.params.tr_code;
+			if( req.query.status_image ) {
+				condition.STATUS_IMAGE = req.query.status_image;
+			}
+			
+			console.log(condition)
+			let query = await UploadImageModel.aggregate( [
+			   {
+				   $match: condition
+			   }
+				
+				
+		    ] );
+		   
+		    if( query.length > 0 ) {
+				let http = [];
+				query.forEach( function( data ) {
+					http.push( image_url + '/' + data.IMAGE_PATH + '/' + data.IMAGE_NAME );
+				} );
+				res.send( {
+					status: true,
+					message: "sukses",
+					data: {
+						http: http
+					}
+				} );
+		   }
+		   else {
+			   res.send( {
+				   status: true, 
+				   message: "sukses",
+				   data: []
+			   } )
+		   }   
+	   }
+	   catch( error ) {
+		   res.send( {
+			   status: false,
+			   message: error.message,
+			   data: []
+		   } );
+	   }
+	 }
+	 
+ }
+
 /**
  * Find File Foto Profile
  * Untuk mengambil data foto profile berdasarkan USER_AUTH_CODE pada TOKEN.
  * --------------------------------------------------------------------------
  */
  	exports.find_one_file_foto_profile = async ( req, res ) => {
-		if( !req.auth.USER_AUTH_CODE ){
+		if ( !req.body.USER_AUTH_CODE ) {
 			return res.send( {
 				status: false,
-				message: config.app.error_message.find_404,
+				message: config.error_message.find_404,
 				data: {}
 			} );
 		}
-	 	
-		UploadFotoProfileModel.find( { 
-			INSERT_USER: req.auth.USER_AUTH_CODE,
+		UploadFotoProfileModel.findOne( { 
+			INSERT_USER: req.body.USER_AUTH_CODE,
 			DELETE_USER: "",
 			DELETE_TIME: 0
 		} )
@@ -40,26 +110,29 @@
 			_id: 0,
 			IMAGE_NAME: 1,
 			IMAGE_PATH: 1,
+			INSERT_TIME: 1
 		} )
 		.then( data => {
 			if( !data ) {
 				return res.send( {
 					status: false,
-					message: config.app.error_message.find_404,
+					message: config.error_message.find_404,
 					data: {}
 				} );
 			}
 			return res.send( {
 				status: true,
-				message: config.app.error_message.find_200,
+				message: config.error_message.find_200,
 				data: {
-					URL: req.protocol + '://' + req.get( 'host' ) + '/files' + data[0].IMAGE_PATH + '/' + data[0].IMAGE_NAME
+					URL: req.protocol + '://' + req.get( 'host' ) + '/files' + data.IMAGE_PATH + '/' + data.IMAGE_NAME,
+					IMAGE_NAME: data.IMAGE_NAME,
+					INSERT_TIME: HelperLib.date_format( String( data.INSERT_TIME ), 'YYYY-MM-DD hh-mm-ss' )
 				}
 			} );
 		} ).catch( err => {
 			return res.send( {
 				status: false,
-				message: config.app.error_message.find_500,
+				message: config.error_message.find_500,
 				data: {}
 			} );
 		} );
@@ -76,7 +149,7 @@
  		if( !req.files ) {
 			return res.send( {
 				status: false,
-				message: config.app.error_message.invalid_input + ' REQUEST FILES.',
+				message: config.error_message.invalid_input + ' REQUEST FILES.',
 				data: {}
 			} );
 		}
@@ -114,7 +187,7 @@
 				if ( err ) {
 					return res.send( {
 						status: false,
-						message: config.app.error_message.upload_404,
+						message: config.error_message.upload_404,
 						data: {}
 					} );
 				}
@@ -179,6 +252,61 @@
  	}
 
 /**
+ * importRealm
+ * Untuk menyimpan data yang diupload dari auth upload realm
+ * --------------------------------------------------------------------------
+ */
+
+	exports.create = ( req, res ) => {
+		// Cari TR_CODE dan IMAGE_CODE gambar, apakah sudah ada di Database atau belum
+		// Jika sudah, maka akan di return false
+		UploadImageModel.findOne( {
+			IMAGE_CODE: req.body.IMAGE_CODE,
+			TR_CODE: req.body.TR_CODE,
+		} ).then( img => {
+			if ( !img ) {
+				const set = new UploadImageModel( {
+					IMAGE_CODE: req.body.IMAGE_CODE,
+					TR_CODE: req.body.TR_CODE || "",
+					IMAGE_NAME: req.body.IMAGE_NAME,
+					IMAGE_PATH: req.body.IMAGE_PATH,
+					IMAGE_PATH_LOCAL: req.body.IMAGE_PATH_LOCAL || "",
+					STATUS_IMAGE: req.body.STATUS_IMAGE || "",
+					MIME_TYPE: req.body.MIME_TYPE,
+					STATUS_SYNC: req.body.STATUS_SYNC || "",
+					SYNC_TIME: HelperLib.date_format( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
+					INSERT_USER: req.body.INSERT_USER || "",
+					INSERT_TIME: HelperLib.date_format( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
+					UPDATE_USER: "",
+					UPDATE_TIME: 0,
+					DELETE_USER: "",
+					DELETE_TIME: 0
+				} ).save().then( () => {
+					console.log( 'Sukses simpan' );
+					res.send( {
+						status: true,
+						message: 'Success!',
+						data: []
+					} );
+				} ).catch( err => {
+					console.log( err.message );
+					res.send( {
+						status: false,
+						message: config.error_message.put_500,
+						data: []
+					} );
+				} ); 
+			} else {
+				res.send( {
+					status: true,
+					message: 'Skip save!',
+					data: []
+				} );
+			}
+		} );
+	}
+
+/**
  * createFile
  * Untuk menyimpan data yang diupload dengan multipart/form-data
  * --------------------------------------------------------------------------
@@ -188,7 +316,7 @@
 		if( !req.files ) {
 			return res.send( {
 				status: false,
-				message: config.app.error_message.invalid_input + ' REQUEST FILES.',
+				message: config.error_message.invalid_input + ' REQUEST FILES.',
 				data: {}
 			} );
 		}
@@ -280,7 +408,7 @@
 							if ( err ) {
 								return res.send( {
 									status: false,
-									message: config.app.error_message.upload_404,
+									message: config.error_message.upload_404,
 									data: {}
 								} );
 							}
@@ -297,7 +425,7 @@
 								if ( err ) {
 									return res.send( {
 										status: false,
-										message: config.app.error_message.create_500 + ' - 2',
+										message: config.error_message.create_500 + ' - 2',
 										data: {}
 									} );
 								}
@@ -317,7 +445,7 @@
 										if( !img_update ) {
 											return res.send( {
 												status: false,
-												message: config.app.error_message.put_404,
+												message: config.error_message.put_404,
 												data: {}
 											} );
 										}
@@ -337,7 +465,7 @@
 									}).catch( err => {
 										return res.send( {
 											status: false,
-											message: config.app.error_message.put_500,
+											message: config.error_message.put_500,
 											data: {}
 										} );
 									});
@@ -355,7 +483,7 @@
 					} ).catch( err => {
 						return res.send( {
 							status: false,
-							message: config.app.error_message.create_500,
+							message: config.error_message.create_500,
 							data: {}
 						} );
 					} );
@@ -378,7 +506,7 @@
 		else {
 			return res.send( {
 				status: false,
-				message: config.app.error_message.upload_406,
+				message: config.error_message.upload_406,
 				data: {}
 			} );
 		}
@@ -395,7 +523,7 @@
 		if( !req.params.id ) {
 			return res.send( {
 				status: false,
-				message: config.app.error_message.invalid_input + 'TR_CODE.',
+				message: config.error_message.invalid_input + 'TR_CODE.',
 				data: {}
 			} );
 		}
@@ -425,7 +553,7 @@
 			if( !data ) {
 				return res.send( {
 					status: false,
-					message: config.app.error_message.find_404,
+					message: config.error_message.find_404,
 					data: {}
 				} );
 			}
@@ -446,13 +574,13 @@
 			} );
 			return res.send( {
 				status: true,
-				message: config.app.error_message.find_200,
+				message: config.error_message.find_200,
 				data: results
 			} );
 		} ).catch( err => {
 			return res.send( {
 				status: false,
-				message: config.app.error_message.find_500,
+				message: config.error_message.find_500,
 				data: {}
 			} );
 		} );
@@ -468,7 +596,7 @@
 		if( !req.body.TR_CODE ) {
 			return res.send( {
 				status: false,
-				message: config.app.error_message.find_404,
+				message: config.error_message.find_404,
 				data: {}
 			} );
 		}
@@ -503,7 +631,7 @@
 			if( !data ) {
 				return res.send( {
 					status: false,
-					message: config.app.error_message.find_404,
+					message: config.error_message.find_404,
 					data: {}
 				} );
 			}
@@ -541,15 +669,64 @@
 
 			return res.send( {
 				status: true,
-				message: config.app.error_message.find_200,
+				message: config.error_message.find_200,
 				data: results
 			} );
 		} ).catch( err => {
 			return res.send( {
 				status: false,
-				message: config.app.error_message.find_500,
+				message: config.error_message.find_500,
 				data: {}
 			} );
+		} );
+	}
+
+	// exports.find_random = async ( req, res ) => {
+	// 	res.json( req.body );
+	// }
+	exports.find_random = async ( req, res ) => {
+		let image_url = req.protocol + '://' + req.get( 'host' ) + '/files';
+		const body = req.body;
+		const codes =  Object.keys( req.body );
+		let resultObject = {  };
+		for ( let i = 0; i < codes.length; i++ ) {
+			let key = codes[i];
+			try {
+				let images = await UploadImageModel.aggregate( [
+					{
+						$match: {
+							TR_CODE: {
+								$in: body[ codes[i] ]
+							}
+						}
+					},
+					{
+						$project: {
+							_id: 0,
+							__v: 0
+						}
+					},
+					{
+						$limit: 1
+					}
+				] );
+				if ( images.length > 0 ) {
+					resultObject[ key ] = image_url + '/' + images[0].IMAGE_PATH + '/' + images[0].IMAGE_NAME;
+				} else {
+					resultObject[key] =  image_url + '/default-suggestion.jpg'
+				}
+			} catch ( err ) {
+				return res.send( {
+					status: false,
+					message: err.message,
+					data: []
+				} );
+			}
+		}
+		res.send( {
+			status: true,
+			message: "Success!",
+			data: resultObject
 		} );
 	}
 

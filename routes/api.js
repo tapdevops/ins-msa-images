@@ -11,6 +11,7 @@ const RoutesVersioning = require('express-routes-versioning')();
 const Controllers = {
 	v_2_0: {
 		Image: require(_directory_base + '/app/v2.0/Http/Controllers/ImageController.js'),
+		ImageProfile: require(_directory_base + '/app/v2.0/Http/Controllers/ImageProfileController.js')
 	},
 	v_1_2: {
 		Image: require(_directory_base + '/app/v1.2/Http/Controllers/ImageController.js'),
@@ -75,6 +76,9 @@ module.exports = (app) => {
 
 	// Get Foto Profile
 	app.post('/api/v2.0/foto-profile', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.Image.find_one_file_foto_profile);
+	
+	// Get Foto Profile untuk MSA-INTERNAL-TAP
+	app.post('/api/v2.0/internal/foto-profile/users', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.ImageProfile.findListFotoProfile);
 
 	//Get Image
 	app.get('/api/v2.0/foto-transaksi/:tr_code', Controllers.v_2_0.Image.find_image);

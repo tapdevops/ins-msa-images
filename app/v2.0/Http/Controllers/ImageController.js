@@ -687,6 +687,7 @@
 	exports.find_random = async ( req, res ) => {
 		let image_url = req.protocol + '://' + req.get( 'host' ) + '/files';
 		const body = req.body;
+		console.log(body);
 		const codes =  Object.keys( req.body );
 		let resultObject = {  };
 		for ( let i = 0; i < codes.length; i++ ) {

@@ -249,6 +249,61 @@
  	}
 
 /**
+ * importRealm
+ * Untuk menyimpan data yang diupload dari auth upload realm
+ * --------------------------------------------------------------------------
+ */
+
+	exports.create = ( req, res ) => {
+		// Cari TR_CODE dan IMAGE_CODE gambar, apakah sudah ada di Database atau belum
+		// Jika sudah, maka akan di return false
+		UploadImageModel.findOne( {
+			IMAGE_CODE: req.body.IMAGE_CODE,
+			TR_CODE: req.body.TR_CODE,
+		} ).then( img => {
+			if ( !img ) {
+				const set = new UploadImageModel( {
+					IMAGE_CODE: req.body.IMAGE_CODE,
+					TR_CODE: req.body.TR_CODE || "",
+					IMAGE_NAME: req.body.IMAGE_NAME,
+					IMAGE_PATH: req.body.IMAGE_PATH,
+					IMAGE_PATH_LOCAL: req.body.IMAGE_PATH_LOCAL || "",
+					STATUS_IMAGE: req.body.STATUS_IMAGE || "",
+					MIME_TYPE: req.body.MIME_TYPE,
+					STATUS_SYNC: req.body.STATUS_SYNC || "",
+					SYNC_TIME: HelperLib.date_format( req.body.SYNC_TIME, 'YYYYMMDDhhmmss' ),
+					INSERT_USER: req.body.INSERT_USER || "",
+					INSERT_TIME: HelperLib.date_format( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
+					UPDATE_USER: "",
+					UPDATE_TIME: 0,
+					DELETE_USER: "",
+					DELETE_TIME: 0
+				} ).save().then( () => {
+					console.log( 'Sukses simpan' );
+					res.send( {
+						status: true,
+						message: 'Success!',
+						data: []
+					} );
+				} ).catch( err => {
+					console.log( err.message );
+					res.send( {
+						status: false,
+						message: config.error_message.put_500,
+						data: []
+					} );
+				} ); 
+			} else {
+				res.send( {
+					status: true,
+					message: 'Skip save!',
+					data: []
+				} );
+			}
+		} );
+	}
+
+/**
  * createFile
  * Untuk menyimpan data yang diupload dengan multipart/form-data
  * --------------------------------------------------------------------------
@@ -623,73 +678,52 @@
 		} );
 	}
 
+	// exports.find_random = async ( req, res ) => {
+	// 	res.json( req.body );
+	// }
 	exports.find_random = async ( req, res ) => {
-		let trCodes = req.body.TR_CODE;
 		let image_url = req.protocol + '://' + req.get( 'host' ) + '/files';
-		let data = [];
-		if( !trCodes ) {
-			trCodes = [];
-		}
-		try {
-			let images = await UploadImageModel.aggregate( [
-				{
-					$match: {
-						TR_CODE: {
-							$in: trCodes
-						}
-					}
-				},
-				{
-					$project: {
-						_id: 0,
-						__v: 0
-					}
-				},
-				{
-					$limit: 5
-				}
-			] );
-			images.forEach( function( image ) {
-				data.push( { 
-					url: image_url + '/' + image.IMAGE_PATH + '/' + image.IMAGE_NAME,
-					image_name: image.IMAGE_NAME
-				} );
-			} );
-			if( images.length < 5 ) {
-				try {
-					let imagesRegex = await UploadImageModel.aggregate( [
-						{
-							$match: {
-								TR_CODE: /^I/
+		const body = req.body;
+		const codes =  Object.keys( req.body );
+		let resultObject = {  };
+		for ( let i = 0; i < codes.length; i++ ) {
+			let key = codes[i];
+			try {
+				let images = await UploadImageModel.aggregate( [
+					{
+						$match: {
+							TR_CODE: {
+								$in: body[ codes[i] ]
 							}
 						}
-					] );
-					for( let i = 0; i < 5 - images.length; i++ ) {
-						let random = Math.floor(Math.random() * imagesRegex.length - 1);
-						data.push( { 
-							url: image_url + '/' + imagesRegex[random].IMAGE_PATH + '/' + imagesRegex[random].IMAGE_NAME,
-							image_name:  imagesRegex[random].IMAGE_NAME
-						} );
+					},
+					{
+						$project: {
+							_id: 0,
+							__v: 0
+						}
+					},
+					{
+						$limit: 1
 					}
-					res.send( {
-						status: true,
-						message: 'OK',
-						data
-					} );
-				} catch ( error ) {
-					res.send( {
-						status: false,
-						message: error.message,
-						data: []
-					} );
+				] );
+				if ( images.length > 0 ) {
+					resultObject[ key ] = image_url + '/' + images[0].IMAGE_PATH + '/' + images[0].IMAGE_NAME;
+				} else {
+					resultObject[key] =  image_url + '/default-suggestion.jpg'
 				}
+			} catch ( err ) {
+				return res.send( {
+					status: false,
+					message: err.message,
+					data: []
+				} );
 			}
-		} catch ( err ) {
-			res.send( {
-				status: false,
-				message: err.message,
-				data: []
-			} );
 		}
+		res.send( {
+			status: true,
+			message: "Success!",
+			data: resultObject
+		} );
 	}
 

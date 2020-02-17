@@ -1,4 +1,4 @@
-FROM node:8
+FROM node:12
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -15,7 +15,7 @@ RUN npm install
 # Bundle app source
 COPY . /usr/src/app
 
-EXPOSE 3012
+EXPOSE 5012
 CMD [ "node", "server.js" ]
 
 #RUN npm install

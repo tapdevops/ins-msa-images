@@ -1,16 +1,7 @@
-/*
- |--------------------------------------------------------------------------
- | Variable
- |--------------------------------------------------------------------------
- */
-const Mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-/*
- |--------------------------------------------------------------------------
- | Schema
- |--------------------------------------------------------------------------
- */
-const UploadImageSchema = Mongoose.Schema({
+const UploadImageSchema = mongoose.Schema({
+
 	IMAGE_CODE: String,
 	TR_CODE: String,
 	IMAGE_NAME: String,
@@ -58,11 +49,7 @@ const UploadImageSchema = Mongoose.Schema({
 			return 0;
 		}
 	}
+
 });
 
-/*
- |--------------------------------------------------------------------------
- | Module Exports
- |--------------------------------------------------------------------------
- */
-module.exports = Mongoose.model('UploadImage_v_1_2', UploadImageSchema, 'TR_IMAGE');
+module.exports = mongoose.model('UploadImage_v_2_0', UploadImageSchema, 'TR_IMAGE');

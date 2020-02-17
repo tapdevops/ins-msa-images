@@ -8,15 +8,15 @@
  */
  	// Models
 
- 	const UploadImageModel = require( _directory_base + '/app/v1.2/Http/Models/UploadImageModel.js' );
- 	const UploadFotoProfileModel = require( _directory_base + '/app/v1.2/Http/Models/UploadFotoProfileModel.js' );
+ 	const UploadImageModel = require( _directory_base + '/app/v2.0/Http/Models/UploadImageModel.js' );
+ 	const UploadFotoProfileModel = require( _directory_base + '/app/v2.0/Http/Models/UploadFotoProfileModel.js' );
 
 	// Node Modules
 	const FileServer = require( 'fs' );
 	const FileSystem = require( 'file-system' );
 
 	// Libraries
-	const HelperLib = require( _directory_base + '/app/v1.2/Http/Libraries/HelperLib.js' );
+	const HelperLib = require( _directory_base + '/app/v2.0/Http/Libraries/HelperLib.js' );
 
 	//config
 	const config = require( _directory_base + '/config/config.js' )
@@ -687,6 +687,7 @@
 	exports.find_random = async ( req, res ) => {
 		let image_url = req.protocol + '://' + req.get( 'host' ) + '/files';
 		const body = req.body;
+		console.log(body);
 		const codes =  Object.keys( req.body );
 		let resultObject = {  };
 		for ( let i = 0; i < codes.length; i++ ) {

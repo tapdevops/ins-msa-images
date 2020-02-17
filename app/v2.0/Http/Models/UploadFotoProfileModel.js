@@ -50,4 +50,4 @@ const UploadImageFotoProfileSchema = Mongoose.Schema({
  | Module Exports
  |--------------------------------------------------------------------------
  */
-module.exports = Mongoose.model('UploadImageFotoProfile_v_1_2', UploadImageFotoProfileSchema, 'TR_IMAGE_PROFILE');
+module.exports = Mongoose.model('UploadImageFotoProfile_v_2_0', UploadImageFotoProfileSchema, 'TR_IMAGE_PROFILE');

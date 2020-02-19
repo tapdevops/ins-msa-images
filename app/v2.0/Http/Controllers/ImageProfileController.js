@@ -178,6 +178,56 @@
 			data: {}
 		} );
 	 }
+
+	 /**
+ * Find File Foto Profile
+ * Untuk mengambil data foto profile berdasarkan USER_AUTH_CODE pada TOKEN.
+ * --------------------------------------------------------------------------
+ */
+	exports.find_one_file_foto_profile = async ( req, res ) => {
+		if ( !req.body.USER_AUTH_CODE ) {
+			return res.send( {
+				status: false,
+				message: config.error_message.find_404,
+				data: {}
+			} );
+		}
+		UploadFotoProfileModel.findOne( { 
+			INSERT_USER: req.body.USER_AUTH_CODE,
+			DELETE_USER: "",
+			DELETE_TIME: 0
+		} )
+		.select( {
+			_id: 0,
+			IMAGE_NAME: 1,
+			IMAGE_PATH: 1,
+			INSERT_TIME: 1
+		} )
+		.then( data => {
+			if( !data ) {
+				return res.send( {
+					status: false,
+					message: config.error_message.find_404,
+					data: {}
+				} );
+			}
+			return res.send( {
+				status: true,
+				message: config.error_message.find_200,
+				data: {
+					URL: req.protocol + '://' + req.get( 'host' ) + '/files' + data.IMAGE_PATH + '/' + data.IMAGE_NAME,
+					IMAGE_NAME: data.IMAGE_NAME,
+					INSERT_TIME: HelperLib.date_format( String( data.INSERT_TIME ), 'YYYY-MM-DD hh-mm-ss' )
+				}
+			} );
+		} ).catch( err => {
+			return res.send( {
+				status: false,
+				message: config.error_message.find_500,
+				data: {}
+			} );
+		} );
+	}
 /**
  * Find List File Foto Profile
  * Untuk mendapatkan list url foto profile yang digunakan pada PetaPanenController di MSA-INTERNAL-TAP

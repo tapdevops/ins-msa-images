@@ -75,17 +75,16 @@ module.exports = (app) => {
 	app.post('/api/v2.0/upload/image/foto-transaksi', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.Image.create_file);
 
 	// Get Foto Profile
-	app.post('/api/v2.0/foto-profile', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.Image.find_one_file_foto_profile);
+	app.post('/api/v2.0/foto-profile', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.ImageProfile.find_one_file_foto_profile);
 	
 	// Get Foto Profile untuk MSA-INTERNAL-TAP
-	app.post('/api/v2.0/internal/foto-profile/users', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.ImageProfile.findListFotoProfile);
+	// app.post('/api/v2.0/internal/foto-profile/users', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.ImageProfile.findListFotoProfile);
 
 	//Get Image
 	app.get('/api/v2.0/foto-transaksi/:tr_code', Controllers.v_2_0.Image.find_image);
 
 	// Upload Image Foto Profile
-	app.get('/api/v2.0/upload/image/foto-profile', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.Image.find_one_file_foto_profile);
-	app.post('/api/v2.0/upload/image/foto-profile', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.Image.create_file_foto_profile);
+	app.post('/api/v2.0/upload/image/foto-profile', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.ImageProfile.create_file_foto_profile);
 
 	// Sync Mobile Images
 	app.post('/api/v2.0/sync-mobile/images', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.Image.sync_mobile);

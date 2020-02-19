@@ -7,7 +7,6 @@
  |
  */
  	// Models
-
  	const UploadImageModel = require( _directory_base + '/app/v1.1/Http/Models/UploadImageModel.js' );
  	const UploadFotoProfileModel = require( _directory_base + '/app/v1.1/Http/Models/UploadFotoProfileModel.js' );
 
@@ -17,7 +16,6 @@
 
 	// Libraries
 	const HelperLib = require( _directory_base + '/app/v1.1/Http/Libraries/HelperLib.js' );
-
 	//config
 	const config = require( _directory_base + '/config/config.js' )
 
@@ -29,7 +27,6 @@
 
  exports.find_image = async ( req, res ) => {
 	 
-	 const env = config.env;
 	 let image_url = req.protocol + '://' + req.get( 'host' ) + '/files';
 	//  if( !req.body.TR_CODE || !req.body.STATUS_IMAGE ) {
 	if( !req.params.tr_code ){
@@ -490,7 +487,7 @@
 				}
 				else {
 					return res.json( {
-						status: false,
+						status: true,
 						message: 'Image Code sudah ada di database, gunakan Image Code yang lain.',
 						data: []
 					} );

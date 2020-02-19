@@ -84,7 +84,6 @@ module.exports = (app) => {
 	app.get('/api/v2.0/foto-transaksi/:tr_code', Controllers.v_2_0.Image.find_image);
 
 	// Upload Image Foto Profile
-	app.get('/api/v2.0/upload/image/foto-profile', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.Image.find_one_file_foto_profile);
 	app.post('/api/v2.0/upload/image/foto-profile', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.Image.create_file_foto_profile);
 
 	// Sync Mobile Images
@@ -114,7 +113,6 @@ module.exports = (app) => {
 	app.get('/api/v1.2/foto-transaksi/:tr_code', Controllers.v_1_2.Image.find_image);
 
 	// Upload Image Foto Profile
-	app.get('/api/v1.2/upload/image/foto-profile', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Image.find_one_file_foto_profile);
 	app.post('/api/v1.2/upload/image/foto-profile', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Image.create_file_foto_profile);
 
 	// Sync Mobile Images
@@ -146,7 +144,6 @@ module.exports = (app) => {
 	app.get('/api/v1.1/foto-transaksi/:tr_code', Controllers.v_1_1.Image.find_image);
 
 	// Upload Image Foto Profile
-	app.get('/api/v1.1/upload/image/foto-profile', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Image.find_one_file_foto_profile);
 	app.post('/api/v1.1/upload/image/foto-profile', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Image.create_file_foto_profile);
 
 	// Sync Mobile Images

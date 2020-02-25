@@ -11,7 +11,7 @@
 		|--------------------------------------------------------------------------
 		*/
 			name: 'Microservice Images',
-			env: 'qa', // prod, qa, dev,
+			env: 'prod', // prod, qa, dev,
 
 			port: {
 				dev: process.env.PORT || 4012,

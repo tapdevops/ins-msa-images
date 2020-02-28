@@ -64,16 +64,13 @@
                             } )
                             .save()
                             .then( data => {
-                                let uploadFolder = 'image-donor-darah';
+                                let uploadFolder = 'images-donor-darah';
         
                                 var dirDate = HelperLib.date_format( 'now', 'YYYYMMDDhhmmss' ).substr( 0, 8 );
                                 var directoryLocal = __basedir + '/assets/images/' + uploadFolder + '/' + dirDate;
                                 var directoryTargetLocal = directoryLocal;
                                 var directoryProject = uploadFolder + '/' + dirDate;
                                 
-                                console.log(directoryLocal);
-                                console.log(directoryTargetLocal)
-                                console.log(directoryProject)
                                 FileServer.existsSync( directoryLocal ) || FileServer.mkdirSync( directoryLocal );
                                 FileServer.existsSync( directoryTargetLocal ) || FileServer.mkdirSync( directoryTargetLocal );
                                 
@@ -102,6 +99,42 @@
                                                 message: config.error_message.create_500 + ' - 2',
                                                 data: {}
                                             } );
+                                        }
+                                        else {
+                                            DonorDarah.findOneAndUpdate( { 
+                                                IMAGE_CODE : req.body.IMAGE_CODE,
+                                                IMAGE_NAME : newFilename
+                                            }, {
+                                                IMAGE_NAME : newFileNameRep,
+                                                MIME_TYPE: file.mimetype,
+                                                IMAGE_PATH : directoryProject
+                                            }, { new: true } )
+                                            .then( img_update => {
+                                                if( !img_update ) {
+                                                    return res.send( {
+                                                        status: false,
+                                                        message: config.error_message.put_404,
+                                                        data: {}
+                                                    } );
+                                                }
+                                                console.log( {
+                                                    IMAGE_NAME : newFileNameRep,
+                                                    MIME_TYPE: file.mimetype,
+                                                    IMAGE_PATH : directoryProject
+                                                } );
+                                                return res.send( {
+                                                    status: true,
+                                                    message: 'OK',
+                                                    data: {}
+                                                } );
+                                                
+                                            }).catch( err => {
+                                                return res.send( {
+                                                    status: false,
+                                                    message: config.error_message.put_500,
+                                                    data: {}
+                                                } );
+                                            });
                                         }
                                     })
                                 })

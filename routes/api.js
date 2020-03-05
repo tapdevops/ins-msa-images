@@ -12,7 +12,6 @@ const Controllers = {
 	v_2_0: {
 		Image: require(_directory_base + '/app/v2.0/Http/Controllers/ImageController.js'),
 		ImageProfile: require(_directory_base + '/app/v2.0/Http/Controllers/ImageProfileController.js'),
-		DonorDarah: require(_directory_base + '/app/v2.0/Http/Controllers/DonorDarahController.js')
 	},
 	v_1_2: {
 		Image: require(_directory_base + '/app/v1.2/Http/Controllers/ImageController.js'),
@@ -69,9 +68,6 @@ module.exports = (app) => {
 	 | API Versi 2.0
 	 |--------------------------------------------------------------------------
 	 */
-
-	//Upload Image Donor Darah
-	app.post('/api/v2.0/donor-darah/images', Controllers.v_2_0.DonorDarah.createFile)
 
 	// Upload Image Transaksi dari node rest client msa auth
 	app.post('/api/v2.0/auth/upload/image/foto-transaksi', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.Image.create);

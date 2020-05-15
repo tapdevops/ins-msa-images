@@ -21,15 +21,15 @@
  */
 	module.exports = {
 		dev: {
-			url: 'mongodb://s_images:s_images@dbappdev.tap-agri.com:4848/s_images?authSource=s_images',
+			url: 'mongodb://s_images:s_images@dbmongodev.tap-agri.com:4848/s_images?authSource=s_images',
 			ssl: false
 		},
 		qa: {
-			url: 'mongodb://s_images:1m4g3s2019@dbappqa.tap-agri.com:4848/s_images?authSource=s_images',
+			url: 'mongodb://s_images:1m4g3s2019@dbmongoqa.tap-agri.com:4848/s_images?authSource=s_images',
 			ssl: false
 		},
 		prod: {
-			url: 'mongodb://s_images:1m4g3s2019@dbapp.tap-agri.com:4848/s_images?authSource=s_images',
+			url: 'mongodb://s_images:1m4g3s2019@dbmongo.tap-agri.com:4848/s_images?authSource=s_images',
 			ssl: false
 		}
 	}

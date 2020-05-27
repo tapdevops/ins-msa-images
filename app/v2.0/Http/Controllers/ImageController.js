@@ -490,8 +490,8 @@
 				}
 				else {
 					return res.json( {
-						status: false,
-						message: 'Image Code sudah ada di database, gunakan Image Code yang lain.',
+						status: true,
+						message: 'Skip save',
 						data: []
 					} );
 				}

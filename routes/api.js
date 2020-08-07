@@ -10,6 +10,7 @@ const RoutesVersioning = require('express-routes-versioning')();
 
 const Controllers = {
 	v_2_0: {
+		UploadWeb: require(_directory_base + '/app/v2.0/Http/Controllers/UploadWebController.js'),
 		Image: require(_directory_base + '/app/v2.0/Http/Controllers/ImageController.js'),
 		ImageProfile: require(_directory_base + '/app/v2.0/Http/Controllers/ImageProfileController.js'),
 	},
@@ -68,6 +69,8 @@ module.exports = (app) => {
 	 | API Versi 2.0
 	 |--------------------------------------------------------------------------
 	 */
+	//Upload image transaksi via WEB
+	app.post('/api/v2.0/web/upload/foto-transaksi', /*Middleware.v_2_0.VerifyToken,*/ Controllers.v_2_0.UploadWeb.uploadImage);
 
 	// Upload Image Transaksi dari node rest client msa auth
 	app.post('/api/v2.0/auth/upload/image/foto-transaksi', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.Image.create);

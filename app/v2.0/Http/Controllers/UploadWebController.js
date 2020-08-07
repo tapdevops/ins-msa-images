@@ -116,8 +116,9 @@
                                         // callback(internalServerError, null);
                                         return;
                                     }
+                                } else {
+                                    console.log('File moved');
                                 }
-                                console.log('File moved');
                             });
                             break;
                         }

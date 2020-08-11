@@ -206,7 +206,7 @@
 		.then( data => {
 			if( !data ) {
 				return res.send( {
-					status: true,
+					status: false,
 					message: config.error_message.find_404,
 					data: {}
 				} );

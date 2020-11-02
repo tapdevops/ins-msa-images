@@ -417,7 +417,7 @@
 									data: {}
 								} );
 							}
-							if(upload_folder == 'images-ebcc') {
+							if(upload_folder == 'images-ebcc' && dir_date !== '') {
 								let kafkaBody = {
 									IMG_URL: config.app.url[config.app.env].microservice_images + '/files/' + upload_folder + '/' + dir_date + '/' + new_filename_rep,
 									IMG_NAME: new_filename_rep,

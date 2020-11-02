@@ -9,6 +9,9 @@ const RoutesVersioning = require('express-routes-versioning')();
 // Controllers
 
 const Controllers = {
+	v_2_1: {
+		Image: require(_directory_base + '/app/v2.1/Http/Controllers/ImageController.js'),
+	},
 	v_2_0: {
 		UploadWeb: require(_directory_base + '/app/v2.0/Http/Controllers/UploadWebController.js'),
 		Image: require(_directory_base + '/app/v2.0/Http/Controllers/ImageController.js'),
@@ -64,6 +67,14 @@ module.exports = (app) => {
 		})
 	});
 
+
+	/*
+	 |--------------------------------------------------------------------------
+	 | API Versi 2.1
+	 |--------------------------------------------------------------------------
+	 */
+	// Upload Image Transaksi dengan kafka
+	app.post('/api/v2.1/upload/image/foto-transaksi', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.Image.create_file);
 	/*
 	 |--------------------------------------------------------------------------
 	 | API Versi 2.0

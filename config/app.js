@@ -17,6 +17,40 @@
 				qa: process.env.PORT || 5012,
 				prod: process.env.PORT || 3012,
 			},
+			
+		/*
+		|--------------------------------------------------------------------------
+		| Kafka Config
+		|--------------------------------------------------------------------------
+		*/
+			kafka: {
+				dev: {
+					server_host: 'kafkadev.tap-agri.com:9092'
+				},
+				qa: {
+					server_host: 'kafkaqa.tap-agri.com:9092'
+				},
+				prod: {
+					server_host: 'kafka.tap-agri.com:9092'
+				}
+			},
+		/*
+		|--------------------------------------------------------------------------
+		| URL
+		|--------------------------------------------------------------------------
+		*/
+			url: {
+				dev: {
+					microservice_images: 'http://image.tap-agri.com:4012',
+					
+				},
+				qa: {
+					microservice_images: 'http://image.tap-agri.com:5012',
+				},
+				prod: {
+					microservice_images: 'http://image.tap-agri.com:3012',
+				}
+			},
 		/*
 		|--------------------------------------------------------------------------
 		| Path

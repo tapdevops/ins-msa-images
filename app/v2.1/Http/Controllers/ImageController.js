@@ -466,11 +466,7 @@
 										} );
 										
 									}).catch( err => {
-										return res.send( {
-											status: false,
-											message: config.app.error_message.put_500,
-											data: {}
-										} );
+										console.log(err);
 									});
 								}
 								if ( err ) console.log( 'ERROR: ' + err );

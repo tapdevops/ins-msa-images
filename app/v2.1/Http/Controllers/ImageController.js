@@ -473,11 +473,6 @@
 							});
 
 						} );
-						return res.json( {
-							status: true,
-							message: 'Success!',
-							data: []
-						} );
 					} ).catch( err => {
 						return res.send( {
 							status: false,

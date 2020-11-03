@@ -419,6 +419,7 @@
 							}
 							if(upload_folder == 'images-ebcc' && dir_date !== '') {
 								let kafkaBody = {
+									EBCC_CODE: req.body.TR_CODE,
 									IMG_URL: config.app.url[config.app.env].microservice_images + '/files/' + upload_folder + '/' + dir_date + '/' + new_filename_rep,
 									IMG_NAME: new_filename_rep,
 									SOURCE: 'MOBILE_INSPECTION',

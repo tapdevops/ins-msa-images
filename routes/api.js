@@ -78,6 +78,8 @@ module.exports = (app) => {
 	 */
 	// Upload Image Transaksi dengan kafka (tambah username, dan role)
 	app.post('/api/v2.2/upload/image/foto-transaksi', Middleware.v_2_0.VerifyToken, Controllers.v_2_2.Image.create_file);
+	// Copy image to image-ai folder (validasi janjang)
+	app.post('/api/v2.2/copy-image', Middleware.v_2_0.VerifyToken, Controllers.v_2_2.Image.copyImage);
 	/*
 	 |--------------------------------------------------------------------------
 	 | API Versi 2.1

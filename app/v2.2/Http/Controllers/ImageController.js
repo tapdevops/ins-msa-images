@@ -258,6 +258,44 @@
 		})
 	}
 
+	exports.getFindingImage = async ( req, res ) => {
+		let findingCode = req.params.tr_code;
+		
+		UploadImageModel.find({
+			TR_CODE: findingCode
+		})
+		.then((data) => {
+			let beforeImage = [];
+			let afterImage = [];
+			if(data.length > 0) {
+				data.forEach(dt => {
+					if(dt.STATUS_IMAGE == 'SEBELUM') {
+						let url = config.app.url[config.app.env].microservice_images + '/files/' + dt.IMAGE_PATH + '/' + dt.IMAGE_NAME;
+						beforeImage.push(url)
+					} else if(dt.STATUS_IMAGE == 'SESUDAH') {
+						let url = config.app.url[config.app.env].microservice_images + '/files/' + dt.IMAGE_PATH + '/' + dt.IMAGE_NAME;
+						afterImage.push(url);
+					}
+				})
+			}
+			return res.status(200).send({
+				status: true,
+				message: 'success',
+				data: {
+					BEFORE: beforeImage,
+					AFTER: afterImage
+				}
+			})
+		})
+		.catch(err => {
+			console.log(err);
+			return res.status(200).send({
+				status: false,
+				message: 'Internal server error',
+				data: {}
+			})
+		})
+	}
 
 
 	

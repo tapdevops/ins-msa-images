@@ -80,7 +80,7 @@ module.exports = (app) => {
 	app.post('/api/v2.2/upload/image/foto-transaksi', Middleware.v_2_0.VerifyToken, Controllers.v_2_2.Image.create_file);
 	// Copy image to image-ai folder (validasi janjang)
 	app.post('/api/v2.2/copy-image', Middleware.v_2_0.VerifyToken, Controllers.v_2_2.Image.copyImage);
-	app.get('/api/v2.2/finding/:tr_code', Middleware.v_2_0.VerifyToken, Controllers.v_2_2.Image.getFindingImage);
+	app.get('/api/v2.2/finding/:tr_code', Controllers.v_2_2.Image.getFindingImage);
 	/*
 	 |--------------------------------------------------------------------------
 	 | API Versi 2.1

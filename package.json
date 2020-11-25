@@ -17,6 +17,7 @@
     "express-routes-versioning": "^1.0.1",
     "file-system": "^2.2.2",
     "file-url": "^2.0.2",
+    "fs-extra": "^9.0.1",
     "glob": "^7.1.6",
     "http": "0.0.0",
     "jsonwebtoken": "^8.4.0",

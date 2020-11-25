@@ -424,7 +424,8 @@
 									IMG_NAME: new_filename_rep,
 									SOURCE: 'MOBILE_INSPECTION',
 									INSERT_TIME: HelperLib.date_format( req.body.INSERT_TIME, 'YYYYMMDDhhmmss' ),
-									INSERT_USER: req.auth.USER_AUTH_CODE
+									INSERT_USER: req.auth.USERNAME,
+									ROLE: req.auth.USER_ROLE
 								}
 								// console.log(kafka)
 								KafkaServer.producer('INS_MSA_IMAGE_TR_IMAGE', JSON.stringify(kafkaBody));

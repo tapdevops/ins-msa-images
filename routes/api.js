@@ -9,6 +9,9 @@ const RoutesVersioning = require('express-routes-versioning')();
 // Controllers
 
 const Controllers = {
+	v_2_2: {
+		Image: require(_directory_base + '/app/v2.2/Http/Controllers/ImageController.js'),
+	},
 	v_2_1: {
 		Image: require(_directory_base + '/app/v2.1/Http/Controllers/ImageController.js'),
 	},
@@ -68,6 +71,16 @@ module.exports = (app) => {
 	});
 
 
+	/*
+	 |--------------------------------------------------------------------------
+	 | API Versi 2.2
+	 |--------------------------------------------------------------------------
+	 */
+	// Upload Image Transaksi dengan kafka (tambah username, dan role)
+	app.post('/api/v2.2/upload/image/foto-transaksi', Middleware.v_2_0.VerifyToken, Controllers.v_2_2.Image.create_file);
+	// Copy image to image-ai folder (validasi janjang)
+	app.post('/api/v2.2/copy-image', Middleware.v_2_0.VerifyToken, Controllers.v_2_2.Image.copyImage);
+	app.get('/api/v2.2/finding/:tr_code', Controllers.v_2_2.Image.getFindingImage);
 	/*
 	 |--------------------------------------------------------------------------
 	 | API Versi 2.1
